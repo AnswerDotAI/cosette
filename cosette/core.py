@@ -30,24 +30,23 @@ empty = inspect.Parameter.empty
 # %% ../00_core.ipynb 6
 models = 'gpt-4o', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct'
 
-# %% ../00_core.ipynb 14
+# %% ../00_core.ipynb 13
 def find_block(r:abc.Mapping, # The message to look in
-#                blk_type:type=TextBlock  # The type of block to find
               ):
     "Find the message in `r`."
     res = nested_idx(r, 'choices', 0, 'message')
     if res: return res
     return nested_idx(r, 'choices', 0, 'delta')
 
-# %% ../00_core.ipynb 15
+# %% ../00_core.ipynb 14
 def contents(r):
-    "Helper to get the contents from Claude response `r`."
+    "Helper to get the contents from response `r`."
     blk = find_block(r)
     if not blk: return r
     if hasattr(blk, 'content'): return getattr(blk,'content')
     return blk
 
-# %% ../00_core.ipynb 17
+# %% ../00_core.ipynb 16
 @patch
 def _repr_markdown_(self:ChatCompletion):
     det = '\n- '.join(f'{k}: {v}' for k,v in dict(self).items())
@@ -61,38 +60,38 @@ def _repr_markdown_(self:ChatCompletion):
 
 </details>"""
 
-# %% ../00_core.ipynb 20
+# %% ../00_core.ipynb 19
 def usage(inp=0, # Number of prompt tokens
           out=0  # Number of completion tokens
          ):
     "Slightly more concise version of `CompletionUsage`."
     return CompletionUsage(prompt_tokens=inp, completion_tokens=out, total_tokens=inp+out)
 
-# %% ../00_core.ipynb 22
+# %% ../00_core.ipynb 21
 @patch
 def __repr__(self:CompletionUsage): return f'In: {self.prompt_tokens}; Out: {self.completion_tokens}; Total: {self.total_tokens}'
 
-# %% ../00_core.ipynb 24
+# %% ../00_core.ipynb 23
 @patch
 def __add__(self:CompletionUsage, b):
     "Add together each of `input_tokens` and `output_tokens`"
     return usage(self.prompt_tokens+b.prompt_tokens, self.completion_tokens+b.completion_tokens)
 
-# %% ../00_core.ipynb 27
+# %% ../00_core.ipynb 26
 def mk_msg(content, role='user', **kwargs):
-    "Helper to create a `dict` appropriate for a Claude message. `kwargs` are added as key/value pairs to the message"
+    "Helper to create a `dict` appropriate for a message. `kwargs` are added as key/value pairs to the message"
     if hasattr(content, 'content'): content,role = content.content,content.role
     if isinstance(content, ChatCompletion): return find_block(content)
     return dict(role=role, content=content, **kwargs)
 
-# %% ../00_core.ipynb 32
+# %% ../00_core.ipynb 31
 class Client:
     def __init__(self, model, cli=None):
         "Basic LLM messages client."
         self.model,self.use = model,usage(0,0)
         self.c = (cli or OpenAI()).chat.completions
 
-# %% ../00_core.ipynb 34
+# %% ../00_core.ipynb 33
 @patch
 def _r(self:Client, r:ChatCompletion):
     "Store the result of the message and accrue total usage."
@@ -100,13 +99,13 @@ def _r(self:Client, r:ChatCompletion):
     if getattr(r,'usage',None): self.use += r.usage
     return r
 
-# %% ../00_core.ipynb 36
+# %% ../00_core.ipynb 35
 def get_stream(r):
     for o in r:
         o = contents(o)
         if o and isinstance(o, str): yield(o)
 
-# %% ../00_core.ipynb 37
+# %% ../00_core.ipynb 36
 @patch
 @delegates(Completions.create)
 def __call__(self:Client,
@@ -123,18 +122,18 @@ def __call__(self:Client,
     if not stream: return self._r(r)
     else: return map(self._r, get_stream(r))
 
-# %% ../00_core.ipynb 44
+# %% ../00_core.ipynb 43
 def mk_openai_func(f): return dict(type='function', function=get_schema(f, 'parameters'))
 
-# %% ../00_core.ipynb 45
+# %% ../00_core.ipynb 44
 def mk_tool_choice(f): return dict(type='function', function={'name':f})
 
-# %% ../00_core.ipynb 50
+# %% ../00_core.ipynb 49
 def _mk_ns(*funcs:list[callable]) -> dict[str,callable]:
     "Create a `dict` of name to function in `funcs`, to use as a namespace"
     return {f.__name__:f for f in funcs}
 
-# %% ../00_core.ipynb 51
+# %% ../00_core.ipynb 50
 def call_func(fc:types.chat.chat_completion_message_tool_call.Function, # Function block from message
               ns:Optional[abc.Mapping]=None, # Namespace to search for tools, defaults to `globals()`
               obj:Optional=None # Object to search for tools
@@ -146,9 +145,9 @@ def call_func(fc:types.chat.chat_completion_message_tool_call.Function, # Functi
     if not func: func = ns[fc.name]
     return func(**json.loads(fc.arguments))
 
-# %% ../00_core.ipynb 56
+# %% ../00_core.ipynb 55
 def mk_toolres(
-    r:abc.Mapping, # Tool use request response from Claude
+    r:abc.Mapping, # Tool use request response
     ns:Optional[abc.Mapping]=None, # Namespace to search for tools
     obj:Optional=None # Class to search for tools
     ):
@@ -164,7 +163,7 @@ def mk_toolres(
         res.append(mk_msg(str(cts), 'tool', tool_call_id=tc.id, name=func.name))
     return res
 
-# %% ../00_core.ipynb 63
+# %% ../00_core.ipynb 62
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
@@ -180,14 +179,14 @@ class Chat:
     @property
     def use(self): return self.c.use
 
-# %% ../00_core.ipynb 65
+# %% ../00_core.ipynb 64
 @patch
 @delegates(Completions.create)
 def __call__(self:Chat,
              pr,  # Prompt / message
              stream:bool=False, # Stream response?
              **kwargs):
-    "Add prompt `pr` to dialog and get a response from Claude"
+    "Add prompt `pr` to dialog and get a response"
     if isinstance(pr,str): pr = pr.strip()
     r = mk_toolres(pr, ns=self.tools, obj=self)
     self.h += r if isinstance(r,list) else [r]
@@ -197,7 +196,7 @@ def __call__(self:Chat,
     self.h.append(mk_msg(res))
     return res
 
-# %% ../00_core.ipynb 76
+# %% ../00_core.ipynb 75
 def img_msg(data:bytes)->dict:
     "Convert image `data` into an encoded `dict`"
     img = base64.b64encode(data).decode("utf-8")
@@ -205,12 +204,12 @@ def img_msg(data:bytes)->dict:
     r = dict(type="base64", media_type=mtype, data=img)
     return {"type": "image", "source": r}
 
-# %% ../00_core.ipynb 78
+# %% ../00_core.ipynb 77
 def text_msg(s:str)->dict:
     "Convert `s` to a text message"
     return {"type": "text", "text": s}
 
-# %% ../00_core.ipynb 82
+# %% ../00_core.ipynb 81
 def _mk_content(src):
     "Create appropriate content data structure based on type of content"
     if isinstance(src,str): return text_msg(src)

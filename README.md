@@ -121,8 +121,8 @@ for o in chat("What's your name?", stream=True): print(o, end='')
 
 ## Tool use
 
-[Tool use](https://docs.openai.com/claude/docs/tool-use) lets Claude use
-external tools.
+[Tool use](https://docs.openai.com/claude/docs/tool-use) lets the model
+use external tools.
 
 We use [docments](https://fastcore.fast.ai/docments.html) to make
 defining Python functions as ergonomic as possible. Each parameter (and
@@ -140,15 +140,15 @@ def sums(
     return a + b
 ```
 
-Sometimes Claude will say something like “according to the `sums` tool
-the answer is” – generally we’d rather it just tells the user the
+Sometimes the model will say something like “according to the `sums`
+tool the answer is” – generally we’d rather it just tells the user the
 answer, so we can use a system prompt to help with this:
 
 ``` python
 sp = "Never mention what tools you use."
 ```
 
-We’ll get Claude to add up some long numbers:
+We’ll get the model to add up some long numbers:
 
 ``` python
 a,b = 604542,6458932
@@ -242,7 +242,7 @@ def mults(
 ```
 
 Now with a single call we can calculate `(a+b)*2` – by passing
-`show_trace` we can see each response from Claude in the process:
+`show_trace` we can see each response from the model in the process:
 
 ``` python
 chat = Chat(model, sp=sp, tools=[sums,mults])
@@ -280,8 +280,7 @@ So the final result is 14,126,948.
 
 ## Images
 
-Claude can handle image data as well. As everyone knows, when testing
-image APIs you have to use a cute puppy.
+As everyone knows, when testing image APIs you have to use a cute puppy.
 
 ``` python
 fn = Path('samples/puppy.jpg')
@@ -338,9 +337,9 @@ chat.use
 
 Alternatively, Cosette supports creating a multi-stage chat with
 separate image and text prompts. For instance, you can pass just the
-image as the initial prompt (in which case Claude will make some general
-comments about what it sees), and then follow up with questions in
-additional prompts:
+image as the initial prompt (in which case the model will make some
+general comments about what it sees), and then follow up with questions
+in additional prompts:
 
 ``` python
 chat = Chat(model)
