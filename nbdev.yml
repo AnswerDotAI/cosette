@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "cosette"
+  site-url: "https://AnswerDotAI.github.io/cosette"
+  description: "Cosette is Claude's friend"
+  repo-branch: main
+  repo-url: "https://github.com/AnswerDotAI/cosette"
