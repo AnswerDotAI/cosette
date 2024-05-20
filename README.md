@@ -5,8 +5,6 @@
 
 ## Install
 
-Don’t even try. It’s not ready.
-
 ``` sh
 pip install cosette
 ```
@@ -60,20 +58,20 @@ chat = Chat(model, sp="""You are a helpful and concise assistant.""")
 chat("I'm Jeremy")
 ```
 
-Hi, Jeremy! How can I help you today?
+Hi Jeremy! How can I assist you today?
 
 <details>
 
-- id: chatcmpl-9QyqLiIQLwDmZvatyF5g3BzLIfXJ7
+- id: chatcmpl-9R77A9rJKtzOpKwWJMSE5BGnP4RDM
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘Hi, Jeremy! How can I help you
+  message=ChatCompletionMessage(content=‘Hi Jeremy! How can I assist you
   today?’, role=‘assistant’, function_call=None, tool_calls=None))\]
-- created: 1716217437
+- created: 1716249232
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_729ea513f7
-- usage: CompletionUsage(completion_tokens=11, prompt_tokens=21,
-  total_tokens=32)
+- usage: CompletionUsage(completion_tokens=10, prompt_tokens=21,
+  total_tokens=31)
 
 </details>
 
@@ -82,20 +80,20 @@ r = chat("What's my name?")
 r
 ```
 
-Your name is Jeremy.
+Your name is Jeremy. How can I help you?
 
 <details>
 
-- id: chatcmpl-9QyqMkfyX4x6MRgOvvwSk4Eerhubz
+- id: chatcmpl-9R77BX3w2NsXOVIrsY5DXeJhXc5A2
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘Your name is Jeremy.’,
-  role=‘assistant’, function_call=None, tool_calls=None))\]
-- created: 1716217438
+  message=ChatCompletionMessage(content=‘Your name is Jeremy. How can I
+  help you?’, role=‘assistant’, function_call=None, tool_calls=None))\]
+- created: 1716249233
 - model: gpt-4o-2024-05-13
 - object: chat.completion
-- system_fingerprint: fp_729ea513f7
-- usage: CompletionUsage(completion_tokens=5, prompt_tokens=44,
-  total_tokens=49)
+- system_fingerprint: fp_927397958d
+- usage: CompletionUsage(completion_tokens=11, prompt_tokens=43,
+  total_tokens=54)
 
 </details>
 
@@ -107,7 +105,7 @@ collapsible section. Alternatively you can `print` the details:
 print(r)
 ```
 
-    ChatCompletion(id='chatcmpl-9QyqMkfyX4x6MRgOvvwSk4Eerhubz', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Your name is Jeremy.', role='assistant', function_call=None, tool_calls=None))], created=1716217438, model='gpt-4o-2024-05-13', object='chat.completion', system_fingerprint='fp_729ea513f7', usage=In: 44; Out: 5; Total: 49)
+    ChatCompletion(id='chatcmpl-9R77BX3w2NsXOVIrsY5DXeJhXc5A2', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Your name is Jeremy. How can I help you?', role='assistant', function_call=None, tool_calls=None))], created=1716249233, model='gpt-4o-2024-05-13', object='chat.completion', system_fingerprint='fp_927397958d', usage=In: 43; Out: 11; Total: 54)
 
 You can use `stream=True` to stream the results as soon as they arrive
 (although you will only see the gradual generation if you execute the
@@ -174,14 +172,16 @@ r = chat(pr)
 r
 ```
 
-- id: chatcmpl-9QyqNJtr4NOBJ2e6Dd4M3pdkhFbVH
+    Finding the sum of 604542 and 6458932
+
+- id: chatcmpl-9R77Ok8WFXh48UV9KTvzwHL7R7Hr9
 - choices: \[Choice(finish_reason=‘tool_calls’, index=0, logprobs=None,
   message=ChatCompletionMessage(content=None, role=‘assistant’,
   function_call=None,
-  tool_calls=\[ChatCompletionMessageToolCall(id=‘call_WshBFpjm93wGEBlqBMrM96ET’,
+  tool_calls=\[ChatCompletionMessageToolCall(id=‘call_uJqr48gNgzne2OuhYGoHyOLW’,
   function=Function(arguments=‘{“a”:604542,“b”:6458932}’, name=‘sums’),
   type=‘function’)\]))\]
-- created: 1716217439
+- created: 1716249246
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_729ea513f7
@@ -192,26 +192,24 @@ Cosette handles all that for us – we just have to pass along the
 message, and it all happens automatically:
 
 ``` python
-chat(r)
+chat()
 ```
 
-    Finding the sum of 604542 and 6458932
-
-The sum of 604542 and 6458932 is 7063474.
+The result of ( 604542 + 6458932 ) is 7,063,474.
 
 <details>
 
-- id: chatcmpl-9QyqUj9gndbqx3buU5eF7qgG60w2Q
+- id: chatcmpl-9R77QR364CDfZsKYCgoMGlLucvyp2
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932
-  is 7063474.’, role=‘assistant’, function_call=None,
+  message=ChatCompletionMessage(content=‘The result of \\ 604542 +
+  6458932 \\ is 7,063,474.’, role=‘assistant’, function_call=None,
   tool_calls=None))\]
-- created: 1716217446
+- created: 1716249248
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_729ea513f7
-- usage: CompletionUsage(completion_tokens=18, prompt_tokens=128,
-  total_tokens=146)
+- usage: CompletionUsage(completion_tokens=23, prompt_tokens=128,
+  total_tokens=151)
 
 </details>
 
@@ -222,7 +220,7 @@ You can see how many tokens have been used at any time by checking the
 chat.use
 ```
 
-    In: 224; Out: 39; Total: 263
+    In: 224; Out: 44; Total: 268
 
 ### Stuff under here isn’t working yet
 
@@ -253,30 +251,9 @@ pr
     'Calculate (604542+6458932)*2'
 
 ``` python
-chat.toolloop(pr, show_trace=True)
+# TODO - not implemented
+# chat.toolloop(pr, show_trace=True)
 ```
-
-    ToolsBetaMessage(id='msg_017rs6nqX3cFgnoTgb6x7frj', content=[TextBlock(text="Okay, let's calculate that step-by-step:", type='text'), ToolUseBlock(id='toolu_0121PUsNMncXygjWoRn9rxJC', input={'a': 604542, 'b': 6458932}, name='sums', type='tool_use')], model='claude-3-haiku-20240307', role='assistant', stop_reason='tool_use', stop_sequence=None, type='message', usage=In: 528; Out: 86; Total: 614)
-    Finding the sum of 604542 and 6458932
-    ToolsBetaMessage(id='msg_01BtiycbFqt6jRRxHaKZd63U', content=[TextBlock(text="Now we'll multiply that sum by 2:", type='text'), ToolUseBlock(id='toolu_011EeL6GwgSYx7Y6D89Jk1QB', input={'a': 7063474, 'b': 2}, name='mults', type='tool_use')], model='claude-3-haiku-20240307', role='assistant', stop_reason='tool_use', stop_sequence=None, type='message', usage=In: 628; Out: 83; Total: 711)
-    Finding the product of 7063474 and 2
-    ToolsBetaMessage(id='msg_01HS7iZubJZWmDLnusWMrZuS', content=[TextBlock(text='So the final result is 14,126,948.', type='text')], model='claude-3-haiku-20240307', role='assistant', stop_reason='end_turn', stop_sequence=None, type='message', usage=In: 725; Out: 16; Total: 741)
-
-So the final result is 14,126,948.
-
-<details>
-
-- id: msg_01HS7iZubJZWmDLnusWMrZuS
-- content: \[{‘text’: ‘So the final result is 14,126,948.’, ‘type’:
-  ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 725, ‘output_tokens’: 16}
-
-</details>
 
 ## Images
 
@@ -309,21 +286,20 @@ Prompts to Claudia can be lists, containing text, images, or both, eg:
 chat([img, "In brief, what color flowers are in this image?"])
 ```
 
-The image contains purple or lavender-colored flowers, which appear to
-be daisies or a similar type of flower.
+The flowers in the image are purple.
 
 <details>
 
-- id: msg_017i7Su5rfcdcz3FmiEQ9CvD
-- content: \[{‘text’: ‘The image contains purple or lavender-colored
-  flowers, which appear to be daisies or a similar type of flower.’,
-  ‘type’: ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 185, ‘output_tokens’: 28}
+- id: chatcmpl-9R77kawRnTgsuk8NsgJRsCYyYSxnX
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The flowers in the image are
+  purple.’, role=‘assistant’, function_call=None, tool_calls=None))\]
+- created: 1716249268
+- model: gpt-4o-2024-05-13
+- object: chat.completion
+- system_fingerprint: fp_927397958d
+- usage: CompletionUsage(completion_tokens=8, prompt_tokens=273,
+  total_tokens=281)
 
 </details>
 
@@ -333,7 +309,7 @@ The image is included as input tokens.
 chat.use
 ```
 
-    In: 185; Out: 28; Total: 213
+    In: 273; Out: 8; Total: 281
 
 Alternatively, Cosette supports creating a multi-stage chat with
 separate image and text prompts. For instance, you can pass just the
@@ -346,29 +322,27 @@ chat = Chat(model)
 chat(img)
 ```
 
-The image shows a cute puppy lying in the grass. The puppy appears to be
-a Cavalier King Charles Spaniel, with a fluffy brown and white coat. The
-puppy is looking directly at the camera with a friendly, curious
-expression. In the background, there are some purple flowers, adding a
-nice natural setting to the scene. The image captures the adorable and
-playful nature of this young pup.
+What a cute puppy! This is a Cavalier King Charles Spaniel, known for
+their friendly and affectionate nature. They are a small breed with
+distinctive markings and long, floppy ears. If you have any more
+questions about this breed or anything else, feel free to ask!
 
 <details>
 
-- id: msg_01K36rQXar93QVV5PzzaAoPr
-- content: \[{‘text’: ‘The image shows a cute puppy lying in the grass.
-  The puppy appears to be a Cavalier King Charles Spaniel, with a fluffy
-  brown and white coat. The puppy is looking directly at the camera with
-  a friendly, curious expression. In the background, there are some
-  purple flowers, adding a nice natural setting to the scene. The image
-  captures the adorable and playful nature of this young pup.’, ‘type’:
-  ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 173, ‘output_tokens’: 91}
+- id: chatcmpl-9R77sofDkOWKHjdVSyt35lOVXQn6K
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘What a cute puppy! This is a
+  Cavalier King Charles Spaniel, known for their friendly and
+  affectionate nature. They are a small breed with distinctive markings
+  and long, floppy ears. If you have any more questions about this breed
+  or anything else, feel free to ask!’, role=‘assistant’,
+  function_call=None, tool_calls=None))\]
+- created: 1716249276
+- model: gpt-4o-2024-05-13
+- object: chat.completion
+- system_fingerprint: fp_927397958d
+- usage: CompletionUsage(completion_tokens=55, prompt_tokens=262,
+  total_tokens=317)
 
 </details>
 
@@ -376,20 +350,24 @@ playful nature of this young pup.
 chat('What direction is the puppy facing?')
 ```
 
-The puppy in the image is facing towards the camera, looking directly at
-the viewer.
+The puppy is facing towards the camera. Its body is angled slightly to
+the right, but its head is turned towards the front, looking directly at
+the camera.
 
 <details>
 
-- id: msg_013CqCFmEzPvc6mW5kAP8fki
-- content: \[{‘text’: ‘The puppy in the image is facing towards the
-  camera, looking directly at the viewer.’, ‘type’: ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 275, ‘output_tokens’: 21}
+- id: chatcmpl-9R786v3XwIhP30RTRQ55D6Pe1bLXH
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The puppy is facing towards the
+  camera. Its body is angled slightly to the right, but its head is
+  turned towards the front, looking directly at the camera.’,
+  role=‘assistant’, function_call=None, tool_calls=None))\]
+- created: 1716249290
+- model: gpt-4o-2024-05-13
+- object: chat.completion
+- system_fingerprint: fp_927397958d
+- usage: CompletionUsage(completion_tokens=32, prompt_tokens=332,
+  total_tokens=364)
 
 </details>
 
@@ -397,23 +375,22 @@ the viewer.
 chat('What color is it?')
 ```
 
-The puppy in the image has a brown and white coat color. It appears to
-be a Cavalier King Charles Spaniel breed, with the characteristic long,
-silky fur in those colors.
+The puppy has a white coat with brown markings, particularly on its ears
+and around its eyes.
 
 <details>
 
-- id: msg_01XfDZDRyaNMW58TVJ9znXjR
-- content: \[{‘text’: ‘The puppy in the image has a brown and white coat
-  color. It appears to be a Cavalier King Charles Spaniel breed, with
-  the characteristic long, silky fur in those colors.’, ‘type’:
-  ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 304, ‘output_tokens’: 44}
+- id: chatcmpl-9R78AX9aTGYR35XZUXWGx5LC666s7
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The puppy has a white coat with
+  brown markings, particularly on its ears and around its eyes.’,
+  role=‘assistant’, function_call=None, tool_calls=None))\]
+- created: 1716249294
+- model: gpt-4o-2024-05-13
+- object: chat.completion
+- system_fingerprint: fp_927397958d
+- usage: CompletionUsage(completion_tokens=19, prompt_tokens=377,
+  total_tokens=396)
 
 </details>
 
@@ -424,4 +401,4 @@ that number of input tokens increases quickly with this kind of chat.
 chat.use
 ```
 
-    In: 752; Out: 156; Total: 908
+    In: 971; Out: 106; Total: 1077
