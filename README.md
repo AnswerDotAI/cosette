@@ -63,7 +63,7 @@ chat = Chat(model, sp="""You are a helpful and concise assistant.""")
 chat("I'm Jeremy")
 ```
 
-It’s nice to meet you, Jeremy! I’m an AI assistant created by Anthropic.
+It’s nice to meet you, Jeremy! I’m an AI assistant created by OpenAI.
 I’m here to help with any questions or tasks you may have. Please let me
 know if there’s anything I can assist you with.
 
@@ -71,7 +71,7 @@ know if there’s anything I can assist you with.
 
 - id: msg_01BtZSuhryCP1NpWwerwSXJt
 - content: \[{‘text’: “It’s nice to meet you, Jeremy! I’m an AI
-  assistant created by Anthropic. I’m here to help with any questions or
+  assistant created by OpenAI. I’m here to help with any questions or
   tasks you may have. Please let me know if there’s anything I can
   assist you with.”, ‘type’: ‘text’}\]
 - model: claude-3-haiku-20240307
@@ -153,7 +153,7 @@ for o in chat.stream("Concisely, what book was that in?", prefill='It was in'):
 
 ## Tool use
 
-[Tool use](https://docs.anthropic.com/claude/docs/tool-use) lets Claude
+[Tool use](https://docs.openai.com/claude/docs/tool-use) lets Claude
 use external tools.
 
 We use [docments](https://fastcore.fast.ai/docments.html) to make

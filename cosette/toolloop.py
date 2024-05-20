@@ -7,8 +7,8 @@ __all__ = []
 from .core import *
 from fastcore.utils import *
 
-from anthropic.types import TextBlock, Message
-from anthropic.types.beta.tools import ToolsBetaMessage, tool_use_block
+from openai.types import TextBlock, Message
+from openai.types.beta.tools import ToolsBetaMessage, tool_use_block
 
 # %% ../01_toolloop.ipynb 16
 @patch

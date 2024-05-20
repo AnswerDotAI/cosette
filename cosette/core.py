@@ -146,7 +146,7 @@ class Chat:
                  cli:Optional[Client]=None, # Client to use (leave empty if passing `model`)
                  sp='', # Optional system prompt
                  tools:Optional[list]=None): # List of tools to make available to Claude
-        "Anthropic chat client."
+        "OpenAI chat client."
         assert model or cli
         self.c = (cli or Client(model))
         self.h,self.sp,self.tools = [],sp,tools
