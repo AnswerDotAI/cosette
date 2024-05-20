@@ -17,7 +17,7 @@ OpenAI’s Python SDK will automatically be installed with Cosette, if you
 don’t already have it.
 
 ``` python
-from cosette.core import models
+from cosette import *
 ```
 
 Cosette only exports the symbols that are needed to use the library, so
@@ -38,11 +38,10 @@ models
 
     ('gpt-4o',
      'gpt-4-turbo',
-     'turbo-2024-04-09',
-     'gpt4-1106-preview',
-     'gpt-35-turbo',
-     'gpt-35-turbo-16k',
-     'gpt-4-32k')
+     'gpt-4',
+     'gpt-4-32k',
+     'gpt-3.5-turbo',
+     'gpt-3.5-turbo-instruct')
 
 For these examples, we’ll use GPT-4o.
 
@@ -52,34 +51,29 @@ model = models[0]
 
 ## Chat
 
-**Nothing under here works. It’s just copied from Claudette. I’m working
-on it OK.**
-
-The main interface to Claudia is the `Chat` class, which provides a
-stateful interface to Claude:
+The main interface to Cosette is the
+[`Chat`](https://AnswerDotAI.github.io/cosette/core.html#chat) class,
+which provides a stateful interface to the models:
 
 ``` python
 chat = Chat(model, sp="""You are a helpful and concise assistant.""")
 chat("I'm Jeremy")
 ```
 
-It’s nice to meet you, Jeremy! I’m an AI assistant created by OpenAI.
-I’m here to help with any questions or tasks you may have. Please let me
-know if there’s anything I can assist you with.
+Hi, Jeremy! How can I help you today?
 
 <details>
 
-- id: msg_01BtZSuhryCP1NpWwerwSXJt
-- content: \[{‘text’: “It’s nice to meet you, Jeremy! I’m an AI
-  assistant created by OpenAI. I’m here to help with any questions or
-  tasks you may have. Please let me know if there’s anything I can
-  assist you with.”, ‘type’: ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 19, ‘output_tokens’: 51}
+- id: chatcmpl-9QyqLiIQLwDmZvatyF5g3BzLIfXJ7
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘Hi, Jeremy! How can I help you
+  today?’, role=‘assistant’, function_call=None, tool_calls=None))\]
+- created: 1716217437
+- model: gpt-4o-2024-05-13
+- object: chat.completion
+- system_fingerprint: fp_729ea513f7
+- usage: CompletionUsage(completion_tokens=11, prompt_tokens=21,
+  total_tokens=32)
 
 </details>
 
@@ -92,14 +86,16 @@ Your name is Jeremy.
 
 <details>
 
-- id: msg_01W5zdkMprwYdN7zLNv5gZQK
-- content: \[{‘text’: ‘Your name is Jeremy.’, ‘type’: ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 78, ‘output_tokens’: 8}
+- id: chatcmpl-9QyqMkfyX4x6MRgOvvwSk4Eerhubz
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘Your name is Jeremy.’,
+  role=‘assistant’, function_call=None, tool_calls=None))\]
+- created: 1716217438
+- model: gpt-4o-2024-05-13
+- object: chat.completion
+- system_fingerprint: fp_729ea513f7
+- usage: CompletionUsage(completion_tokens=5, prompt_tokens=44,
+  total_tokens=49)
 
 </details>
 
@@ -111,50 +107,22 @@ collapsible section. Alternatively you can `print` the details:
 print(r)
 ```
 
-    ToolsBetaMessage(id='msg_01W5zdkMprwYdN7zLNv5gZQK', content=[TextBlock(text='Your name is Jeremy.', type='text')], model='claude-3-haiku-20240307', role='assistant', stop_reason='end_turn', stop_sequence=None, type='message', usage=In: 78; Out: 8; Total: 86)
+    ChatCompletion(id='chatcmpl-9QyqMkfyX4x6MRgOvvwSk4Eerhubz', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Your name is Jeremy.', role='assistant', function_call=None, tool_calls=None))], created=1716217438, model='gpt-4o-2024-05-13', object='chat.completion', system_fingerprint='fp_729ea513f7', usage=In: 44; Out: 5; Total: 49)
 
-Claude supports adding an extra `assistant` message at the end, which
-contains the *prefill* – i.e. the text we want Claude to assume the
-response starts with. Let’s try it out:
-
-``` python
-chat("Concisely, what is the meaning of life?",
-     prefill='According to Douglas Adams,')
-```
-
-According to Douglas Adams, “The answer to the ultimate question of
-life, the universe, and everything is 42.”
-
-<details>
-
-- id: msg_01GKFGiZLu4wwrDe882a6MNx
-- content: \[{‘text’: ‘According to Douglas Adams, “The answer to the
-  ultimate question of life, the universe, and everything is 42.”’,
-  ‘type’: ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 106, ‘output_tokens’: 23}
-
-</details>
-
-Instead of calling `Chat` directly, you can use `Chat.stream` to stream
-the results as soon as they arrive (although you will only see the
-gradual generation if you execute the notebook yourself, of course!)
+You can use `stream=True` to stream the results as soon as they arrive
+(although you will only see the gradual generation if you execute the
+notebook yourself, of course!)
 
 ``` python
-for o in chat.stream("Concisely, what book was that in?", prefill='It was in'):
-    print(o, end='')
+for o in chat("What's your name?", stream=True): print(o, end='')
 ```
 
-    It was in The Hitchhiker's Guide to the Galaxy.
+    I don't have a personal name, but you can call me Assistant. How can I assist you today, Jeremy?
 
 ## Tool use
 
-[Tool use](https://docs.openai.com/claude/docs/tool-use) lets Claude
-use external tools.
+[Tool use](https://docs.openai.com/claude/docs/tool-use) lets Claude use
+external tools.
 
 We use [docments](https://fastcore.fast.ai/docments.html) to make
 defining Python functions as ergonomic as possible. Each parameter (and
@@ -190,37 +158,35 @@ pr
 
     'What is 604542+6458932?'
 
-To use tools, pass a list of them to `Chat`:
+To use tools, pass a list of them to
+[`Chat`](https://AnswerDotAI.github.io/cosette/core.html#chat):
 
 ``` python
 chat = Chat(model, sp=sp, tools=[sums])
 ```
 
-Now when we call that with our prompt, Claude doesn’t return the answer,
-but instead returns a `tool_use` message, which means we have to call
-the named tool with the provided parameters:
+Now when we call that with our prompt, the model doesn’t return the
+answer, but instead returns a `tool_use` message, which means we have to
+call the named tool with the provided parameters:
 
 ``` python
 r = chat(pr)
 r
 ```
 
-ToolUseBlock(id=‘toolu_01JgEPbVF5JiwehJPWzFMLse’, input={‘a’: 604542,
-‘b’: 6458932}, name=‘sums’, type=‘tool_use’)
-
-<details>
-
-- id: msg_01LAipBzuv5bB9QezDXgJY41
-- content: \[{‘id’: ‘toolu_01JgEPbVF5JiwehJPWzFMLse’, ‘input’: {‘a’:
-  604542, ‘b’: 6458932}, ‘name’: ‘sums’, ‘type’: ‘tool_use’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: tool_use
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 398, ‘output_tokens’: 72}
-
-</details>
+- id: chatcmpl-9QyqNJtr4NOBJ2e6Dd4M3pdkhFbVH
+- choices: \[Choice(finish_reason=‘tool_calls’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=None, role=‘assistant’,
+  function_call=None,
+  tool_calls=\[ChatCompletionMessageToolCall(id=‘call_WshBFpjm93wGEBlqBMrM96ET’,
+  function=Function(arguments=‘{“a”:604542,“b”:6458932}’, name=‘sums’),
+  type=‘function’)\]))\]
+- created: 1716217439
+- model: gpt-4o-2024-05-13
+- object: chat.completion
+- system_fingerprint: fp_729ea513f7
+- usage: CompletionUsage(completion_tokens=21, prompt_tokens=96,
+  total_tokens=117)
 
 Cosette handles all that for us – we just have to pass along the
 message, and it all happens automatically:
@@ -235,31 +201,35 @@ The sum of 604542 and 6458932 is 7063474.
 
 <details>
 
-- id: msg_01WX3khUpmrdG8F1e9yz6nmW
-- content: \[{‘text’: ‘The sum of 604542 and 6458932 is 7063474.’,
-  ‘type’: ‘text’}\]
-- model: claude-3-haiku-20240307
-- role: assistant
-- stop_reason: end_turn
-- stop_sequence: None
-- type: message
-- usage: {‘input_tokens’: 485, ‘output_tokens’: 23}
+- id: chatcmpl-9QyqUj9gndbqx3buU5eF7qgG60w2Q
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932
+  is 7063474.’, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1716217446
+- model: gpt-4o-2024-05-13
+- object: chat.completion
+- system_fingerprint: fp_729ea513f7
+- usage: CompletionUsage(completion_tokens=18, prompt_tokens=128,
+  total_tokens=146)
 
 </details>
 
 You can see how many tokens have been used at any time by checking the
-`use` property. Note that (as of May 2024) tool use in Claude uses a
-*lot* of tokens, since it automatically adds a large system prompt.
+`use` property.
 
 ``` python
 chat.use
 ```
 
-    In: 923; Out: 95; Total: 1018
+    In: 224; Out: 39; Total: 263
+
+### Stuff under here isn’t working yet
 
 We can do everything needed to use tools in a single step, by using
-`Chat.toolloop`. This can even call multiple tools as needed solve a
-problem. For example, let’s define a tool to handle multiplication:
+[`Chat.toolloop`](https://AnswerDotAI.github.io/cosette/toolloop.html#chat.toolloop).
+This can even call multiple tools as needed solve a problem. For
+example, let’s define a tool to handle multiplication:
 
 ``` python
 def mults(
@@ -318,9 +288,11 @@ fn = Path('samples/puppy.jpg')
 display.Image(filename=fn, width=200)
 ```
 
-![](index_files/figure-commonmark/cell-20-output-1.jpeg)
+![](index_files/figure-commonmark/cell-19-output-1.jpeg)
 
-We create a `Chat` object as before:
+We create a
+[`Chat`](https://AnswerDotAI.github.io/cosette/core.html#chat) object as
+before:
 
 ``` python
 chat = Chat(model)
