@@ -223,7 +223,7 @@ chat.use
 
     In: 224; Out: 39; Total: 263
 
-### Stuff under here isn’t working yet
+### Tool loop
 
 We can do everything needed to use tools in a single step, by using
 [`Chat.toolloop`](https://AnswerDotAI.github.io/cosette/toolloop.html#chat.toolloop).
