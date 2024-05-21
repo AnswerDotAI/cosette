@@ -29,5 +29,6 @@ d = { 'settings': { 'branch': 'main',
                               'cosette.core.mk_tool_choice': ('core.html#mk_tool_choice', 'cosette/core.py'),
                               'cosette.core.mk_toolres': ('core.html#mk_toolres', 'cosette/core.py'),
                               'cosette.core.text_msg': ('core.html#text_msg', 'cosette/core.py'),
-                              'cosette.core.usage': ('core.html#usage', 'cosette/core.py')},
+                              'cosette.core.usage': ('core.html#usage', 'cosette/core.py'),
+                              'cosette.core.wrap_latex': ('core.html#wrap_latex', 'cosette/core.py')},
             'cosette.toolloop': {'cosette.toolloop.Chat.toolloop': ('toolloop.html#chat.toolloop', 'cosette/toolloop.py')}}}

@@ -62,11 +62,11 @@ Hi Jeremy! How can I assist you today?
 
 <details>
 
-- id: chatcmpl-9R77A9rJKtzOpKwWJMSE5BGnP4RDM
+- id: chatcmpl-9R8Z0uRHgWl7XaV6yJtahVDyDTzMZ
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
   message=ChatCompletionMessage(content=‘Hi Jeremy! How can I assist you
   today?’, role=‘assistant’, function_call=None, tool_calls=None))\]
-- created: 1716249232
+- created: 1716254802
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_729ea513f7
@@ -80,20 +80,21 @@ r = chat("What's my name?")
 r
 ```
 
-Your name is Jeremy. How can I help you?
+Your name is Jeremy. How can I assist you further?
 
 <details>
 
-- id: chatcmpl-9R77BX3w2NsXOVIrsY5DXeJhXc5A2
+- id: chatcmpl-9R8Z1c76TFqYFYjyON08CbkAmjerN
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
   message=ChatCompletionMessage(content=‘Your name is Jeremy. How can I
-  help you?’, role=‘assistant’, function_call=None, tool_calls=None))\]
-- created: 1716249233
+  assist you further?’, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1716254803
 - model: gpt-4o-2024-05-13
 - object: chat.completion
-- system_fingerprint: fp_927397958d
-- usage: CompletionUsage(completion_tokens=11, prompt_tokens=43,
-  total_tokens=54)
+- system_fingerprint: fp_729ea513f7
+- usage: CompletionUsage(completion_tokens=12, prompt_tokens=43,
+  total_tokens=55)
 
 </details>
 
@@ -105,7 +106,7 @@ collapsible section. Alternatively you can `print` the details:
 print(r)
 ```
 
-    ChatCompletion(id='chatcmpl-9R77BX3w2NsXOVIrsY5DXeJhXc5A2', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Your name is Jeremy. How can I help you?', role='assistant', function_call=None, tool_calls=None))], created=1716249233, model='gpt-4o-2024-05-13', object='chat.completion', system_fingerprint='fp_927397958d', usage=In: 43; Out: 11; Total: 54)
+    ChatCompletion(id='chatcmpl-9R8Z1c76TFqYFYjyON08CbkAmjerN', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Your name is Jeremy. How can I assist you further?', role='assistant', function_call=None, tool_calls=None))], created=1716254803, model='gpt-4o-2024-05-13', object='chat.completion', system_fingerprint='fp_729ea513f7', usage=In: 43; Out: 12; Total: 55)
 
 You can use `stream=True` to stream the results as soon as they arrive
 (although you will only see the gradual generation if you execute the
@@ -115,7 +116,7 @@ notebook yourself, of course!)
 for o in chat("What's your name?", stream=True): print(o, end='')
 ```
 
-    I don't have a personal name, but you can call me Assistant. How can I assist you today, Jeremy?
+    I don't have a personal name, but you can call me Assistant. How can I help you today, Jeremy?
 
 ## Tool use
 
@@ -174,14 +175,14 @@ r
 
     Finding the sum of 604542 and 6458932
 
-- id: chatcmpl-9R77Ok8WFXh48UV9KTvzwHL7R7Hr9
+- id: chatcmpl-9R8Z2JNenseQyQoseIs8XNImmy2Bo
 - choices: \[Choice(finish_reason=‘tool_calls’, index=0, logprobs=None,
   message=ChatCompletionMessage(content=None, role=‘assistant’,
   function_call=None,
-  tool_calls=\[ChatCompletionMessageToolCall(id=‘call_uJqr48gNgzne2OuhYGoHyOLW’,
+  tool_calls=\[ChatCompletionMessageToolCall(id=‘call_HV4yaZEY1OYK1zYouAcVwfZK’,
   function=Function(arguments=‘{“a”:604542,“b”:6458932}’, name=‘sums’),
   type=‘function’)\]))\]
-- created: 1716249246
+- created: 1716254804
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_729ea513f7
@@ -195,21 +196,21 @@ message, and it all happens automatically:
 chat()
 ```
 
-The result of ( 604542 + 6458932 ) is 7,063,474.
+The sum of 604542 and 6458932 is 7063474.
 
 <details>
 
-- id: chatcmpl-9R77QR364CDfZsKYCgoMGlLucvyp2
+- id: chatcmpl-9R8Z4CrFU3zd71acZzdCsQFQDHxp9
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘The result of \\ 604542 +
-  6458932 \\ is 7,063,474.’, role=‘assistant’, function_call=None,
+  message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932
+  is 7063474.’, role=‘assistant’, function_call=None,
   tool_calls=None))\]
-- created: 1716249248
+- created: 1716254806
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_729ea513f7
-- usage: CompletionUsage(completion_tokens=23, prompt_tokens=128,
-  total_tokens=151)
+- usage: CompletionUsage(completion_tokens=18, prompt_tokens=128,
+  total_tokens=146)
 
 </details>
 
@@ -220,7 +221,7 @@ You can see how many tokens have been used at any time by checking the
 chat.use
 ```
 
-    In: 224; Out: 44; Total: 268
+    In: 224; Out: 39; Total: 263
 
 ### Stuff under here isn’t working yet
 
@@ -251,9 +252,28 @@ pr
     'Calculate (604542+6458932)*2'
 
 ``` python
-# TODO - not implemented
-# chat.toolloop(pr, show_trace=True)
+def pchoice(r): print(r.choices[0])
 ```
+
+``` python
+r = chat.toolloop(pr, trace_func=pchoice)
+```
+
+    Finding the sum of 604542 and 6458932
+    Finding the product of 2 and 1
+    Choice(finish_reason='tool_calls', index=0, logprobs=None, message=ChatCompletionMessage(content=None, role='assistant', function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_OfypQBQoAuIUksucevaxwH5Z', function=Function(arguments='{"a": 604542, "b": 6458932}', name='sums'), type='function'), ChatCompletionMessageToolCall(id='call_yKAL5o96cDef83OFJhDB21MM', function=Function(arguments='{"a": 2}', name='mults'), type='function')]))
+    Finding the product of 7063474 and 2
+    Choice(finish_reason='tool_calls', index=0, logprobs=None, message=ChatCompletionMessage(content=None, role='assistant', function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_Ffye7Tf65CjVjwwx8Sp8031i', function=Function(arguments='{"a":7063474,"b":2}', name='mults'), type='function')]))
+    Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='The result of \\((604542 + 6458932) \\times 2\\) is 14,126,948.', role='assistant', function_call=None, tool_calls=None))
+
+OpenAI uses special tags for math equations, which we can replace using
+[`wrap_latex`](https://AnswerDotAI.github.io/cosette/core.html#wrap_latex):
+
+``` python
+wrap_latex(contents(r))
+```
+
+The result of $(604542 + 6458932) \times 2$ is 14,126,948.
 
 ## Images
 
@@ -264,7 +284,7 @@ fn = Path('samples/puppy.jpg')
 display.Image(filename=fn, width=200)
 ```
 
-![](index_files/figure-commonmark/cell-19-output-1.jpeg)
+![](index_files/figure-commonmark/cell-21-output-1.jpeg)
 
 We create a
 [`Chat`](https://AnswerDotAI.github.io/cosette/core.html#chat) object as
@@ -290,11 +310,11 @@ The flowers in the image are purple.
 
 <details>
 
-- id: chatcmpl-9R77kawRnTgsuk8NsgJRsCYyYSxnX
+- id: chatcmpl-9R8Vqpx62OezZDjAt3SIfnjMpH3I8
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
   message=ChatCompletionMessage(content=‘The flowers in the image are
   purple.’, role=‘assistant’, function_call=None, tool_calls=None))\]
-- created: 1716249268
+- created: 1716254606
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_927397958d
@@ -322,27 +342,29 @@ chat = Chat(model)
 chat(img)
 ```
 
-What a cute puppy! This is a Cavalier King Charles Spaniel, known for
-their friendly and affectionate nature. They are a small breed with
-distinctive markings and long, floppy ears. If you have any more
-questions about this breed or anything else, feel free to ask!
+What an adorable puppy! This puppy has a white and light brown coat and
+is lying on green grass next to some purple flowers. Puppies like this
+are commonly seen from breeds such as Cavalier King Charles Spaniels,
+though without more context, it’s difficult to identify the breed
+precisely. It looks very playful and cute!
 
 <details>
 
-- id: chatcmpl-9R77sofDkOWKHjdVSyt35lOVXQn6K
+- id: chatcmpl-9R8VsAnTWr9k1DShC7mZsnhRtqxRA
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘What a cute puppy! This is a
-  Cavalier King Charles Spaniel, known for their friendly and
-  affectionate nature. They are a small breed with distinctive markings
-  and long, floppy ears. If you have any more questions about this breed
-  or anything else, feel free to ask!’, role=‘assistant’,
-  function_call=None, tool_calls=None))\]
-- created: 1716249276
+  message=ChatCompletionMessage(content=“What an adorable puppy! This
+  puppy has a white and light brown coat and is lying on green grass
+  next to some purple flowers. Puppies like this are commonly seen from
+  breeds such as Cavalier King Charles Spaniels, though without more
+  context, it’s difficult to identify the breed precisely. It looks very
+  playful and cute!”, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1716254608
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_927397958d
-- usage: CompletionUsage(completion_tokens=55, prompt_tokens=262,
-  total_tokens=317)
+- usage: CompletionUsage(completion_tokens=63, prompt_tokens=262,
+  total_tokens=325)
 
 </details>
 
@@ -350,24 +372,25 @@ questions about this breed or anything else, feel free to ask!
 chat('What direction is the puppy facing?')
 ```
 
-The puppy is facing towards the camera. Its body is angled slightly to
-the right, but its head is turned towards the front, looking directly at
-the camera.
+The puppy is facing slightly to the right of the camera, with its head
+turned towards the viewer. Its body is positioned in such a way that
+suggests it is laying down or resting on the grass.
 
 <details>
 
-- id: chatcmpl-9R786v3XwIhP30RTRQ55D6Pe1bLXH
+- id: chatcmpl-9R8VuzGIABwg341oOHMXbGGa7daya
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘The puppy is facing towards the
-  camera. Its body is angled slightly to the right, but its head is
-  turned towards the front, looking directly at the camera.’,
-  role=‘assistant’, function_call=None, tool_calls=None))\]
-- created: 1716249290
+  message=ChatCompletionMessage(content=‘The puppy is facing slightly to
+  the right of the camera, with its head turned towards the viewer. Its
+  body is positioned in such a way that suggests it is laying down or
+  resting on the grass.’, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1716254610
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_927397958d
-- usage: CompletionUsage(completion_tokens=32, prompt_tokens=332,
-  total_tokens=364)
+- usage: CompletionUsage(completion_tokens=40, prompt_tokens=340,
+  total_tokens=380)
 
 </details>
 
@@ -375,22 +398,25 @@ the camera.
 chat('What color is it?')
 ```
 
-The puppy has a white coat with brown markings, particularly on its ears
-and around its eyes.
+The puppy has a predominantly white coat with light brown patches,
+particularly around its ears and eyes. This coloration is commonly seen
+in certain breeds, such as the Cavalier King Charles Spaniel.
 
 <details>
 
-- id: chatcmpl-9R78AX9aTGYR35XZUXWGx5LC666s7
+- id: chatcmpl-9R8Vwtlu6aDEGQ8O7bZFk8rfT9FGL
 - choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘The puppy has a white coat with
-  brown markings, particularly on its ears and around its eyes.’,
-  role=‘assistant’, function_call=None, tool_calls=None))\]
-- created: 1716249294
+  message=ChatCompletionMessage(content=‘The puppy has a predominantly
+  white coat with light brown patches, particularly around its ears and
+  eyes. This coloration is commonly seen in certain breeds, such as the
+  Cavalier King Charles Spaniel.’, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1716254612
 - model: gpt-4o-2024-05-13
 - object: chat.completion
 - system_fingerprint: fp_927397958d
-- usage: CompletionUsage(completion_tokens=19, prompt_tokens=377,
-  total_tokens=396)
+- usage: CompletionUsage(completion_tokens=38, prompt_tokens=393,
+  total_tokens=431)
 
 </details>
 
@@ -401,4 +427,4 @@ that number of input tokens increases quickly with this kind of chat.
 chat.use
 ```
 
-    In: 971; Out: 106; Total: 1077
+    In: 995; Out: 141; Total: 1136
