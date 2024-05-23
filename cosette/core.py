@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['empty', 'models', 'find_block', 'contents', 'usage', 'wrap_latex', 'Client', 'get_stream', 'mk_openai_func',
-           'mk_tool_choice', 'call_func', 'mk_toolres', 'Chat', 'img_msg', 'text_msg', 'mk_msg']
+           'mk_tool_choice', 'call_func', 'mk_toolres', 'mock_tooluse', 'Chat', 'img_msg', 'text_msg', 'mk_msg']
 
 # %% ../00_core.ipynb 3
 from fastcore import imghdr
@@ -11,6 +11,8 @@ from fastcore.meta import delegates
 
 import inspect, typing, mimetypes, base64, json, ast
 from collections import abc
+from random import choices
+from string import ascii_letters,digits
 
 from openai import types
 from openai import Completion,OpenAI,NOT_GIVEN
@@ -163,7 +165,21 @@ def mk_toolres(
         res.append(mk_msg(str(cts), 'tool', tool_call_id=tc.id, name=func.name))
     return res
 
-# %% ../00_core.ipynb 65
+# %% ../00_core.ipynb 64
+def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
+
+def mock_tooluse(name:str, # The name of the called function
+                 res,  # The result of calling the function
+                 **kwargs): # The arguments to the function
+    ""
+    id = _mock_id()
+    func = dict(arguments=json.dumps(kwargs), name=name)
+    tc = dict(id=id, function=func, type='function')
+    req = dict(content=None, role='assistant', tool_calls=[tc])
+    resp = mk_msg('' if res is None else str(res), 'tool', tool_call_id=id, name=name)
+    return [req,resp]
+
+# %% ../00_core.ipynb 68
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
@@ -179,7 +195,7 @@ class Chat:
     @property
     def use(self): return self.c.use
 
-# %% ../00_core.ipynb 67
+# %% ../00_core.ipynb 70
 @patch
 @delegates(Completions.create)
 def __call__(self:Chat,
@@ -195,7 +211,7 @@ def __call__(self:Chat,
     self.h += mk_toolres(res, ns=self.tools, obj=self)
     return res
 
-# %% ../00_core.ipynb 79
+# %% ../00_core.ipynb 82
 def img_msg(data:bytes)->dict:
     "Convert image `data` into an encoded `dict`"
     img = base64.b64encode(data).decode("utf-8")
@@ -203,25 +219,25 @@ def img_msg(data:bytes)->dict:
     r = {'url': f"data:{mtype};base64,{img}"}
     return {'type': "image_url", "image_url": r}
 
-# %% ../00_core.ipynb 80
+# %% ../00_core.ipynb 83
 def text_msg(s:str)->dict:
     "Convert `s` to a text message"
     return {"type": "text", "text": s}
 
-# %% ../00_core.ipynb 83
+# %% ../00_core.ipynb 86
 def _mk_content(src):
     "Create appropriate content data structure based on type of content"
     if isinstance(src,str): return text_msg(src)
     if isinstance(src,bytes): return img_msg(src)
     return src
 
-# %% ../00_core.ipynb 86
+# %% ../00_core.ipynb 89
 def mk_msg(content, # A string, list, or dict containing the contents of the message
            role='user', # Must be 'user' or 'assistant'
            **kwargs):
     "Helper to create a `dict` appropriate for a message. `kwargs` are added as key/value pairs to the message"
     if hasattr(content, 'content'): content,role = content.content,content.role
     if isinstance(content, ChatCompletion): return find_block(content)
-    if not isinstance(content, list): content=[content]
-    content = [_mk_content(o) for o in content] if content else '.'
+    if content is not None and not isinstance(content, list): content=[content]
+    content = [_mk_content(o) for o in content] if content else ''
     return dict(role=role, content=content, **kwargs)
