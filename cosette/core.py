@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['empty', 'models', 'find_block', 'contents', 'usage', 'wrap_latex', 'Client', 'get_stream', 'mk_openai_func',
-           'mk_tool_choice', 'call_func', 'mk_toolres', 'mock_tooluse', 'Chat', 'img_msg', 'text_msg', 'mk_msg']
+           'mk_tool_choice', 'call_func', 'mk_toolres', 'mk_tooluse', 'Chat', 'img_msg', 'text_msg', 'mk_msg']
 
 # %% ../00_core.ipynb 3
 from fastcore import imghdr
@@ -19,7 +19,7 @@ from openai import Completion,OpenAI,NOT_GIVEN
 from openai.resources import chat
 from openai.resources.chat import Completions
 from openai.types.chat.chat_completion import ChatCompletion, ChatCompletionMessage
-from openai.types.completion_usage import CompletionUsage
+from openai.types.completion_usage import CompletionUsage,CompletionTokensDetails
 
 from toolslm.funccall import *
 
@@ -30,7 +30,7 @@ except: display=None
 empty = inspect.Parameter.empty
 
 # %% ../00_core.ipynb 6
-models = 'gpt-4o', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct'
+models = 'gpt-4o', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1-preview', 'o1-mini'
 
 # %% ../00_core.ipynb 13
 def find_block(r:abc.Mapping, # The message to look in
@@ -65,20 +65,21 @@ def _repr_markdown_(self:ChatCompletion):
 
 # %% ../00_core.ipynb 19
 def usage(inp=0, # Number of prompt tokens
-          out=0  # Number of completion tokens
+          out=0, # Number of completion tokens
+          reas=0 # Number of reasoning tokens
          ):
     "Slightly more concise version of `CompletionUsage`."
-    return CompletionUsage(prompt_tokens=inp, completion_tokens=out, total_tokens=inp+out)
+    return CompletionUsage(prompt_tokens=inp, completion_tokens=out, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=reas), total_tokens=inp+out+reas)
 
 # %% ../00_core.ipynb 21
 @patch
-def __repr__(self:CompletionUsage): return f'In: {self.prompt_tokens}; Out: {self.completion_tokens}; Total: {self.total_tokens}'
+def __repr__(self:CompletionUsage): return f'In: {self.prompt_tokens}; Out: {self.completion_tokens}; Reasoning: {self.completion_tokens_details.reasoning_tokens}; Total: {self.total_tokens}'
 
 # %% ../00_core.ipynb 23
 @patch
 def __add__(self:CompletionUsage, b):
     "Add together each of `input_tokens` and `output_tokens`"
-    return usage(self.prompt_tokens+b.prompt_tokens, self.completion_tokens+b.completion_tokens)
+    return usage(self.prompt_tokens+b.prompt_tokens, self.completion_tokens+b.completion_tokens, self.completion_tokens_details.reasoning_tokens+b.completion_tokens_details.reasoning_tokens)
 
 # %% ../00_core.ipynb 25
 def wrap_latex(text, md=True):
@@ -168,7 +169,7 @@ def mk_toolres(
 # %% ../00_core.ipynb 64
 def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
 
-def mock_tooluse(name:str, # The name of the called function
+def mk_tooluse(name:str, # The name of the called function
                  res,  # The result of calling the function
                  **kwargs): # The arguments to the function
     ""

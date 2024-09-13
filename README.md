@@ -284,7 +284,8 @@ fn = Path('samples/puppy.jpg')
 display.Image(filename=fn, width=200)
 ```
 
-![](index_files/figure-commonmark/cell-21-output-1.jpeg)
+<img src="index_files/figure-commonmark/cell-21-output-1.jpeg"
+width="200" />
 
 We create a
 [`Chat`](https://AnswerDotAI.github.io/cosette/core.html#chat) object as
