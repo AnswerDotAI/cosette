@@ -90,9 +90,9 @@ def wrap_latex(text, md=True):
 
 # %% ../00_core.ipynb 32
 class Client:
-    def __init__(self, model, cli=None):
+    def __init__(self, model, cli=None, multimodal=True):
         "Basic LLM messages client."
-        self.model,self.use = model,usage(0,0)
+        self.model,self.multimodal,self.use = model,multimodal,usage(0,0)
         self.c = (cli or OpenAI()).chat.completions
 
 # %% ../00_core.ipynb 34
@@ -120,7 +120,7 @@ def __call__(self:Client,
              **kwargs):
     "Make a call to LLM."
     if stream: kwargs['stream_options'] = {"include_usage": True}
-    if sp: msgs = [mk_msg(sp, 'system')] + list(msgs)
+    if sp: msgs = [mk_msg(sp, 'system', multimodal=self.multimodal)] + list(msgs)
     r = self.c.create(
         model=self.model, messages=msgs, max_tokens=maxtok, stream=stream, **kwargs)
     if not stream: return self._r(r)
@@ -185,12 +185,13 @@ class Chat:
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
                  cli:Optional[Client]=None, # Client to use (leave empty if passing `model`)
                  sp='', # Optional system prompt
+                 multimodal:bool=True, # Are your messages multimodal (text and images)?
                  tools:Optional[list]=None,  # List of tools to make available
                  tool_choice:Optional[str]=None): # Forced tool choice
         "OpenAI chat client."
         assert model or cli
-        self.c = (cli or Client(model))
-        self.h,self.sp,self.tools,self.tool_choice = [],sp,tools,tool_choice
+        self.c = (cli or Client(model, multimodal=multimodal))
+        self.h,self.sp,self.multimodal,self.tools,self.tool_choice = [],sp,multimodal,tools,tool_choice
     
     @property
     def use(self): return self.c.use
@@ -204,7 +205,7 @@ def __call__(self:Chat,
              **kwargs):
     "Add prompt `pr` to dialog and get a response"
     if isinstance(pr,str): pr = pr.strip()
-    if pr: self.h.append(mk_msg(pr))
+    if pr: self.h.append(mk_msg(pr, multimodal=self.multimodal))
     if self.tools: kwargs['tools'] = [mk_openai_func(o) for o in self.tools]
     if self.tool_choice: kwargs['tool_choice'] = mk_tool_choice(tool_choice)
     res = self.c(self.h, sp=self.sp, stream=stream, **kwargs)
@@ -234,10 +235,11 @@ def _mk_content(src):
 # %% ../00_core.ipynb 89
 def mk_msg(content, # A string, list, or dict containing the contents of the message
            role='user', # Must be 'user' or 'assistant'
+           multimodal=True, 
            **kwargs):
     "Helper to create a `dict` appropriate for a message. `kwargs` are added as key/value pairs to the message"
     if hasattr(content, 'content'): content,role = content.content,content.role
     if isinstance(content, ChatCompletion): return find_block(content)
-    if content is not None and not isinstance(content, list): content=[content]
-    content = [_mk_content(o) for o in content] if content else ''
+    if content and not multimodal: content = " .".join(content)
+    else: content = [_mk_content(o) for o in content] if content else ''
     return dict(role=role, content=content, **kwargs)
