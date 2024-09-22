@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Cosette’s source – cosette</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Cosette’s source – cosette">
+<meta property="og:description" content="Cosette is Claude’s friend">
+<meta property="og:site_name" content="cosette">
+<meta name="twitter:title" content="Cosette’s source – cosette">
+<meta name="twitter:description" content="Cosette is Claude’s friend">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">cosette</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./core.html">Cosette’s source</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">cosette</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Cosette’s source</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./toolloop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tool loop</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#openai-sdk" id="toc-openai-sdk" class="nav-link" data-scroll-target="#openai-sdk">OpenAI SDK</a>
+  <ul class="collapse">
+  <li><a href="#formatting-output" id="toc-formatting-output" class="nav-link" data-scroll-target="#formatting-output">Formatting output</a></li>
+  <li><a href="#find_block" id="toc-find_block" class="nav-link" data-scroll-target="#find_block">find_block</a></li>
+  <li><a href="#contents" id="toc-contents" class="nav-link" data-scroll-target="#contents">contents</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">usage</a></li>
+  <li><a href="#completionusage.__repr__" id="toc-completionusage.__repr__" class="nav-link" data-scroll-target="#completionusage.__repr__">CompletionUsage.__repr__</a></li>
+  <li><a href="#completionusage.__add__" id="toc-completionusage.__add__" class="nav-link" data-scroll-target="#completionusage.__add__">CompletionUsage.__add__</a></li>
+  <li><a href="#wrap_latex" id="toc-wrap_latex" class="nav-link" data-scroll-target="#wrap_latex">wrap_latex</a></li>
+  <li><a href="#creating-messages" id="toc-creating-messages" class="nav-link" data-scroll-target="#creating-messages">Creating messages</a></li>
+  </ul></li>
+  <li><a href="#client" id="toc-client" class="nav-link" data-scroll-target="#client">Client</a>
+  <ul class="collapse">
+  <li><a href="#client-1" id="toc-client-1" class="nav-link" data-scroll-target="#client-1">Client</a></li>
+  <li><a href="#get_stream" id="toc-get_stream" class="nav-link" data-scroll-target="#get_stream">get_stream</a></li>
+  <li><a href="#client.__call__" id="toc-client.__call__" class="nav-link" data-scroll-target="#client.__call__">Client.__call__</a></li>
+  </ul></li>
+  <li><a href="#tool-use" id="toc-tool-use" class="nav-link" data-scroll-target="#tool-use">Tool use</a>
+  <ul class="collapse">
+  <li><a href="#mk_openai_func" id="toc-mk_openai_func" class="nav-link" data-scroll-target="#mk_openai_func">mk_openai_func</a></li>
+  <li><a href="#mk_tool_choice" id="toc-mk_tool_choice" class="nav-link" data-scroll-target="#mk_tool_choice">mk_tool_choice</a></li>
+  <li><a href="#call_func" id="toc-call_func" class="nav-link" data-scroll-target="#call_func">call_func</a></li>
+  <li><a href="#mk_toolres" id="toc-mk_toolres" class="nav-link" data-scroll-target="#mk_toolres">mk_toolres</a></li>
+  <li><a href="#mock_tooluse" id="toc-mock_tooluse" class="nav-link" data-scroll-target="#mock_tooluse">mock_tooluse</a></li>
+  </ul></li>
+  <li><a href="#chat" id="toc-chat" class="nav-link" data-scroll-target="#chat">Chat</a>
+  <ul class="collapse">
+  <li><a href="#chat-1" id="toc-chat-1" class="nav-link" data-scroll-target="#chat-1">Chat</a></li>
+  <li><a href="#chat.__call__" id="toc-chat.__call__" class="nav-link" data-scroll-target="#chat.__call__">Chat.__call__</a></li>
+  <li><a href="#chat-tool-use" id="toc-chat-tool-use" class="nav-link" data-scroll-target="#chat-tool-use">Chat tool use</a></li>
+  </ul></li>
+  <li><a href="#images" id="toc-images" class="nav-link" data-scroll-target="#images">Images</a>
+  <ul class="collapse">
+  <li><a href="#img_msg" id="toc-img_msg" class="nav-link" data-scroll-target="#img_msg">img_msg</a></li>
+  <li><a href="#text_msg" id="toc-text_msg" class="nav-link" data-scroll-target="#text_msg">text_msg</a></li>
+  <li><a href="#mk_msg" id="toc-mk_msg" class="nav-link" data-scroll-target="#mk_msg">mk_msg</a></li>
+  </ul></li>
+  <li><a href="#third-party-providers" id="toc-third-party-providers" class="nav-link" data-scroll-target="#third-party-providers">Third Party Providers</a>
+  <ul class="collapse">
+  <li><a href="#azure-openai-service" id="toc-azure-openai-service" class="nav-link" data-scroll-target="#azure-openai-service">Azure OpenAI Service</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/AnswerDotAI/cosette/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="core.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Cosette’s source</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div id="0fff8869" class="cell" data-execution_count="5">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> <span class="st">'o1-preview'</span>, <span class="st">'o1-mini'</span>, <span class="st">'gpt-4o'</span>, <span class="st">'gpt-4-turbo'</span>, <span class="st">'gpt-4'</span>, <span class="st">'gpt-4-32k'</span>, <span class="st">'gpt-3.5-turbo'</span>, <span class="st">'gpt-3.5-turbo-instruct'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="87f69208" class="cell" data-execution_count="6">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>text_only_models <span class="op">=</span> <span class="st">'o1-preview'</span>, <span class="st">'o1-mini'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="dacf2bd2" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> models[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For examples, we’ll use GPT-4o.</p>
+</section>
+<section id="openai-sdk" class="level2">
+<h2 class="anchored" data-anchor-id="openai-sdk">OpenAI SDK</h2>
+<div id="70b53a51" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cli <span class="op">=</span> OpenAI().chat.completions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6ec40731" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> {<span class="st">'role'</span>: <span class="st">'user'</span>, <span class="st">'content'</span>: <span class="st">"I'm Jeremy"</span>}</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> cli.create(messages<span class="op">=</span>[m], model<span class="op">=</span>model, max_completion_tokens<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>ChatCompletion(id='chatcmpl-A95hVv3arQgyKoFoYWOoNf3883JwX', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Hi Jeremy! How can I assist you today?', refusal=None, role='assistant', function_call=None, tool_calls=None))], created=1726730229, model='gpt-4o-2024-05-13', object='chat.completion', service_tier=None, system_fingerprint='fp_e375328146', usage=CompletionUsage(completion_tokens=10, prompt_tokens=9, total_tokens=19, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0)))</code></pre>
+</div>
+</div>
+<section id="formatting-output" class="level3">
+<h3 class="anchored" data-anchor-id="formatting-output">Formatting output</h3>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L40" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="find_block" class="level3">
+<h3 class="anchored" data-anchor-id="find_block">find_block</h3>
+<blockquote class="blockquote">
+<pre><code> find_block (r:collections.abc.Mapping)</code></pre>
+</blockquote>
+<p><em>Find the message in <code>r</code>.</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>r</td>
+<td>Mapping</td>
+<td>The message to look in</td>
+</tr>
+</tbody>
+</table>
+<div id="eba620ce" class="cell" data-execution_count="10">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_block(r:abc.Mapping, <span class="co"># The message to look in</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>              ):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Find the message in `r`."</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> nested_idx(r, <span class="st">'choices'</span>, <span class="dv">0</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> m: <span class="cf">return</span> m</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">hasattr</span>(m, <span class="st">'message'</span>): <span class="cf">return</span> m.message</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L49" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="contents" class="level3">
+<h3 class="anchored" data-anchor-id="contents">contents</h3>
+<blockquote class="blockquote">
+<pre><code> contents (r)</code></pre>
+</blockquote>
+<p><em>Helper to get the contents from response <code>r</code>.</em></p>
+<div id="ae99799d" class="cell" data-execution_count="11">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> contents(r):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Helper to get the contents from response `r`."</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    blk <span class="op">=</span> find_block(r)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> blk: <span class="cf">return</span> r</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">hasattr</span>(blk, <span class="st">'content'</span>): <span class="cf">return</span> <span class="bu">getattr</span>(blk,<span class="st">'content'</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> blk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="6d5f2107" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>contents(r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>'Hi Jeremy! How can I assist you today?'</code></pre>
+</div>
+</div>
+<div id="17924d0c" class="cell" data-execution_count="13">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _repr_markdown_(<span class="va">self</span>:ChatCompletion):</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    det <span class="op">=</span> <span class="st">'</span><span class="ch">\n</span><span class="st">- '</span>.join(<span class="ss">f'</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>v<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> k,v <span class="kw">in</span> <span class="bu">dict</span>(<span class="va">self</span>).items())</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> contents(<span class="va">self</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> res: <span class="cf">return</span> <span class="ss">f"- </span><span class="sc">{</span>det<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"""</span><span class="sc">{</span>contents(<span class="va">self</span>)<span class="sc">}</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;details&gt;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="sc">{</span>det<span class="sc">}</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;/details&gt;"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cfd85eeb" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="14">
+<p>Hi Jeremy! How can I assist you today?</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hVv3arQgyKoFoYWOoNf3883JwX</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘Hi Jeremy! How can I assist you today?’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730229</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_e375328146</li>
+<li>usage: CompletionUsage(completion_tokens=10, prompt_tokens=9, total_tokens=19, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+<div id="10c7466f" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>r.usage</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>CompletionUsage(completion_tokens=10, prompt_tokens=9, total_tokens=19, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L71" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="usage" class="level3">
+<h3 class="anchored" data-anchor-id="usage">usage</h3>
+<blockquote class="blockquote">
+<pre><code> usage (inp=0, out=0)</code></pre>
+</blockquote>
+<p><em>Slightly more concise version of <code>CompletionUsage</code>.</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>inp</td>
+<td>int</td>
+<td>0</td>
+<td>Number of prompt tokens</td>
+</tr>
+<tr class="even">
+<td>out</td>
+<td>int</td>
+<td>0</td>
+<td>Number of completion tokens</td>
+</tr>
+</tbody>
+</table>
+<div id="b1a24f68" class="cell" data-execution_count="16">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> usage(inp<span class="op">=</span><span class="dv">0</span>, <span class="co"># Number of prompt tokens</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>          out<span class="op">=</span><span class="dv">0</span>  <span class="co"># Number of completion tokens</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         ):</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Slightly more concise version of `CompletionUsage`."</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> CompletionUsage(prompt_tokens<span class="op">=</span>inp, completion_tokens<span class="op">=</span>out, total_tokens<span class="op">=</span>inp<span class="op">+</span>out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="a7e52afd" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>usage(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>CompletionUsage(completion_tokens=0, prompt_tokens=5, total_tokens=5, completion_tokens_details=None)</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L79" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="completionusage.__repr__" class="level3">
+<h3 class="anchored" data-anchor-id="completionusage.__repr__">CompletionUsage.__repr__</h3>
+<blockquote class="blockquote">
+<pre><code> CompletionUsage.__repr__ ()</code></pre>
+</blockquote>
+<p><em>Return repr(self).</em></p>
+<div id="27468180" class="cell" data-execution_count="18">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>:CompletionUsage): <span class="cf">return</span> <span class="ss">f'In: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prompt_tokens<span class="sc">}</span><span class="ss">; Out: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>completion_tokens<span class="sc">}</span><span class="ss">; Total: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>total_tokens<span class="sc">}</span><span class="ss">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="765ca615" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>r.usage</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>In: 9; Out: 10; Total: 19</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L83" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="completionusage.__add__" class="level3">
+<h3 class="anchored" data-anchor-id="completionusage.__add__">CompletionUsage.__add__</h3>
+<blockquote class="blockquote">
+<pre><code> CompletionUsage.__add__ (b)</code></pre>
+</blockquote>
+<p><em>Add together each of <code>input_tokens</code> and <code>output_tokens</code></em></p>
+<div id="bec303ba" class="cell" data-execution_count="20">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__add__</span>(<span class="va">self</span>:CompletionUsage, b):</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Add together each of `input_tokens` and `output_tokens`"</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> usage(<span class="va">self</span>.prompt_tokens<span class="op">+</span>b.prompt_tokens, <span class="va">self</span>.completion_tokens<span class="op">+</span>b.completion_tokens)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="bffb0b2e" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>r.usage<span class="op">+</span>r.usage</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>In: 18; Out: 20; Total: 38</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L88" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="wrap_latex" class="level3">
+<h3 class="anchored" data-anchor-id="wrap_latex">wrap_latex</h3>
+<blockquote class="blockquote">
+<pre><code> wrap_latex (text, md=True)</code></pre>
+</blockquote>
+<p><em>Replace OpenAI LaTeX codes with markdown-compatible ones</em></p>
+</section>
+<section id="creating-messages" class="level3">
+<h3 class="anchored" data-anchor-id="creating-messages">Creating messages</h3>
+<div id="8ab553a4" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mk_msg(content, role<span class="op">=</span><span class="st">'user'</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Helper to create a `dict` appropriate for a message. `kwargs` are added as key/value pairs to the message"</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">hasattr</span>(content, <span class="st">'content'</span>): content,role <span class="op">=</span> content.content,content.role</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(content, ChatCompletion): <span class="cf">return</span> find_block(content)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">dict</span>(role<span class="op">=</span>role, content<span class="op">=</span>content, <span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="e79f7705" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> <span class="st">"I'm Jeremy"</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> mk_msg(prompt)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> cli.create(messages<span class="op">=</span>[m], model<span class="op">=</span>model, max_completion_tokens<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="24">
+<p>Hello, Jeremy! How can I assist you today?</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hY7CX2wHziIIZ63iVW8X421rH4</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘Hello, Jeremy! How can I assist you today?’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730232</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_52a7f40b0b</li>
+<li>usage: CompletionUsage(completion_tokens=11, prompt_tokens=9, total_tokens=20, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+<div id="7eef3715" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">=</span> [mk_msg(prompt), mk_msg(r), mk_msg(<span class="st">'I forgot my name. Can you remind me please?'</span>)]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>msgs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>[{'role': 'user', 'content': "I'm Jeremy"},
+ ChatCompletionMessage(content='Hello, Jeremy! How can I assist you today?', refusal=None, role='assistant', function_call=None, tool_calls=None),
+ {'role': 'user', 'content': 'I forgot my name. Can you remind me please?'}]</code></pre>
+</div>
+</div>
+<div id="6c464f8b" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>cli.create(messages<span class="op">=</span>msgs, model<span class="op">=</span>model, max_completion_tokens<span class="op">=</span><span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="26">
+<p>Your name is Jeremy! Is there anything else you’d like to discuss or need help with today?</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hYLPKxto5DLzggVfVYV5NHQ0Ij</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=“Your name is Jeremy! Is there anything else you’d like to discuss or need help with today?”, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730232</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_52a7f40b0b</li>
+<li>usage: CompletionUsage(completion_tokens=19, prompt_tokens=39, total_tokens=58, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+</section>
+</section>
+<section id="client" class="level2">
+<h2 class="anchored" data-anchor-id="client">Client</h2>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L96" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="client-1" class="level3">
+<h3 class="anchored" data-anchor-id="client-1">Client</h3>
+<blockquote class="blockquote">
+<pre><code> Client (model, cli=None)</code></pre>
+</blockquote>
+<p><em>Basic LLM messages client.</em></p>
+<div id="3b873aaf" class="cell" data-execution_count="27">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Client:</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model, cli<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">"Basic LLM messages client."</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model,<span class="va">self</span>.use <span class="op">=</span> model,usage(<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.text_only <span class="op">=</span> model <span class="kw">in</span> text_only_models</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.c <span class="op">=</span> (cli <span class="kw">or</span> OpenAI()).chat.completions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="d01e9ccf" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> Client(model)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>c.use</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>In: 0; Out: 0; Total: 0</code></pre>
+</div>
+</div>
+<div id="be54737f" class="cell" data-execution_count="29">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _r(<span class="va">self</span>:Client, r:ChatCompletion):</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Store the result of the message and accrue total usage."</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.result <span class="op">=</span> r</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">getattr</span>(r,<span class="st">'usage'</span>,<span class="va">None</span>): <span class="va">self</span>.use <span class="op">+=</span> r.usage</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="0181f7b3" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>c._r(r)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>c.use</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>In: 9; Out: 11; Total: 20</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L112" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="get_stream" class="level3">
+<h3 class="anchored" data-anchor-id="get_stream">get_stream</h3>
+<blockquote class="blockquote">
+<pre><code> get_stream (r)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L120" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="client.__call__" class="level3">
+<h3 class="anchored" data-anchor-id="client.__call__">Client.__call__</h3>
+<blockquote class="blockquote">
+<pre><code> Client.__call__ (msgs:list, sp:str='', maxtok=4096, stream:bool=False,
+                  frequency_penalty:Optional[float]|NotGiven=NOT_GIVEN, fu
+                  nction_call:completion_create_params.FunctionCall|NotGiv
+                  en=NOT_GIVEN, functions:Iterable[completion_create_param
+                  s.Function]|NotGiven=NOT_GIVEN,
+                  logit_bias:Optional[Dict[str,int]]|NotGiven=NOT_GIVEN,
+                  logprobs:Optional[bool]|NotGiven=NOT_GIVEN,
+                  max_completion_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+                  max_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+                  n:Optional[int]|NotGiven=NOT_GIVEN,
+                  parallel_tool_calls:bool|NotGiven=NOT_GIVEN,
+                  presence_penalty:Optional[float]|NotGiven=NOT_GIVEN, res
+                  ponse_format:completion_create_params.ResponseFormat|Not
+                  Given=NOT_GIVEN, seed:Optional[int]|NotGiven=NOT_GIVEN, 
+                  service_tier:"Optional[Literal['auto','default']]|NotGiv
+                  en"=NOT_GIVEN,
+                  stop:Union[Optional[str],List[str]]|NotGiven=NOT_GIVEN, 
+                  stream_options:Optional[ChatCompletionStreamOptionsParam
+                  ]|NotGiven=NOT_GIVEN,
+                  temperature:Optional[float]|NotGiven=NOT_GIVEN, tool_cho
+                  ice:ChatCompletionToolChoiceOptionParam|NotGiven=NOT_GIV
+                  EN, tools:Iterable[ChatCompletionToolParam]|NotGiven=NOT
+                  _GIVEN, top_logprobs:Optional[int]|NotGiven=NOT_GIVEN,
+                  top_p:Optional[float]|NotGiven=NOT_GIVEN,
+                  user:str|NotGiven=NOT_GIVEN,
+                  extra_headers:Headers|None=None,
+                  extra_query:Query|None=None, extra_body:Body|None=None,
+                  timeout:float|httpx.Timeout|None|NotGiven=NOT_GIVEN)</code></pre>
+</blockquote>
+<p><em>Make a call to LLM.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>msgs</td>
+<td>list</td>
+<td></td>
+<td>List of messages in the dialog</td>
+</tr>
+<tr class="even">
+<td>sp</td>
+<td>str</td>
+<td></td>
+<td>System prompt</td>
+</tr>
+<tr class="odd">
+<td>maxtok</td>
+<td>int</td>
+<td>4096</td>
+<td>Maximum tokens</td>
+</tr>
+<tr class="even">
+<td>stream</td>
+<td>bool</td>
+<td>False</td>
+<td>Stream response?</td>
+</tr>
+<tr class="odd">
+<td>frequency_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>function_call</td>
+<td>completion_create_params.FunctionCall | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>functions</td>
+<td>Iterable[completion_create_params.Function] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>logit_bias</td>
+<td>Optional[Dict[str, int]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>logprobs</td>
+<td>Optional[bool] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>max_completion_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>max_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>n</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>parallel_tool_calls</td>
+<td>bool | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>presence_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>response_format</td>
+<td>completion_create_params.ResponseFormat | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>service_tier</td>
+<td>Optional[Literal[‘auto’, ‘default’]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>stop</td>
+<td>Union[Optional[str], List[str]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>stream_options</td>
+<td>Optional[ChatCompletionStreamOptionsParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>temperature</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>tool_choice</td>
+<td>ChatCompletionToolChoiceOptionParam | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>tools</td>
+<td>Iterable[ChatCompletionToolParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>top_logprobs</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>top_p</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>user</td>
+<td>str | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>extra_headers</td>
+<td>Headers | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>extra_query</td>
+<td>Query | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>extra_body</td>
+<td>Body | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>timeout</td>
+<td>float | httpx.Timeout | None | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div id="5fb96c43" class="cell" data-execution_count="32">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="at">@delegates</span>(Completions.create)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>:Client,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>             msgs:<span class="bu">list</span>, <span class="co"># List of messages in the dialog</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>             sp:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, <span class="co"># System prompt</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>             maxtok<span class="op">=</span><span class="dv">4096</span>, <span class="co"># Maximum tokens</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>             stream:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span>, <span class="co"># Stream response?</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>             <span class="op">**</span>kwargs):</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Make a call to LLM."</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="kw">not</span> (<span class="va">self</span>.text_only <span class="kw">and</span> <span class="bu">bool</span>(sp)), <span class="st">"System prompts are not supported by the current model type."</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="kw">not</span> (<span class="va">self</span>.text_only <span class="kw">and</span> stream), <span class="st">"Streaming is not supported by the current model type."</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'tools'</span> <span class="kw">in</span> kwargs: <span class="cf">assert</span> <span class="kw">not</span> <span class="va">self</span>.text_only, <span class="st">"Tool use is not supported by the current model type."</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(c[<span class="st">'type'</span>] <span class="op">==</span> <span class="st">'image_url'</span> <span class="cf">for</span> msg <span class="kw">in</span> msgs <span class="cf">if</span> <span class="bu">isinstance</span>(msg, <span class="bu">dict</span>) <span class="kw">and</span> <span class="bu">isinstance</span>(msg.get(<span class="st">'content'</span>), <span class="bu">list</span>) <span class="cf">for</span> c <span class="kw">in</span> msg[<span class="st">'content'</span>]): <span class="cf">assert</span> <span class="kw">not</span> <span class="va">self</span>.text_only, <span class="st">"Images are not supported by the current model type."</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> stream: kwargs[<span class="st">'stream_options'</span>] <span class="op">=</span> {<span class="st">"include_usage"</span>: <span class="va">True</span>}</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sp: msgs <span class="op">=</span> [mk_msg(sp, <span class="st">'system'</span>)] <span class="op">+</span> <span class="bu">list</span>(msgs)</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> <span class="va">self</span>.c.create(</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>        model<span class="op">=</span><span class="va">self</span>.model, messages<span class="op">=</span>msgs, max_completion_tokens<span class="op">=</span>maxtok, stream<span class="op">=</span>stream, <span class="op">**</span>kwargs)</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> stream: <span class="cf">return</span> <span class="va">self</span>._r(r)</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="cf">return</span> get_stream(<span class="bu">map</span>(<span class="va">self</span>._r, r))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="47195b07" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">=</span> [mk_msg(<span class="st">'Hi'</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="338a38e5" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>c(msgs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="34">
+<p>Hello! How can I assist you today?</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95haOvw7b7QspKMVwNMLOuzyB4Zq</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘Hello! How can I assist you today?’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730234</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_3537616b13</li>
+<li>usage: CompletionUsage(completion_tokens=9, prompt_tokens=8, total_tokens=17, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+<div id="d7c3a5b6" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>c.use</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>In: 17; Out: 20; Total: 37</code></pre>
+</div>
+</div>
+<div id="13a92b57" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> o <span class="kw">in</span> c(msgs, stream<span class="op">=</span><span class="va">True</span>): <span class="bu">print</span>(o, end<span class="op">=</span><span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello! How can I assist you today?</code></pre>
+</div>
+</div>
+<div id="b1af093b" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>c.use</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>In: 25; Out: 29; Total: 54</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="tool-use" class="level2">
+<h2 class="anchored" data-anchor-id="tool-use">Tool use</h2>
+<div id="046e8cc3" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sums(</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    a:<span class="bu">int</span>,  <span class="co"># First thing to sum</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    b:<span class="bu">int</span> <span class="co"># Second thing to sum</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="bu">int</span>: <span class="co"># The sum of the inputs</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Adds a + b."</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Finding the sum of </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L139" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="mk_openai_func" class="level3">
+<h3 class="anchored" data-anchor-id="mk_openai_func">mk_openai_func</h3>
+<blockquote class="blockquote">
+<pre><code> mk_openai_func (f)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L142" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="mk_tool_choice" class="level3">
+<h3 class="anchored" data-anchor-id="mk_tool_choice">mk_tool_choice</h3>
+<blockquote class="blockquote">
+<pre><code> mk_tool_choice (f)</code></pre>
+</blockquote>
+<div id="abcab8c7" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>sysp <span class="op">=</span> <span class="st">"You are a helpful assistant. When using tools, be sure to pass all required parameters, at minimum."</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="567d958c" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>a,b <span class="op">=</span> <span class="dv">604542</span>,<span class="dv">6458932</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>pr <span class="op">=</span> <span class="ss">f"What is </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">+</span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">?"</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>tools<span class="op">=</span>[mk_openai_func(sums)]</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>tool_choice<span class="op">=</span>mk_tool_choice(<span class="st">"sums"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="4cad8f11" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">=</span> [mk_msg(pr)]</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> c(msgs, sp<span class="op">=</span>sysp, tools<span class="op">=</span>tools)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="43">
+<ul>
+<li>id: chatcmpl-A95hcyHo1JJFjyz8NndJbuqV6vfKZ</li>
+<li>choices: [Choice(finish_reason=‘tool_calls’, index=0, logprobs=None, message=ChatCompletionMessage(content=None, refusal=None, role=‘assistant’, function_call=None, tool_calls=[ChatCompletionMessageToolCall(id=‘call_BZRyZ2J81u80U6SSXVGxVuTo’, function=Function(arguments=‘{“a”:604542,“b”:6458932}’, name=‘sums’), type=‘function’)]))]</li>
+<li>created: 1726730236</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_e375328146</li>
+<li>usage: CompletionUsage(completion_tokens=21, prompt_tokens=104, total_tokens=125, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</div>
+</div>
+<div id="c9394b2d" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> find_block(r)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<pre><code>ChatCompletionMessage(content=None, refusal=None, role='assistant', function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_BZRyZ2J81u80U6SSXVGxVuTo', function=Function(arguments='{"a":604542,"b":6458932}', name='sums'), type='function')])</code></pre>
+</div>
+</div>
+<div id="2a6488b7" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>tc <span class="op">=</span> m.tool_calls</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>tc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
+<pre><code>[ChatCompletionMessageToolCall(id='call_BZRyZ2J81u80U6SSXVGxVuTo', function=Function(arguments='{"a":604542,"b":6458932}', name='sums'), type='function')]</code></pre>
+</div>
+</div>
+<div id="d5fc3933" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>func <span class="op">=</span> tc[<span class="dv">0</span>].function</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>func</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+<pre><code>Function(arguments='{"a":604542,"b":6458932}', name='sums')</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L150" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="call_func" class="level3">
+<h3 class="anchored" data-anchor-id="call_func">call_func</h3>
+<blockquote class="blockquote">
+<pre><code> call_func
+            (fc:openai.types.chat.chat_completion_message_tool_call.Functi
+            on, ns:Optional[collections.abc.Mapping]=None,
+            obj:Optional=None)</code></pre>
+</blockquote>
+<p><em>Call the function in the tool response <code>tr</code>, using namespace <code>ns</code>.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fc</td>
+<td>Function</td>
+<td></td>
+<td>Function block from message</td>
+</tr>
+<tr class="even">
+<td>ns</td>
+<td>Optional</td>
+<td>None</td>
+<td>Namespace to search for tools, defaults to <code>globals()</code></td>
+</tr>
+<tr class="odd">
+<td>obj</td>
+<td>Optional</td>
+<td>None</td>
+<td>Object to search for tools</td>
+</tr>
+</tbody>
+</table>
+<div id="5ce1b859" class="cell" data-execution_count="47">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _mk_ns(<span class="op">*</span>funcs:<span class="bu">list</span>[<span class="bu">callable</span>]) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>,<span class="bu">callable</span>]:</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a `dict` of name to function in `funcs`, to use as a namespace"</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {f.<span class="va">__name__</span>:f <span class="cf">for</span> f <span class="kw">in</span> funcs}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="ed48a299" class="cell" data-execution_count="48">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> call_func(fc:types.chat.chat_completion_message_tool_call.Function, <span class="co"># Function block from message</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>              ns:Optional[abc.Mapping]<span class="op">=</span><span class="va">None</span>, <span class="co"># Namespace to search for tools, defaults to `globals()`</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>              obj:Optional<span class="op">=</span><span class="va">None</span> <span class="co"># Object to search for tools</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>             ):</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Call the function in the tool response `tr`, using namespace `ns`."</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ns <span class="kw">is</span> <span class="va">None</span>: ns<span class="op">=</span><span class="bu">globals</span>()</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(ns, abc.Mapping): ns <span class="op">=</span> _mk_ns(<span class="op">*</span>ns)</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>    func <span class="op">=</span> <span class="bu">getattr</span>(obj, fc.name, <span class="va">None</span>)</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> func: func <span class="op">=</span> ns[fc.name]</span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> func(<span class="op">**</span>ast.literal_eval(fc.arguments))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="b506ec11" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>ns <span class="op">=</span> _mk_ns(sums)</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> call_func(func, ns<span class="op">=</span>ns)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Finding the sum of 604542 and 6458932</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="49">
+<pre><code>7063474</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L162" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="mk_toolres" class="level3">
+<h3 class="anchored" data-anchor-id="mk_toolres">mk_toolres</h3>
+<blockquote class="blockquote">
+<pre><code> mk_toolres (r:collections.abc.Mapping,
+             ns:Optional[collections.abc.Mapping]=None, obj:Optional=None)</code></pre>
+</blockquote>
+<p><em>Create a <code>tool_result</code> message from response <code>r</code>.</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>r</td>
+<td>Mapping</td>
+<td></td>
+<td>Tool use request response</td>
+</tr>
+<tr class="even">
+<td>ns</td>
+<td>Optional</td>
+<td>None</td>
+<td>Namespace to search for tools</td>
+</tr>
+<tr class="odd">
+<td>obj</td>
+<td>Optional</td>
+<td>None</td>
+<td>Class to search for tools</td>
+</tr>
+</tbody>
+</table>
+<div id="d475922d" class="cell" data-execution_count="50">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mk_toolres(</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>    r:abc.Mapping, <span class="co"># Tool use request response</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>    ns:Optional[abc.Mapping]<span class="op">=</span><span class="va">None</span>, <span class="co"># Namespace to search for tools</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>    obj:Optional<span class="op">=</span><span class="va">None</span> <span class="co"># Class to search for tools</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a `tool_result` message from response `r`."</span></span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> mk_msg(r)</span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a>    tcs <span class="op">=</span> <span class="bu">getattr</span>(r, <span class="st">'tool_calls'</span>, [])</span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> [r]</span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tc <span class="kw">in</span> (tcs <span class="kw">or</span> []):</span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a>        func <span class="op">=</span> tc.function</span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a>        cts <span class="op">=</span> <span class="bu">str</span>(call_func(func, ns<span class="op">=</span>ns, obj<span class="op">=</span>obj))</span>
+<span id="cb72-13"><a href="#cb72-13" aria-hidden="true" tabindex="-1"></a>        res.append(mk_msg(<span class="bu">str</span>(cts), <span class="st">'tool'</span>, tool_call_id<span class="op">=</span>tc.<span class="bu">id</span>, name<span class="op">=</span>func.name))</span>
+<span id="cb72-14"><a href="#cb72-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="f13de1fc" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>tr <span class="op">=</span> mk_toolres(r, ns<span class="op">=</span>ns)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>tr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Finding the sum of 604542 and 6458932</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="51">
+<pre><code>[ChatCompletionMessage(content=None, refusal=None, role='assistant', function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_BZRyZ2J81u80U6SSXVGxVuTo', function=Function(arguments='{"a":604542,"b":6458932}', name='sums'), type='function')]),
+ {'role': 'tool',
+  'content': '7063474',
+  'tool_call_id': 'call_BZRyZ2J81u80U6SSXVGxVuTo',
+  'name': 'sums'}]</code></pre>
+</div>
+</div>
+<div id="bcc83c48" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">+=</span> tr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="eed99502" class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> c(msgs, sp<span class="op">=</span>sysp, tools<span class="op">=</span>tools)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="53">
+<p>604,542 + 6,458,932 equals 7,063,474.</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hgkzP32EI2pyRXqD12CAzJVoON</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘604,542 + 6,458,932 equals 7,063,474.’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730240</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_e375328146</li>
+<li>usage: CompletionUsage(completion_tokens=19, prompt_tokens=136, total_tokens=155, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+<div id="800a53a9" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Dummy:</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sums(</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>        a:<span class="bu">int</span>,  <span class="co"># First thing to sum</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>        b:<span class="bu">int</span><span class="op">=</span><span class="dv">1</span> <span class="co"># Second thing to sum</span></span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> <span class="bu">int</span>: <span class="co"># The sum of the inputs</span></span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">"Adds a + b."</span></span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Finding the sum of </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="7ff70d08" class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>tools <span class="op">=</span> [mk_openai_func(Dummy.sums)]</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>o <span class="op">=</span> Dummy()</span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">=</span> mk_toolres(<span class="st">"I'm Jeremy"</span>)</span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> c(msgs, sp<span class="op">=</span>sysp, tools<span class="op">=</span>tools)</span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">+=</span> mk_toolres(r, obj<span class="op">=</span>o)</span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> c(msgs, sp<span class="op">=</span>sysp, tools<span class="op">=</span>tools)</span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="55">
+<p>Hello Jeremy! How can I help you today?</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hh9LzIcyQ3eU2JCiehTKtKhQyw</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘Hello Jeremy! How can I help you today?’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730241</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_52a7f40b0b</li>
+<li>usage: CompletionUsage(completion_tokens=11, prompt_tokens=116, total_tokens=127, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+<div id="9e93b087" class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>msgs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="56">
+<pre><code>[{'role': 'user', 'content': "I'm Jeremy"},
+ ChatCompletionMessage(content='Hello Jeremy! How can I assist you today?', refusal=None, role='assistant', function_call=None, tool_calls=None)]</code></pre>
+</div>
+</div>
+<div id="b21e6290" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>tools <span class="op">=</span> [mk_openai_func(Dummy.sums)]</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>o <span class="op">=</span> Dummy()</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">=</span> mk_toolres(pr)</span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> c(msgs, sp<span class="op">=</span>sysp, tools<span class="op">=</span>tools)</span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>msgs <span class="op">+=</span> mk_toolres(r, obj<span class="op">=</span>o)</span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> c(msgs, sp<span class="op">=</span>sysp, tools<span class="op">=</span>tools)</span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Finding the sum of 604542 and 6458932</code></pre>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="57">
+<p>The sum of 604542 and 6458932 is 7063474.</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hiPmpF1TzyHplPuwe0WY0oFOaX</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932 is 7063474.’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730242</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_e375328146</li>
+<li>usage: CompletionUsage(completion_tokens=18, prompt_tokens=142, total_tokens=160, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L180" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="mock_tooluse" class="level3">
+<h3 class="anchored" data-anchor-id="mock_tooluse">mock_tooluse</h3>
+<blockquote class="blockquote">
+<pre><code> mock_tooluse (name:str, res, **kwargs)</code></pre>
+</blockquote>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>name</td>
+<td>str</td>
+<td>The name of the called function</td>
+</tr>
+<tr class="even">
+<td>res</td>
+<td></td>
+<td>The result of calling the function</td>
+</tr>
+<tr class="odd">
+<td>kwargs</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div id="c29b9b81" class="cell" data-execution_count="58">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _mock_id(): <span class="cf">return</span> <span class="st">'call_'</span> <span class="op">+</span> <span class="st">''</span>.join(choices(ascii_letters<span class="op">+</span>digits, k<span class="op">=</span><span class="dv">24</span>))</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mock_tooluse(name:<span class="bu">str</span>, <span class="co"># The name of the called function</span></span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>                 res,  <span class="co"># The result of calling the function</span></span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>                 <span class="op">**</span>kwargs): <span class="co"># The arguments to the function</span></span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">""</span></span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span> <span class="op">=</span> _mock_id()</span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>    func <span class="op">=</span> <span class="bu">dict</span>(arguments<span class="op">=</span>json.dumps(kwargs), name<span class="op">=</span>name)</span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>    tc <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">id</span><span class="op">=</span><span class="bu">id</span>, function<span class="op">=</span>func, <span class="bu">type</span><span class="op">=</span><span class="st">'function'</span>)</span>
+<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>    req <span class="op">=</span> <span class="bu">dict</span>(content<span class="op">=</span><span class="va">None</span>, role<span class="op">=</span><span class="st">'assistant'</span>, tool_calls<span class="op">=</span>[tc])</span>
+<span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a>    resp <span class="op">=</span> mk_msg(<span class="st">''</span> <span class="cf">if</span> res <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> <span class="bu">str</span>(res), <span class="st">'tool'</span>, tool_call_id<span class="op">=</span><span class="bu">id</span>, name<span class="op">=</span>name)</span>
+<span id="cb85-12"><a href="#cb85-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [req,resp]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>This function mocks the messages needed to implement tool use, for situations where you want to insert tool use messages into a dialog without actually calling into the model.</p>
+<div id="9bcee006" class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>tu <span class="op">=</span> mock_tooluse(name<span class="op">=</span><span class="st">'sums'</span>, res<span class="op">=</span><span class="dv">7063474</span>, a<span class="op">=</span><span class="dv">604542</span>, b<span class="op">=</span><span class="dv">6458932</span>)</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> c([mk_msg(pr)]<span class="op">+</span>tu, tools<span class="op">=</span>tools)</span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="59">
+<p>The sum of 604542 and 6458932 is 7063474.</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hj9H4SJBzY5szsIZilaTp8wXv3</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932 is 7063474.’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730243</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_e375328146</li>
+<li>usage: CompletionUsage(completion_tokens=18, prompt_tokens=121, total_tokens=139, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+</section>
+</section>
+<section id="chat" class="level2">
+<h2 class="anchored" data-anchor-id="chat">Chat</h2>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L192" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="chat-1" class="level3">
+<h3 class="anchored" data-anchor-id="chat-1">Chat</h3>
+<blockquote class="blockquote">
+<pre><code> Chat (model:Optional[str]=None, cli:Optional[__main__.Client]=None,
+       sp='', tools:Optional[list]=None, tool_choice:Optional[str]=None)</code></pre>
+</blockquote>
+<p><em>OpenAI chat client.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>model</td>
+<td>Optional</td>
+<td>None</td>
+<td>Model to use (leave empty if passing <code>cli</code>)</td>
+</tr>
+<tr class="even">
+<td>cli</td>
+<td>Optional</td>
+<td>None</td>
+<td>Client to use (leave empty if passing <code>model</code>)</td>
+</tr>
+<tr class="odd">
+<td>sp</td>
+<td>str</td>
+<td></td>
+<td>Optional system prompt</td>
+</tr>
+<tr class="even">
+<td>tools</td>
+<td>Optional</td>
+<td>None</td>
+<td>List of tools to make available</td>
+</tr>
+<tr class="odd">
+<td>tool_choice</td>
+<td>Optional</td>
+<td>None</td>
+<td>Forced tool choice</td>
+</tr>
+</tbody>
+</table>
+<div id="a77d1edb" class="cell" data-execution_count="60">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Chat:</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>                 model:Optional[<span class="bu">str</span>]<span class="op">=</span><span class="va">None</span>, <span class="co"># Model to use (leave empty if passing `cli`)</span></span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>                 cli:Optional[Client]<span class="op">=</span><span class="va">None</span>, <span class="co"># Client to use (leave empty if passing `model`)</span></span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>                 sp<span class="op">=</span><span class="st">''</span>, <span class="co"># Optional system prompt</span></span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a>                 tools:Optional[<span class="bu">list</span>]<span class="op">=</span><span class="va">None</span>,  <span class="co"># List of tools to make available</span></span>
+<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a>                 tool_choice:Optional[<span class="bu">str</span>]<span class="op">=</span><span class="va">None</span>): <span class="co"># Forced tool choice</span></span>
+<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">"OpenAI chat client."</span></span>
+<span id="cb88-9"><a href="#cb88-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> model <span class="kw">or</span> cli</span>
+<span id="cb88-10"><a href="#cb88-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.c <span class="op">=</span> (cli <span class="kw">or</span> Client(model))</span>
+<span id="cb88-11"><a href="#cb88-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.h,<span class="va">self</span>.sp,<span class="va">self</span>.tools,<span class="va">self</span>.tool_choice <span class="op">=</span> [],sp,tools,tool_choice</span>
+<span id="cb88-12"><a href="#cb88-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb88-13"><a href="#cb88-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb88-14"><a href="#cb88-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> use(<span class="va">self</span>): <span class="cf">return</span> <span class="va">self</span>.c.use</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="04b837c5" class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>sp <span class="op">=</span> <span class="st">"Never mention what tools you use."</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>chat <span class="op">=</span> Chat(model, sp<span class="op">=</span>sp)</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>chat.c.use, chat.h</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="61">
+<pre><code>(In: 0; Out: 0; Total: 0, [])</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L210" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="chat.__call__" class="level3">
+<h3 class="anchored" data-anchor-id="chat.__call__">Chat.__call__</h3>
+<blockquote class="blockquote">
+<pre><code> Chat.__call__ (pr=None, stream:bool=False,
+                frequency_penalty:Optional[float]|NotGiven=NOT_GIVEN, func
+                tion_call:completion_create_params.FunctionCall|NotGiven=N
+                OT_GIVEN, functions:Iterable[completion_create_params.Func
+                tion]|NotGiven=NOT_GIVEN,
+                logit_bias:Optional[Dict[str,int]]|NotGiven=NOT_GIVEN,
+                logprobs:Optional[bool]|NotGiven=NOT_GIVEN,
+                max_completion_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+                max_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+                n:Optional[int]|NotGiven=NOT_GIVEN,
+                parallel_tool_calls:bool|NotGiven=NOT_GIVEN,
+                presence_penalty:Optional[float]|NotGiven=NOT_GIVEN, respo
+                nse_format:completion_create_params.ResponseFormat|NotGive
+                n=NOT_GIVEN, seed:Optional[int]|NotGiven=NOT_GIVEN, servic
+                e_tier:"Optional[Literal['auto','default']]|NotGiven"=NOT_
+                GIVEN,
+                stop:Union[Optional[str],List[str]]|NotGiven=NOT_GIVEN, st
+                ream_options:Optional[ChatCompletionStreamOptionsParam]|No
+                tGiven=NOT_GIVEN,
+                temperature:Optional[float]|NotGiven=NOT_GIVEN, tool_choic
+                e:ChatCompletionToolChoiceOptionParam|NotGiven=NOT_GIVEN, 
+                tools:Iterable[ChatCompletionToolParam]|NotGiven=NOT_GIVEN
+                , top_logprobs:Optional[int]|NotGiven=NOT_GIVEN,
+                top_p:Optional[float]|NotGiven=NOT_GIVEN,
+                user:str|NotGiven=NOT_GIVEN,
+                extra_headers:Headers|None=None,
+                extra_query:Query|None=None, extra_body:Body|None=None,
+                timeout:float|httpx.Timeout|None|NotGiven=NOT_GIVEN)</code></pre>
+</blockquote>
+<p><em>Add prompt <code>pr</code> to dialog and get a response</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>pr</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Prompt / message</td>
+</tr>
+<tr class="even">
+<td>stream</td>
+<td>bool</td>
+<td>False</td>
+<td>Stream response?</td>
+</tr>
+<tr class="odd">
+<td>frequency_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>function_call</td>
+<td>completion_create_params.FunctionCall | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>functions</td>
+<td>Iterable[completion_create_params.Function] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>logit_bias</td>
+<td>Optional[Dict[str, int]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>logprobs</td>
+<td>Optional[bool] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>max_completion_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>max_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>n</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>parallel_tool_calls</td>
+<td>bool | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>presence_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>response_format</td>
+<td>completion_create_params.ResponseFormat | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>service_tier</td>
+<td>Optional[Literal[‘auto’, ‘default’]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>stop</td>
+<td>Union[Optional[str], List[str]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>stream_options</td>
+<td>Optional[ChatCompletionStreamOptionsParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>temperature</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>tool_choice</td>
+<td>ChatCompletionToolChoiceOptionParam | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>tools</td>
+<td>Iterable[ChatCompletionToolParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>top_logprobs</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>top_p</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>user</td>
+<td>str | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>extra_headers</td>
+<td>Headers | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>extra_query</td>
+<td>Query | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>extra_body</td>
+<td>Body | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>timeout</td>
+<td>float | httpx.Timeout | None | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div id="403539e1" class="cell" data-execution_count="62">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="at">@delegates</span>(Completions.create)</span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>:Chat,</span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>             pr<span class="op">=</span><span class="va">None</span>,  <span class="co"># Prompt / message</span></span>
+<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>             stream:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span>, <span class="co"># Stream response?</span></span>
+<span id="cb92-6"><a href="#cb92-6" aria-hidden="true" tabindex="-1"></a>             <span class="op">**</span>kwargs):</span>
+<span id="cb92-7"><a href="#cb92-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Add prompt `pr` to dialog and get a response"</span></span>
+<span id="cb92-8"><a href="#cb92-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(pr,<span class="bu">str</span>): pr <span class="op">=</span> pr.strip()</span>
+<span id="cb92-9"><a href="#cb92-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> pr: <span class="va">self</span>.h.append(mk_msg(pr))</span>
+<span id="cb92-10"><a href="#cb92-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="va">self</span>.tools: kwargs[<span class="st">'tools'</span>] <span class="op">=</span> [mk_openai_func(o) <span class="cf">for</span> o <span class="kw">in</span> <span class="va">self</span>.tools]</span>
+<span id="cb92-11"><a href="#cb92-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="va">self</span>.tool_choice: kwargs[<span class="st">'tool_choice'</span>] <span class="op">=</span> mk_tool_choice(tool_choice)</span>
+<span id="cb92-12"><a href="#cb92-12" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> <span class="va">self</span>.c(<span class="va">self</span>.h, sp<span class="op">=</span><span class="va">self</span>.sp, stream<span class="op">=</span>stream, <span class="op">**</span>kwargs)</span>
+<span id="cb92-13"><a href="#cb92-13" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.h <span class="op">+=</span> mk_toolres(res, ns<span class="op">=</span><span class="va">self</span>.tools, obj<span class="op">=</span><span class="va">self</span>)</span>
+<span id="cb92-14"><a href="#cb92-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="40073f42" class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>chat(<span class="st">"I'm Jeremy"</span>)</span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>chat(<span class="st">"What's my name?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="63">
+<p>Your name is Jeremy! How can I help you today?</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hlZ1h5bTJj4HeyFQdozKhwlmQY</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘Your name is Jeremy! How can I help you today?’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730245</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_3537616b13</li>
+<li>usage: CompletionUsage(completion_tokens=12, prompt_tokens=42, total_tokens=54, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+<div id="529104ec" class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>chat <span class="op">=</span> Chat(model, sp<span class="op">=</span>sp)</span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> o <span class="kw">in</span> chat(<span class="st">"I'm Jeremy"</span>, stream<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>    o <span class="op">=</span> contents(o)</span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> o <span class="kw">and</span> <span class="bu">isinstance</span>(o, <span class="bu">str</span>): <span class="bu">print</span>(o, end<span class="op">=</span><span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hi Jeremy! How can I assist you today?</code></pre>
+</div>
+</div>
+</section>
+<section id="chat-tool-use" class="level3">
+<h3 class="anchored" data-anchor-id="chat-tool-use">Chat tool use</h3>
+<div id="ee6535cf" class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>pr <span class="op">=</span> <span class="ss">f"What is </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">+</span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">?"</span></span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>pr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="65">
+<pre><code>'What is 604542+6458932?'</code></pre>
+</div>
+</div>
+<div id="797741c5" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>chat <span class="op">=</span> Chat(model, sp<span class="op">=</span>sp, tools<span class="op">=</span>[sums])</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> chat(pr)</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Finding the sum of 604542 and 6458932</code></pre>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="66">
+<ul>
+<li>id: chatcmpl-A95hmcXyayZwsjge5JvYvKOe7b27y</li>
+<li>choices: [Choice(finish_reason=‘tool_calls’, index=0, logprobs=None, message=ChatCompletionMessage(content=None, refusal=None, role=‘assistant’, function_call=None, tool_calls=[ChatCompletionMessageToolCall(id=‘call_Tf3NezEkBKHx8tXrrUTTw0Xe’, function=Function(arguments=‘{“a”:604542,“b”:6458932}’, name=‘sums’), type=‘function’)]))]</li>
+<li>created: 1726730246</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_3537616b13</li>
+<li>usage: CompletionUsage(completion_tokens=21, prompt_tokens=90, total_tokens=111, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</div>
+</div>
+<div id="0979c832" class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>chat()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="67">
+<p>The sum of 604542 and 6458932 is 7063474.</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hn1eNVHbCudBYKDZjUdSyWxiPM</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932 is 7063474.’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730247</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_e375328146</li>
+<li>usage: CompletionUsage(completion_tokens=18, prompt_tokens=122, total_tokens=140, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+</section>
+</section>
+<section id="images" class="level2">
+<h2 class="anchored" data-anchor-id="images">Images</h2>
+<p>As everyone knows, when testing image APIs you have to use a cute puppy.</p>
+<div id="5d35d564" class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Image is Cute_dog.jpg from Wikimedia</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> Path(<span class="st">'samples/puppy.jpg'</span>)</span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>display.Image(filename<span class="op">=</span>fn, width<span class="op">=</span><span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="68">
+<div>
+<figure class="figure">
+<p><img src="00_core_files/figure-html/cell-77-output-1.jpeg" class="img-fluid figure-img" width="200"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="d120d8fb" class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> fn.read_bytes()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"type"</span><span class="op">:</span> <span class="st">"image_url"</span><span class="op">,</span></span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"image_url"</span><span class="op">:</span> {</span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"url"</span><span class="op">:</span> f<span class="st">"data:image/jpeg;base64,{base64_image}"</span></span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L224" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="img_msg" class="level3">
+<h3 class="anchored" data-anchor-id="img_msg">img_msg</h3>
+<blockquote class="blockquote">
+<pre><code> img_msg (data:bytes)</code></pre>
+</blockquote>
+<p><em>Convert image <code>data</code> into an encoded <code>dict</code></em></p>
+<div id="af0c7392" class="cell" data-execution_count="70">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> img_msg(data:<span class="bu">bytes</span>)<span class="op">-&gt;</span><span class="bu">dict</span>:</span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Convert image `data` into an encoded `dict`"</span></span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> base64.b64encode(data).decode(<span class="st">"utf-8"</span>)</span>
+<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a>    mtype <span class="op">=</span> mimetypes.types_map[<span class="st">'.'</span><span class="op">+</span>imghdr.what(<span class="va">None</span>, h<span class="op">=</span>data)]</span>
+<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> {<span class="st">'url'</span>: <span class="ss">f"data:</span><span class="sc">{</span>mtype<span class="sc">}</span><span class="ss">;base64,</span><span class="sc">{</span>img<span class="sc">}</span><span class="ss">"</span>}</span>
+<span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">'type'</span>: <span class="st">"image_url"</span>, <span class="st">"image_url"</span>: r}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L232" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="text_msg" class="level3">
+<h3 class="anchored" data-anchor-id="text_msg">text_msg</h3>
+<blockquote class="blockquote">
+<pre><code> text_msg (s:str)</code></pre>
+</blockquote>
+<p><em>Convert <code>s</code> to a text message</em></p>
+<div id="07b3340d" class="cell" data-execution_count="71">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> text_msg(s:<span class="bu">str</span>)<span class="op">-&gt;</span><span class="bu">dict</span>:</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Convert `s` to a text message"</span></span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"type"</span>: <span class="st">"text"</span>, <span class="st">"text"</span>: s}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="0c0eed5d" class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="st">"In brief, what color flowers are in this image?"</span></span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> mk_msg([img_msg(img), text_msg(q)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="2295c2d3" class="cell" data-execution_count="73">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>c([msg])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="73">
+<p>The flowers in the image are purple.</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hqkW52monsC5hYDm2iQqavkouF</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘The flowers in the image are purple.’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730250</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_3537616b13</li>
+<li>usage: CompletionUsage(completion_tokens=8, prompt_tokens=273, total_tokens=281, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+<div id="8764c605" class="cell" data-execution_count="74">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _mk_content(src):</span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create appropriate content data structure based on type of content"</span></span>
+<span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(src,<span class="bu">str</span>): <span class="cf">return</span> text_msg(src)</span>
+<span id="cb110-4"><a href="#cb110-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(src,<span class="bu">bytes</span>): <span class="cf">return</span> img_msg(src)</span>
+<span id="cb110-5"><a href="#cb110-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> src</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>There’s not need to manually choose the type of message, since we figure that out from the data of the source data.</p>
+<div id="6ccff61c" class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>_mk_content(<span class="st">'Hi'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="75">
+<pre><code>{'type': 'text', 'text': 'Hi'}</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L244" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="mk_msg" class="level3">
+<h3 class="anchored" data-anchor-id="mk_msg">mk_msg</h3>
+<blockquote class="blockquote">
+<pre><code> mk_msg (content, role='user', **kwargs)</code></pre>
+</blockquote>
+<p><em>Helper to create a <code>dict</code> appropriate for a message. <code>kwargs</code> are added as key/value pairs to the message</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>content</td>
+<td></td>
+<td></td>
+<td>A string, list, or dict containing the contents of the message</td>
+</tr>
+<tr class="even">
+<td>role</td>
+<td>str</td>
+<td>user</td>
+<td>Must be ‘user’ or ‘assistant’</td>
+</tr>
+<tr class="odd">
+<td>kwargs</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div id="4f2ea0d4" class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>c([mk_msg([img, q])])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="77">
+<p>The flowers in the image are purple.</p>
+<details>
+<ul>
+<li>id: chatcmpl-A95hrcJ6Ff76fEJjNzSWnbhFUojgM</li>
+<li>choices: [Choice(finish_reason=‘stop’, index=0, logprobs=None, message=ChatCompletionMessage(content=‘The flowers in the image are purple.’, refusal=None, role=‘assistant’, function_call=None, tool_calls=None))]</li>
+<li>created: 1726730251</li>
+<li>model: gpt-4o-2024-05-13</li>
+<li>object: chat.completion</li>
+<li>service_tier: None</li>
+<li>system_fingerprint: fp_3537616b13</li>
+<li>usage: CompletionUsage(completion_tokens=8, prompt_tokens=273, total_tokens=281, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0))</li>
+</ul>
+</details>
+</div>
+</div>
+</section>
+</section>
+<section id="third-party-providers" class="level1">
+<h1>Third Party Providers</h1>
+<section id="azure-openai-service" class="level2">
+<h2 class="anchored" data-anchor-id="azure-openai-service">Azure OpenAI Service</h2>
+<div id="5608da5c" class="cell">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>azure_endpoint <span class="op">=</span> AzureOpenAI(</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>  azure_endpoint <span class="op">=</span> os.getenv(<span class="st">"AZURE_OPENAI_ENDPOINT"</span>), </span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a>  api_key<span class="op">=</span>os.getenv(<span class="st">"AZURE_OPENAI_API_KEY"</span>),  </span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>  api_version<span class="op">=</span><span class="st">"2024-08-01-preview"</span></span>
+<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="ae8a6512" class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> Client(models_azure[<span class="dv">0</span>], azure_endpoint)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="e7ba3025" class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>chat <span class="op">=</span> Chat(cli<span class="op">=</span>client)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6e7ff6d6" class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>chat(<span class="st">"I'm Faisal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/AnswerDotAI\.github\.io\/cosette");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/AnswerDotAI/cosette/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
