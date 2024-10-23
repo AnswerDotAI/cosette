@@ -145,11 +145,11 @@ def mk_openai_func(f):
 # %% ../00_core.ipynb 52
 def mk_tool_choice(f): return dict(type='function', function={'name':f})
 
-# %% ../00_core.ipynb 60
+# %% ../00_core.ipynb 59
 def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function, ns:Optional[abc.Mapping]=None):
     return call_func(func.name, ast.literal_eval(func.arguments), ns)
 
-# %% ../00_core.ipynb 62
+# %% ../00_core.ipynb 61
 def mk_toolres(
     r:abc.Mapping, # Tool use request response
     ns:Optional[abc.Mapping]=None, # Namespace to search for tools
@@ -167,7 +167,7 @@ def mk_toolres(
         res.append(mk_msg(str(cts), 'tool', tool_call_id=tc.id, name=func.name))
     return res
 
-# %% ../00_core.ipynb 70
+# %% ../00_core.ipynb 69
 def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
 
 def mock_tooluse(name:str, # The name of the called function
@@ -181,11 +181,11 @@ def mock_tooluse(name:str, # The name of the called function
     resp = mk_msg('' if res is None else str(res), 'tool', tool_call_id=id, name=name)
     return [req,resp]
 
-# %% ../00_core.ipynb 74
+# %% ../00_core.ipynb 73
 @patch
 @delegates(Client.__call__)
 def structured(self:Client,
-               pr: str, # Prompt
+               msgs: list, # Prompt
                tools:Optional[list]=None, # List of tools to make available to OpenAI model
                obj:Optional=None, # Class to search for tools
                ns:Optional[abc.Mapping]=None, # Namespace to search for tools
@@ -194,12 +194,12 @@ def structured(self:Client,
     tools = [mk_openai_func(o) for o in listify(tools)]
     if ns is None: ns=globals()
     if obj is not None: ns = mk_ns(obj)
-    res = self([mk_msg(pr)], tools=tools, tool_choice='required', **kwargs)
+    res = self(msgs, tools=tools, tool_choice='required', **kwargs)
     cts = getattr(res, 'choices', [])
     tcs = [call_func_openai(t.function, ns=ns) for o in cts if o.message.tool_calls for t in o.message.tool_calls]
     return tcs
 
-# %% ../00_core.ipynb 78
+# %% ../00_core.ipynb 77
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
@@ -215,7 +215,7 @@ class Chat:
     @property
     def use(self): return self.c.use
 
-# %% ../00_core.ipynb 80
+# %% ../00_core.ipynb 79
 @patch
 @delegates(Completions.create)
 def __call__(self:Chat,
@@ -231,5 +231,5 @@ def __call__(self:Chat,
     self.h += mk_toolres(res, ns=self.tools)
     return res
 
-# %% ../00_core.ipynb 96
+# %% ../00_core.ipynb 95
 models_azure = ('gpt-4o', 'gpt-4-32k', 'gpt4-1106-preview', 'gpt-35-turbo', 'gpt-35-turbo-16k')
