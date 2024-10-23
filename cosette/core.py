@@ -191,8 +191,9 @@ def structured(self:Client,
                ns:Optional[abc.Mapping]=None, # Namespace to search for tools
                **kwargs):
     "Return the value of all tool calls (generally used for structured outputs)"
-    tools = [mk_openai_func(o) for o in listify(tools)]
-    if ns is None: ns=globals()
+    tools = listify(tools)
+    if ns is None: ns=mk_ns(*tools)
+    tools = [mk_openai_func(o) for o in tools]
     if obj is not None: ns = mk_ns(obj)
     res = self(msgs, tools=tools, tool_choice='required', **kwargs)
     cts = getattr(res, 'choices', [])
