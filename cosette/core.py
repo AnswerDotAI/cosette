@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['empty', 'models', 'text_only_models', 'models_azure', 'find_block', 'contents', 'usage', 'wrap_latex', 'Client',
-           'get_stream', 'mk_openai_func', 'mk_tool_choice', 'call_func', 'mk_toolres', 'mock_tooluse', 'Chat']
+           'get_stream', 'mk_openai_func', 'mk_tool_choice', 'call_func_openai', 'mk_toolres', 'mock_tooluse', 'Chat']
 
 # %% ../00_core.ipynb 3
 from fastcore import imghdr
@@ -32,7 +32,7 @@ except: display=None
 empty = inspect.Parameter.empty
 
 # %% ../00_core.ipynb 7
-models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct'
+models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct'
 
 # %% ../00_core.ipynb 9
 text_only_models = 'o1-preview', 'o1-mini'
@@ -137,29 +137,19 @@ def __call__(self:Client,
     else: return get_stream(map(self._r, r))
 
 # %% ../00_core.ipynb 51
-def mk_openai_func(f): return dict(type='function', function=get_schema(f, 'parameters'))
+def mk_openai_func(f): 
+    sc = get_schema(f, 'parameters')
+    sc['parameters'].pop('title', None)
+    return dict(type='function', function=sc)
 
 # %% ../00_core.ipynb 52
 def mk_tool_choice(f): return dict(type='function', function={'name':f})
 
 # %% ../00_core.ipynb 59
-def _mk_ns(*funcs:list[callable]) -> dict[str,callable]:
-    "Create a `dict` of name to function in `funcs`, to use as a namespace"
-    return {f.__name__:f for f in funcs}
+def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function, ns:Optional[abc.Mapping]=None):
+    return call_func(func.name, ast.literal_eval(func.arguments), ns)
 
-# %% ../00_core.ipynb 60
-def call_func(fc:types.chat.chat_completion_message_tool_call.Function, # Function block from message
-              ns:Optional[abc.Mapping]=None, # Namespace to search for tools, defaults to `globals()`
-              obj:Optional=None # Object to search for tools
-             ):
-    "Call the function in the tool response `tr`, using namespace `ns`."
-    if ns is None: ns=globals()
-    if not isinstance(ns, abc.Mapping): ns = _mk_ns(*ns)
-    func = getattr(obj, fc.name, None)
-    if not func: func = ns[fc.name]
-    return func(**ast.literal_eval(fc.arguments))
-
-# %% ../00_core.ipynb 62
+# %% ../00_core.ipynb 61
 def mk_toolres(
     r:abc.Mapping, # Tool use request response
     ns:Optional[abc.Mapping]=None, # Namespace to search for tools
@@ -169,13 +159,15 @@ def mk_toolres(
     r = mk_msg(r)
     tcs = getattr(r, 'tool_calls', [])
     res = [r]
+    if ns is None: ns = globals()
+    if obj is not None: ns = mk_ns(obj)
     for tc in (tcs or []):
         func = tc.function
-        cts = str(call_func(func, ns=ns, obj=obj))
+        cts = str(call_func_openai(func, ns=ns))
         res.append(mk_msg(str(cts), 'tool', tool_call_id=tc.id, name=func.name))
     return res
 
-# %% ../00_core.ipynb 70
+# %% ../00_core.ipynb 69
 def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
 
 def mock_tooluse(name:str, # The name of the called function
@@ -189,7 +181,26 @@ def mock_tooluse(name:str, # The name of the called function
     resp = mk_msg('' if res is None else str(res), 'tool', tool_call_id=id, name=name)
     return [req,resp]
 
-# %% ../00_core.ipynb 74
+# %% ../00_core.ipynb 73
+@patch
+@delegates(Client.__call__)
+def structured(self:Client,
+               msgs: list, # Prompt
+               tools:Optional[list]=None, # List of tools to make available to OpenAI model
+               obj:Optional=None, # Class to search for tools
+               ns:Optional[abc.Mapping]=None, # Namespace to search for tools
+               **kwargs):
+    "Return the value of all tool calls (generally used for structured outputs)"
+    tools = listify(tools)
+    if ns is None: ns=mk_ns(*tools)
+    tools = [mk_openai_func(o) for o in tools]
+    if obj is not None: ns = mk_ns(obj)
+    res = self(msgs, tools=tools, tool_choice='required', **kwargs)
+    cts = getattr(res, 'choices', [])
+    tcs = [call_func_openai(t.function, ns=ns) for o in cts for t in (o.message.tool_calls or [])]
+    return tcs
+
+# %% ../00_core.ipynb 77
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
@@ -205,7 +216,7 @@ class Chat:
     @property
     def use(self): return self.c.use
 
-# %% ../00_core.ipynb 76
+# %% ../00_core.ipynb 79
 @patch
 @delegates(Completions.create)
 def __call__(self:Chat,
@@ -216,10 +227,10 @@ def __call__(self:Chat,
     if isinstance(pr,str): pr = pr.strip()
     if pr: self.h.append(mk_msg(pr))
     if self.tools: kwargs['tools'] = [mk_openai_func(o) for o in self.tools]
-    if self.tool_choice: kwargs['tool_choice'] = mk_tool_choice(tool_choice)
+    if self.tool_choice: kwargs['tool_choice'] = mk_tool_choice(self.tool_choice)
     res = self.c(self.h, sp=self.sp, stream=stream, **kwargs)
-    self.h += mk_toolres(res, ns=self.tools, obj=self)
+    self.h += mk_toolres(res, ns=self.tools)
     return res
 
-# %% ../00_core.ipynb 92
+# %% ../00_core.ipynb 95
 models_azure = ('gpt-4o', 'gpt-4-32k', 'gpt4-1106-preview', 'gpt-35-turbo', 'gpt-35-turbo-16k')
