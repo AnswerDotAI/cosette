@@ -2,7 +2,8 @@
 
 # %% auto 0
 __all__ = ['empty', 'models', 'text_only_models', 'models_azure', 'find_block', 'contents', 'usage', 'wrap_latex', 'Client',
-           'get_stream', 'mk_openai_func', 'mk_tool_choice', 'call_func_openai', 'mk_toolres', 'mock_tooluse', 'Chat']
+           'get_stream', 'mk_openai_func', 'mk_tool_choice', 'call_func_openai', 'mk_toolres', 'mock_tooluse', 'Chat',
+           'mk_msg', 'mk_msgs']
 
 # %% ../00_core.ipynb 3
 from fastcore import imghdr
@@ -29,15 +30,18 @@ try: from IPython import display
 except: display=None
 
 # %% ../00_core.ipynb 5
+_all_ = ['mk_msg', 'mk_msgs']
+
+# %% ../00_core.ipynb 6
 empty = inspect.Parameter.empty
 
-# %% ../00_core.ipynb 7
+# %% ../00_core.ipynb 8
 models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct'
 
-# %% ../00_core.ipynb 9
+# %% ../00_core.ipynb 10
 text_only_models = 'o1-preview', 'o1-mini'
 
-# %% ../00_core.ipynb 16
+# %% ../00_core.ipynb 17
 def find_block(r:abc.Mapping, # The message to look in
               ):
     "Find the message in `r`."
@@ -46,7 +50,7 @@ def find_block(r:abc.Mapping, # The message to look in
     if hasattr(m, 'message'): return m.message
     return m.delta
 
-# %% ../00_core.ipynb 17
+# %% ../00_core.ipynb 18
 def contents(r):
     "Helper to get the contents from response `r`."
     blk = find_block(r)
@@ -54,7 +58,7 @@ def contents(r):
     if hasattr(blk, 'content'): return getattr(blk,'content')
     return blk
 
-# %% ../00_core.ipynb 19
+# %% ../00_core.ipynb 20
 @patch
 def _repr_markdown_(self:ChatCompletion):
     det = '\n- '.join(f'{k}: {v}' for k,v in dict(self).items())
@@ -68,24 +72,24 @@ def _repr_markdown_(self:ChatCompletion):
 
 </details>"""
 
-# %% ../00_core.ipynb 22
+# %% ../00_core.ipynb 23
 def usage(inp=0, # Number of prompt tokens
           out=0  # Number of completion tokens
          ):
     "Slightly more concise version of `CompletionUsage`."
     return CompletionUsage(prompt_tokens=inp, completion_tokens=out, total_tokens=inp+out)
 
-# %% ../00_core.ipynb 24
+# %% ../00_core.ipynb 25
 @patch
 def __repr__(self:CompletionUsage): return f'In: {self.prompt_tokens}; Out: {self.completion_tokens}; Total: {self.total_tokens}'
 
-# %% ../00_core.ipynb 26
+# %% ../00_core.ipynb 27
 @patch
 def __add__(self:CompletionUsage, b):
     "Add together each of `input_tokens` and `output_tokens`"
     return usage(self.prompt_tokens+b.prompt_tokens, self.completion_tokens+b.completion_tokens)
 
-# %% ../00_core.ipynb 28
+# %% ../00_core.ipynb 29
 def wrap_latex(text, md=True):
     "Replace OpenAI LaTeX codes with markdown-compatible ones"
     text = re.sub(r"\\\((.*?)\\\)", lambda o: f"${o.group(1)}$", text)
