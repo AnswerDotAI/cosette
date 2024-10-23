@@ -189,7 +189,24 @@ def mock_tooluse(name:str, # The name of the called function
     resp = mk_msg('' if res is None else str(res), 'tool', tool_call_id=id, name=name)
     return [req,resp]
 
-# %% ../00_core.ipynb 74
+# %% ../00_core.ipynb 73
+@patch
+@delegates(Client.__call__)
+def structured(self:Client,
+               pr: str, # Prompt
+               tools:Optional[list]=None, # List of tools to make available to OpenAI model
+               obj:Optional=None, # Class to search for tools
+               ns:Optional[abc.Mapping]=None, # Namespace to search for tools
+               **kwargs):
+    "Return the value of all tool calls (generally used for structured outputs)"
+    tools = listify(tools)
+    if ns is None: ns=tools
+    res = self([mk_msg(pr)], tools=[mk_openai_func(o) for o in tools], tool_choice=[mk_tool_choice(o.__name__) for o in tools], **kwargs)
+    cts = getattr(res, 'choices', [])
+    tcs = [call_func(t.function, ns=ns, obj=obj) for o in cts if o.message.tool_calls for t in o.message.tool_calls]
+    return tcs
+
+# %% ../00_core.ipynb 76
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
@@ -205,7 +222,7 @@ class Chat:
     @property
     def use(self): return self.c.use
 
-# %% ../00_core.ipynb 76
+# %% ../00_core.ipynb 78
 @patch
 @delegates(Completions.create)
 def __call__(self:Chat,
@@ -216,10 +233,10 @@ def __call__(self:Chat,
     if isinstance(pr,str): pr = pr.strip()
     if pr: self.h.append(mk_msg(pr))
     if self.tools: kwargs['tools'] = [mk_openai_func(o) for o in self.tools]
-    if self.tool_choice: kwargs['tool_choice'] = mk_tool_choice(tool_choice)
+    if self.tool_choice: kwargs['tool_choice'] = mk_tool_choice(self.tool_choice)
     res = self.c(self.h, sp=self.sp, stream=stream, **kwargs)
     self.h += mk_toolres(res, ns=self.tools, obj=self)
     return res
 
-# %% ../00_core.ipynb 92
+# %% ../00_core.ipynb 94
 models_azure = ('gpt-4o', 'gpt-4-32k', 'gpt4-1106-preview', 'gpt-35-turbo', 'gpt-35-turbo-16k')
