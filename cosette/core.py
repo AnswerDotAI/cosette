@@ -196,7 +196,7 @@ def structured(self:Client,
     if obj is not None: ns = mk_ns(obj)
     res = self(msgs, tools=tools, tool_choice='required', **kwargs)
     cts = getattr(res, 'choices', [])
-    tcs = [call_func_openai(t.function, ns=ns) for o in cts if o.message.tool_calls for t in o.message.tool_calls]
+    tcs = [call_func_openai(t.function, ns=ns) for o in cts for t in (o.message.tool_calls or [])]
     return tcs
 
 # %% ../00_core.ipynb 77
