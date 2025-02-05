@@ -1,9 +1,11 @@
-<project title="Claudette" summary="Cosette is a Python library that wraps OpenAI's API to provide a higher-level interface for creating AI applications. It automates common patterns while maintaining full control, offering features like stateful chat, prefill support, image handling, and streamlined tool use.">Things to remember when using Cosette: 
+<project title="Cosette" summary="Cosette is a Python library that wraps OpenAI's API to provide a higher-level interface for creating AI applications. It automates common patterns while maintaining full control, offering features like stateful chat, image handling, and streamlined tool use.">Things to remember when using Cosette: 
 
-- Cosette is designed to work with Claude 3 models (e.g. 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct') and supports multiple providers (OpenAI direct, Azure)
+- You must set the `OPENAI_API_KEY` environment variable with your OpenAI API key
+- Cosette is designed to work with OpenAI models (e.g. 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct') and supports multiple providers (OpenAI direct, Azure)
+- You can also pass in your own OpenAI client if you wish to change the base URL or other settings.
 - Use `Chat()` for maintaining conversation state and handling tool interactions
 - When using tools, the library automatically handles the request/response loop
-- Image support is built in<docs><doc title="README" desc="Quick start guide and overview"># cosette
+- Image support is built in but only available on compatible models (e.g. not o1 series)<docs><doc title="README" desc="Quick start guide and overview"># cosette
 
 
 
@@ -432,7 +434,7 @@ that number of input tokens increases quickly with this kind of chat.
 chat.use
 ```
 
-    In: 995; Out: 141; Total: 1136</doc></docs><api><doc title="API List" desc="A succint list of all functions and methods in claudette."># cosette Module Documentation
+    In: 995; Out: 141; Total: 1136</doc></docs><api><doc title="API List" desc="A succint list of all functions and methods in cosette."># cosette Module Documentation
 
 ## cosette.core
 
