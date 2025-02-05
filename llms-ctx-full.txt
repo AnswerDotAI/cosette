@@ -1,6 +1,6 @@
-<project title="Claudette" summary="Cosette is a Python library that wraps OpenAI's API to provide a higher-level interface for creating AI applications. It automates common patterns while maintaining full control, offering features like stateful chat, prefill support, image handling, and streamlined tool use.">Things to remember when using Claudette:
+<project title="Claudette" summary="Cosette is a Python library that wraps OpenAI's API to provide a higher-level interface for creating AI applications. It automates common patterns while maintaining full control, offering features like stateful chat, prefill support, image handling, and streamlined tool use.">Things to remember when using Cosette: 
 
-- Claudette is designed to work with Claude 3 models (e.g. 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct') and supports multiple providers (OpenAI direct, Azure)
+- Cosette is designed to work with Claude 3 models (e.g. 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct') and supports multiple providers (OpenAI direct, Azure)
 - Use `Chat()` for maintaining conversation state and handling tool interactions
 - When using tools, the library automatically handles the request/response loop
 - Image support is built in<docs><doc title="README" desc="Quick start guide and overview"># cosette
@@ -898,4 +898,2134 @@ The status of order O2 is “Cancelled”.
 - usage: CompletionUsage(completion_tokens=11, prompt_tokens=436,
   total_tokens=447)
 
-</details></doc></optional></project>
+</details></doc><doc title="Cosette Core"># Cosette’s source
+
+
+
+## Setup
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct'
+```
+
+</details>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+text_only_models = 'o1-preview', 'o1-mini'
+```
+
+</details>
+
+``` python
+model = models[2]
+```
+
+For examples, we’ll use GPT-4o.
+
+## OpenAI SDK
+
+``` python
+cli = OpenAI().chat.completions
+```
+
+``` python
+m = {'role': 'user', 'content': "I'm Jeremy"}
+r = cli.create(messages=[m], model=model, max_completion_tokens=100)
+r
+```
+
+    ChatCompletion(id='chatcmpl-ALXzEpOZShv71v2TVAaoMv2dhKVTl', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Hello, Jeremy! How can I assist you today?', refusal=None, role='assistant', function_call=None, tool_calls=None))], created=1729698896, model='gpt-4o-2024-08-06', object='chat.completion', service_tier=None, system_fingerprint='fp_a7d06e42a7', usage=CompletionUsage(completion_tokens=11, prompt_tokens=9, total_tokens=20, completion_tokens_details=CompletionTokensDetails(audio_tokens=None, reasoning_tokens=0), prompt_tokens_details=PromptTokensDetails(audio_tokens=None, cached_tokens=0)))
+
+### Formatting output
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L45"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### find_block
+
+>  find_block (r:collections.abc.Mapping)
+
+*Find the message in `r`.*
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r</td>
+<td>Mapping</td>
+<td>The message to look in</td>
+</tr>
+</tbody>
+</table>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+def find_block(r:abc.Mapping, # The message to look in
+              ):
+    "Find the message in `r`."
+    m = nested_idx(r, 'choices', 0)
+    if not m: return m
+    if hasattr(m, 'message'): return m.message
+    return m.delta
+```
+
+</details>
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L54"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### contents
+
+>  contents (r)
+
+*Helper to get the contents from response `r`.*
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+def contents(r):
+    "Helper to get the contents from response `r`."
+    blk = find_block(r)
+    if not blk: return r
+    if hasattr(blk, 'content'): return getattr(blk,'content')
+    return blk
+```
+
+</details>
+
+``` python
+contents(r)
+```
+
+    'Hello, Jeremy! How can I assist you today?'
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+@patch
+def _repr_markdown_(self:ChatCompletion):
+    det = '\n- '.join(f'{k}: {v}' for k,v in dict(self).items())
+    res = contents(self)
+    if not res: return f"- {det}"
+    return f"""{contents(self)}
+
+<details>
+
+- {det}
+
+</details>"""
+```
+
+</details>
+
+``` python
+r
+```
+
+Hello, Jeremy! How can I assist you today?
+
+<details>
+
+- id: chatcmpl-ALXzEpOZShv71v2TVAaoMv2dhKVTl
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘Hello, Jeremy! How can I assist
+  you today?’, refusal=None, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1729698896
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=11, prompt_tokens=9,
+  total_tokens=20,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+``` python
+r.usage
+```
+
+    CompletionUsage(completion_tokens=11, prompt_tokens=9, total_tokens=20, completion_tokens_details=CompletionTokensDetails(audio_tokens=None, reasoning_tokens=0), prompt_tokens_details=PromptTokensDetails(audio_tokens=None, cached_tokens=0))
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L76"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### usage
+
+>  usage (inp=0, out=0)
+
+*Slightly more concise version of `CompletionUsage`.*
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>inp</td>
+<td>int</td>
+<td>0</td>
+<td>Number of prompt tokens</td>
+</tr>
+<tr>
+<td>out</td>
+<td>int</td>
+<td>0</td>
+<td>Number of completion tokens</td>
+</tr>
+</tbody>
+</table>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+def usage(inp=0, # Number of prompt tokens
+          out=0  # Number of completion tokens
+         ):
+    "Slightly more concise version of `CompletionUsage`."
+    return CompletionUsage(prompt_tokens=inp, completion_tokens=out, total_tokens=inp+out)
+```
+
+</details>
+
+``` python
+usage(5)
+```
+
+    CompletionUsage(completion_tokens=0, prompt_tokens=5, total_tokens=5, completion_tokens_details=None, prompt_tokens_details=None)
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L84"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### CompletionUsage.\_\_repr\_\_
+
+>  CompletionUsage.__repr__ ()
+
+*Return repr(self).*
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+@patch
+def __repr__(self:CompletionUsage): return f'In: {self.prompt_tokens}; Out: {self.completion_tokens}; Total: {self.total_tokens}'
+```
+
+</details>
+
+``` python
+r.usage
+```
+
+    In: 9; Out: 11; Total: 20
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L88"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### CompletionUsage.\_\_add\_\_
+
+>  CompletionUsage.__add__ (b)
+
+*Add together each of `input_tokens` and `output_tokens`*
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+@patch
+def __add__(self:CompletionUsage, b):
+    "Add together each of `input_tokens` and `output_tokens`"
+    return usage(self.prompt_tokens+b.prompt_tokens, self.completion_tokens+b.completion_tokens)
+```
+
+</details>
+
+``` python
+r.usage+r.usage
+```
+
+    In: 18; Out: 22; Total: 40
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L93"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### wrap_latex
+
+>  wrap_latex (text, md=True)
+
+*Replace OpenAI LaTeX codes with markdown-compatible ones*
+
+### Creating messages
+
+Creating correctly formatted `dict`s from scratch every time isn’t very
+handy, so we’ll import a couple of helper functions from the `msglm`
+library.
+
+Let’s use `mk_msg` to recreate our msg
+`{'role': 'user', 'content': "I'm Jeremy"}` from earlier.
+
+``` python
+prompt = "I'm Jeremy"
+m = mk_msg(prompt)
+r = cli.create(messages=[m], model=model, max_completion_tokens=100)
+r
+```
+
+Hi Jeremy! How can I assist you today?
+
+<details>
+
+- id: chatcmpl-ALXzFkDqG2syVjHdYTGU4bfriaDeX
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘Hi Jeremy! How can I assist you
+  today?’, refusal=None, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1729698897
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=10, prompt_tokens=9,
+  total_tokens=19,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+We can pass more than just text messages to OpenAI. As we’ll see later
+we can also pass images, SDK objects, etc. To handle these different
+data types we need to pass the type along with our content to OpenAI.
+
+Here’s an example of a multimodal message containing text and images.
+
+``` json
+{
+    'role': 'user', 
+    'content': [
+        {'type': 'text', 'text': 'What is in the image?'},
+        {'type': 'image_url', 'image_url': {'url': f'data:{MEDIA_TYPE};base64,{IMG}'}}
+    ]
+}
+```
+
+`mk_msg` infers the type automatically and creates the appropriate data
+structure.
+
+LLMs, don’t actually have state, but instead dialogs are created by
+passing back all previous prompts and responses every time. With OpenAI,
+they always alternate *user* and *assistant*. We’ll use `mk_msgs` from
+`msglm` to make it easier to build up these dialog lists.
+
+``` python
+msgs = mk_msgs([prompt, r, "I forgot my name. Can you remind me please?"]) 
+msgs
+```
+
+    [{'role': 'user', 'content': "I'm Jeremy"},
+     ChatCompletionMessage(content='Hi Jeremy! How can I assist you today?', refusal=None, role='assistant', function_call=None, tool_calls=None),
+     {'role': 'user', 'content': 'I forgot my name. Can you remind me please?'}]
+
+``` python
+cli.create(messages=msgs, model=model, max_completion_tokens=200)
+```
+
+It looks like you mentioned your name is Jeremy. How can I help you
+further?
+
+<details>
+
+- id: chatcmpl-ALXzGveStdH76ojrSQjXb9fei0tp8
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘It looks like you mentioned
+  your name is Jeremy. How can I help you further?’, refusal=None,
+  role=‘assistant’, function_call=None, tool_calls=None))\]
+- created: 1729698898
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=17, prompt_tokens=38,
+  total_tokens=55,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+## Client
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L101"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### Client
+
+>  Client (model, cli=None)
+
+*Basic LLM messages client.*
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+class Client:
+    def __init__(self, model, cli=None):
+        "Basic LLM messages client."
+        self.model,self.use = model,usage(0,0)
+        self.text_only = model in text_only_models
+        self.c = (cli or OpenAI()).chat.completions
+```
+
+</details>
+
+``` python
+c = Client(model)
+c.use
+```
+
+    In: 0; Out: 0; Total: 0
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+@patch
+def _r(self:Client, r:ChatCompletion):
+    "Store the result of the message and accrue total usage."
+    self.result = r
+    if getattr(r,'usage',None): self.use += r.usage
+    return r
+```
+
+</details>
+
+``` python
+c._r(r)
+c.use
+```
+
+    In: 9; Out: 10; Total: 19
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L117"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### get_stream
+
+>  get_stream (r)
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L125"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### Client.\_\_call\_\_
+
+>  Client.__call__ (msgs:list, sp:str='', maxtok=4096, stream:bool=False,
+>                       audio:Optional[ChatCompletionAudioParam]|NotGiven=NOT_GI
+>                       VEN,
+>                       frequency_penalty:Optional[float]|NotGiven=NOT_GIVEN, fu
+>                       nction_call:completion_create_params.FunctionCall|NotGiv
+>                       en=NOT_GIVEN, functions:Iterable[completion_create_param
+>                       s.Function]|NotGiven=NOT_GIVEN,
+>                       logit_bias:Optional[Dict[str,int]]|NotGiven=NOT_GIVEN,
+>                       logprobs:Optional[bool]|NotGiven=NOT_GIVEN,
+>                       max_completion_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+>                       max_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+>                       metadata:Optional[Dict[str,str]]|NotGiven=NOT_GIVEN, mod
+>                       alities:Optional[List[ChatCompletionModality]]|NotGiven=
+>                       NOT_GIVEN, n:Optional[int]|NotGiven=NOT_GIVEN,
+>                       parallel_tool_calls:bool|NotGiven=NOT_GIVEN, prediction:
+>                       Optional[ChatCompletionPredictionContentParam]|NotGiven=
+>                       NOT_GIVEN,
+>                       presence_penalty:Optional[float]|NotGiven=NOT_GIVEN, rea
+>                       soning_effort:ChatCompletionReasoningEffort|NotGiven=NOT
+>                       _GIVEN, response_format:completion_create_params.Respons
+>                       eFormat|NotGiven=NOT_GIVEN,
+>                       seed:Optional[int]|NotGiven=NOT_GIVEN, service_tier:"Opt
+>                       ional[Literal['auto','default']]|NotGiven"=NOT_GIVEN,
+>                       stop:Union[Optional[str],List[str]]|NotGiven=NOT_GIVEN,
+>                       store:Optional[bool]|NotGiven=NOT_GIVEN, stream_options:
+>                       Optional[ChatCompletionStreamOptionsParam]|NotGiven=NOT_
+>                       GIVEN, temperature:Optional[float]|NotGiven=NOT_GIVEN, t
+>                       ool_choice:ChatCompletionToolChoiceOptionParam|NotGiven=
+>                       NOT_GIVEN, tools:Iterable[ChatCompletionToolParam]|NotGi
+>                       ven=NOT_GIVEN,
+>                       top_logprobs:Optional[int]|NotGiven=NOT_GIVEN,
+>                       top_p:Optional[float]|NotGiven=NOT_GIVEN,
+>                       user:str|NotGiven=NOT_GIVEN,
+>                       extra_headers:Headers|None=None,
+>                       extra_query:Query|None=None, extra_body:Body|None=None,
+>                       timeout:float|httpx.Timeout|None|NotGiven=NOT_GIVEN)
+
+*Make a call to LLM.*
+
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 25%" />
+<col style="width: 34%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msgs</td>
+<td>list</td>
+<td></td>
+<td>List of messages in the dialog</td>
+</tr>
+<tr>
+<td>sp</td>
+<td>str</td>
+<td></td>
+<td>System prompt</td>
+</tr>
+<tr>
+<td>maxtok</td>
+<td>int</td>
+<td>4096</td>
+<td>Maximum tokens</td>
+</tr>
+<tr>
+<td>stream</td>
+<td>bool</td>
+<td>False</td>
+<td>Stream response?</td>
+</tr>
+<tr>
+<td>audio</td>
+<td>Optional[ChatCompletionAudioParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>frequency_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>function_call</td>
+<td>completion_create_params.FunctionCall | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>functions</td>
+<td>Iterable[completion_create_params.Function] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>logit_bias</td>
+<td>Optional[Dict[str, int]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>logprobs</td>
+<td>Optional[bool] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>max_completion_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>max_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>Optional[Dict[str, str]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>modalities</td>
+<td>Optional[List[ChatCompletionModality]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>n</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>parallel_tool_calls</td>
+<td>bool | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>prediction</td>
+<td>Optional[ChatCompletionPredictionContentParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>presence_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>reasoning_effort</td>
+<td>ChatCompletionReasoningEffort | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>response_format</td>
+<td>completion_create_params.ResponseFormat | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>seed</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>service_tier</td>
+<td>Optional[Literal[‘auto’, ‘default’]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>stop</td>
+<td>Union[Optional[str], List[str]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>store</td>
+<td>Optional[bool] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>stream_options</td>
+<td>Optional[ChatCompletionStreamOptionsParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>temperature</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>tool_choice</td>
+<td>ChatCompletionToolChoiceOptionParam | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>tools</td>
+<td>Iterable[ChatCompletionToolParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>top_logprobs</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>top_p</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>user</td>
+<td>str | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_headers</td>
+<td>Headers | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_query</td>
+<td>Query | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_body</td>
+<td>Body | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>float | httpx.Timeout | None | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+@patch
+@delegates(Completions.create)
+def __call__(self:Client,
+             msgs:list, # List of messages in the dialog
+             sp:str='', # System prompt
+             maxtok=4096, # Maximum tokens
+             stream:bool=False, # Stream response?
+             **kwargs):
+    "Make a call to LLM."
+    assert not (self.text_only and bool(sp)), "System prompts are not supported by the current model type."
+    assert not (self.text_only and stream), "Streaming is not supported by the current model type."
+    if 'tools' in kwargs: assert not self.text_only, "Tool use is not supported by the current model type."
+    if any(c['type'] == 'image_url' for msg in msgs if isinstance(msg, dict) and isinstance(msg.get('content'), list) for c in msg['content']): assert not self.text_only, "Images are not supported by the current model type."
+    if stream: kwargs['stream_options'] = {"include_usage": True}
+    if sp: msgs = [mk_msg(sp, 'system')] + list(msgs)
+    r = self.c.create(
+        model=self.model, messages=msgs, max_completion_tokens=maxtok, stream=stream, **kwargs)
+    if not stream: return self._r(r)
+    else: return get_stream(map(self._r, r))
+```
+
+</details>
+
+``` python
+msgs = [mk_msg('Hi')]
+```
+
+``` python
+c(msgs)
+```
+
+Hello! How can I assist you today?
+
+<details>
+
+- id: chatcmpl-ALXzIRMSnolsXgCkpNZhRkP6He04H
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘Hello! How can I assist you
+  today?’, refusal=None, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1729698900
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=9, prompt_tokens=8,
+  total_tokens=17,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+``` python
+c.use
+```
+
+    In: 17; Out: 19; Total: 36
+
+``` python
+for o in c(msgs, stream=True): print(o, end='')
+```
+
+    Hello! How can I assist you today?
+
+``` python
+c.use
+```
+
+    In: 25; Out: 28; Total: 53
+
+## Tool use
+
+``` python
+def sums(
+    a:int,  # First thing to sum
+    b:int # Second thing to sum
+) -> int: # The sum of the inputs
+    "Adds a + b."
+    print(f"Finding the sum of {a} and {b}")
+    return a + b
+```
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L144"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### mk_openai_func
+
+>  mk_openai_func (f)
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L150"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### mk_tool_choice
+
+>  mk_tool_choice (f)
+
+``` python
+sysp = "You are a helpful assistant. When using tools, be sure to pass all required parameters, at minimum."
+```
+
+``` python
+a,b = 604542,6458932
+pr = f"What is {a}+{b}?"
+tools=[mk_openai_func(sums)]
+tool_choice=mk_tool_choice("sums")
+```
+
+``` python
+msgs = [mk_msg(pr)]
+r = c(msgs, sp=sysp, tools=tools)
+r
+```
+
+- id: chatcmpl-ALXzJN8S3M8xOpyLYt9JlP7swcae1
+- choices: \[Choice(finish_reason=‘tool_calls’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=None, refusal=None,
+  role=‘assistant’, function_call=None,
+  tool_calls=\[ChatCompletionMessageToolCall(id=‘call_ED1LI54AaSkk0T6aDrX5foal’,
+  function=Function(arguments=‘{“a”:604542,“b”:6458932}’, name=‘sums’),
+  type=‘function’)\]))\]
+- created: 1729698901
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=21, prompt_tokens=94,
+  total_tokens=115,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+``` python
+m = find_block(r)
+m
+```
+
+    ChatCompletionMessage(content=None, refusal=None, role='assistant', function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_ED1LI54AaSkk0T6aDrX5foal', function=Function(arguments='{"a":604542,"b":6458932}', name='sums'), type='function')])
+
+``` python
+tc = m.tool_calls
+tc
+```
+
+    [ChatCompletionMessageToolCall(id='call_ED1LI54AaSkk0T6aDrX5foal', function=Function(arguments='{"a":604542,"b":6458932}', name='sums'), type='function')]
+
+``` python
+func = tc[0].function
+func
+```
+
+    Function(arguments='{"a":604542,"b":6458932}', name='sums')
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L153"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### call_func_openai
+
+>  call_func_openai
+>                        (func:openai.types.chat.chat_completion_message_tool_ca
+>                        ll.Function, ns:Optional[collections.abc.Mapping]=None)
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function, ns:Optional[abc.Mapping]=None):
+    return call_func(func.name, ast.literal_eval(func.arguments), ns)
+```
+
+</details>
+
+``` python
+ns = mk_ns(sums)
+res = call_func_openai(func, ns=ns)
+res
+```
+
+    Finding the sum of 604542 and 6458932
+
+    7063474
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L157"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### mk_toolres
+
+>  mk_toolres (r:collections.abc.Mapping,
+>                  ns:Optional[collections.abc.Mapping]=None, obj:Optional=None)
+
+*Create a `tool_result` message from response `r`.*
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r</td>
+<td>Mapping</td>
+<td></td>
+<td>Tool use request response</td>
+</tr>
+<tr>
+<td>ns</td>
+<td>Optional</td>
+<td>None</td>
+<td>Namespace to search for tools</td>
+</tr>
+<tr>
+<td>obj</td>
+<td>Optional</td>
+<td>None</td>
+<td>Class to search for tools</td>
+</tr>
+</tbody>
+</table>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+def mk_toolres(
+    r:abc.Mapping, # Tool use request response
+    ns:Optional[abc.Mapping]=None, # Namespace to search for tools
+    obj:Optional=None # Class to search for tools
+    ):
+    "Create a `tool_result` message from response `r`."
+    r = mk_msg(r)
+    tcs = getattr(r, 'tool_calls', [])
+    res = [r]
+    if ns is None: ns = globals()
+    if obj is not None: ns = mk_ns(obj)
+    for tc in (tcs or []):
+        func = tc.function
+        cts = str(call_func_openai(func, ns=ns))
+        res.append(mk_msg(str(cts), 'tool', tool_call_id=tc.id, name=func.name))
+    return res
+```
+
+</details>
+
+``` python
+tr = mk_toolres(r, ns=ns)
+tr
+```
+
+    Finding the sum of 604542 and 6458932
+
+    [ChatCompletionMessage(content=None, refusal=None, role='assistant', function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_ED1LI54AaSkk0T6aDrX5foal', function=Function(arguments='{"a":604542,"b":6458932}', name='sums'), type='function')]),
+     {'role': 'tool',
+      'content': '7063474',
+      'tool_call_id': 'call_ED1LI54AaSkk0T6aDrX5foal',
+      'name': 'sums'}]
+
+``` python
+msgs += tr
+```
+
+``` python
+res = c(msgs, sp=sysp, tools=tools)
+res
+```
+
+The sum of 604,542 and 6,458,932 is 7,063,474.
+
+<details>
+
+- id: chatcmpl-ALXzK678Vwp480g7tu1eT5wIURo8Q
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The sum of 604,542 and
+  6,458,932 is 7,063,474.’, refusal=None, role=‘assistant’,
+  function_call=None, tool_calls=None))\]
+- created: 1729698902
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_45c6de4934
+- usage: CompletionUsage(completion_tokens=23, prompt_tokens=126,
+  total_tokens=149,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+``` python
+class Dummy:
+    def sums(
+        self,
+        a:int,  # First thing to sum
+        b:int=1 # Second thing to sum
+    ) -> int: # The sum of the inputs
+        "Adds a + b."
+        print(f"Finding the sum of {a} and {b}")
+        return a + b
+```
+
+``` python
+tools = [mk_openai_func(Dummy.sums)]
+
+o = Dummy()
+msgs = mk_toolres("I'm Jeremy")
+r = c(msgs, sp=sysp, tools=tools)
+msgs += mk_toolres(r, obj=o)
+res = c(msgs, sp=sysp, tools=tools)
+res
+```
+
+Hello Jeremy! How can I assist you today?
+
+<details>
+
+- id: chatcmpl-ALXzMvnxaEgzwABU1ojD5KD9KMvur
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘Hello Jeremy! How can I assist
+  you today?’, refusal=None, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1729698904
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=11, prompt_tokens=106,
+  total_tokens=117,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+``` python
+msgs
+```
+
+    [{'role': 'user', 'content': "I'm Jeremy"},
+     ChatCompletionMessage(content='Hello Jeremy! How can I assist you today?', refusal=None, role='assistant', function_call=None, tool_calls=None)]
+
+``` python
+tools = [mk_openai_func(Dummy.sums)]
+
+o = Dummy()
+msgs = mk_toolres(pr)
+r = c(msgs, sp=sysp, tools=tools)
+msgs += mk_toolres(r, obj=o)
+res = c(msgs, sp=sysp, tools=tools)
+res
+```
+
+    Finding the sum of 604542 and 6458932
+
+The sum of 604542 and 6458932 is 7,063,474.
+
+<details>
+
+- id: chatcmpl-ALXzNUuTFv6YooYC3BDKLUG8JW1E9
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932
+  is 7,063,474.’, refusal=None, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1729698905
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=20, prompt_tokens=132,
+  total_tokens=152,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L177"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### mock_tooluse
+
+>  mock_tooluse (name:str, res, **kwargs)
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>str</td>
+<td>The name of the called function</td>
+</tr>
+<tr>
+<td>res</td>
+<td></td>
+<td>The result of calling the function</td>
+</tr>
+<tr>
+<td>kwargs</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
+
+def mock_tooluse(name:str, # The name of the called function
+                 res,  # The result of calling the function
+                 **kwargs): # The arguments to the function
+    ""
+    id = _mock_id()
+    func = dict(arguments=json.dumps(kwargs), name=name)
+    tc = dict(id=id, function=func, type='function')
+    req = dict(content=None, role='assistant', tool_calls=[tc])
+    resp = mk_msg('' if res is None else str(res), 'tool', tool_call_id=id, name=name)
+    return [req,resp]
+```
+
+</details>
+
+This function mocks the messages needed to implement tool use, for
+situations where you want to insert tool use messages into a dialog
+without actually calling into the model.
+
+``` python
+tu = mock_tooluse(name='sums', res=7063474, a=604542, b=6458932)
+r = c([mk_msg(pr)]+tu, tools=tools)
+r
+```
+
+The sum of 604542 and 6458932 is 7063474.
+
+<details>
+
+- id: chatcmpl-ALXzOlnmqz2JsWy3I803CW2jSTlQ0
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932
+  is 7063474.’, refusal=None, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1729698906
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=18, prompt_tokens=111,
+  total_tokens=129,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+Structured outputs
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L191"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### Client.structured
+
+>  Client.structured (msgs:list, tools:Optional[list]=None,
+>                         obj:Optional=None,
+>                         ns:Optional[collections.abc.Mapping]=None, sp:str='',
+>                         maxtok=4096, stream:bool=False, audio:Optional[ChatCom
+>                         pletionAudioParam]|NotGiven=NOT_GIVEN,
+>                         frequency_penalty:Optional[float]|NotGiven=NOT_GIVEN, 
+>                         function_call:completion_create_params.FunctionCall|No
+>                         tGiven=NOT_GIVEN, functions:Iterable[completion_create
+>                         _params.Function]|NotGiven=NOT_GIVEN,
+>                         logit_bias:Optional[Dict[str,int]]|NotGiven=NOT_GIVEN,
+>                         logprobs:Optional[bool]|NotGiven=NOT_GIVEN, max_comple
+>                         tion_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+>                         max_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+>                         metadata:Optional[Dict[str,str]]|NotGiven=NOT_GIVEN, m
+>                         odalities:Optional[List[ChatCompletionModality]]|NotGi
+>                         ven=NOT_GIVEN, n:Optional[int]|NotGiven=NOT_GIVEN,
+>                         parallel_tool_calls:bool|NotGiven=NOT_GIVEN, predictio
+>                         n:Optional[ChatCompletionPredictionContentParam]|NotGi
+>                         ven=NOT_GIVEN,
+>                         presence_penalty:Optional[float]|NotGiven=NOT_GIVEN, r
+>                         easoning_effort:ChatCompletionReasoningEffort|NotGiven
+>                         =NOT_GIVEN, response_format:completion_create_params.R
+>                         esponseFormat|NotGiven=NOT_GIVEN,
+>                         seed:Optional[int]|NotGiven=NOT_GIVEN, service_tier:"O
+>                         ptional[Literal['auto','default']]|NotGiven"=NOT_GIVEN
+>                         , stop:Union[Optional[str],List[str]]|NotGiven=NOT_GIV
+>                         EN, store:Optional[bool]|NotGiven=NOT_GIVEN, stream_op
+>                         tions:Optional[ChatCompletionStreamOptionsParam]|NotGi
+>                         ven=NOT_GIVEN,
+>                         temperature:Optional[float]|NotGiven=NOT_GIVEN, tool_c
+>                         hoice:ChatCompletionToolChoiceOptionParam|NotGiven=NOT
+>                         _GIVEN, top_logprobs:Optional[int]|NotGiven=NOT_GIVEN,
+>                         top_p:Optional[float]|NotGiven=NOT_GIVEN,
+>                         user:str|NotGiven=NOT_GIVEN,
+>                         extra_headers:Headers|None=None,
+>                         extra_query:Query|None=None,
+>                         extra_body:Body|None=None,
+>                         timeout:float|httpx.Timeout|None|NotGiven=NOT_GIVEN)
+
+*Return the value of all tool calls (generally used for structured
+outputs)*
+
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 25%" />
+<col style="width: 34%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msgs</td>
+<td>list</td>
+<td></td>
+<td>Prompt</td>
+</tr>
+<tr>
+<td>tools</td>
+<td>Optional</td>
+<td>None</td>
+<td>List of tools to make available to OpenAI model</td>
+</tr>
+<tr>
+<td>obj</td>
+<td>Optional</td>
+<td>None</td>
+<td>Class to search for tools</td>
+</tr>
+<tr>
+<td>ns</td>
+<td>Optional</td>
+<td>None</td>
+<td>Namespace to search for tools</td>
+</tr>
+<tr>
+<td>sp</td>
+<td>str</td>
+<td></td>
+<td>System prompt</td>
+</tr>
+<tr>
+<td>maxtok</td>
+<td>int</td>
+<td>4096</td>
+<td>Maximum tokens</td>
+</tr>
+<tr>
+<td>stream</td>
+<td>bool</td>
+<td>False</td>
+<td>Stream response?</td>
+</tr>
+<tr>
+<td>audio</td>
+<td>Optional[ChatCompletionAudioParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>frequency_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>function_call</td>
+<td>completion_create_params.FunctionCall | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>functions</td>
+<td>Iterable[completion_create_params.Function] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>logit_bias</td>
+<td>Optional[Dict[str, int]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>logprobs</td>
+<td>Optional[bool] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>max_completion_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>max_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>Optional[Dict[str, str]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>modalities</td>
+<td>Optional[List[ChatCompletionModality]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>n</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>parallel_tool_calls</td>
+<td>bool | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>prediction</td>
+<td>Optional[ChatCompletionPredictionContentParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>presence_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>reasoning_effort</td>
+<td>ChatCompletionReasoningEffort | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>response_format</td>
+<td>completion_create_params.ResponseFormat | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>seed</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>service_tier</td>
+<td>Optional[Literal[‘auto’, ‘default’]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>stop</td>
+<td>Union[Optional[str], List[str]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>store</td>
+<td>Optional[bool] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>stream_options</td>
+<td>Optional[ChatCompletionStreamOptionsParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>temperature</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>tool_choice</td>
+<td>ChatCompletionToolChoiceOptionParam | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>top_logprobs</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>top_p</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>user</td>
+<td>str | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_headers</td>
+<td>Headers | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_query</td>
+<td>Query | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_body</td>
+<td>Body | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>float | httpx.Timeout | None | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+@patch
+@delegates(Client.__call__)
+def structured(self:Client,
+               msgs: list, # Prompt
+               tools:Optional[list]=None, # List of tools to make available to OpenAI model
+               obj:Optional=None, # Class to search for tools
+               ns:Optional[abc.Mapping]=None, # Namespace to search for tools
+               **kwargs):
+    "Return the value of all tool calls (generally used for structured outputs)"
+    tools = listify(tools)
+    if ns is None: ns=mk_ns(*tools)
+    tools = [mk_openai_func(o) for o in tools]
+    if obj is not None: ns = mk_ns(obj)
+    res = self(msgs, tools=tools, tool_choice='required', **kwargs)
+    cts = getattr(res, 'choices', [])
+    tcs = [call_func_openai(t.function, ns=ns) for o in cts for t in (o.message.tool_calls or [])]
+    return tcs
+```
+
+</details>
+
+OpenAI’s API doesn’t natively support response formats, so we introduce
+a `structured` method to handle tool calling for this purpose. In this
+setup, the tool’s result is sent directly to the user without being
+passed back to the model.
+
+``` python
+c.structured(mk_msgs(pr), tools=[sums])
+```
+
+    Finding the sum of 604542 and 6458932
+
+    [7063474]
+
+## Chat
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L208"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### Chat
+
+>  Chat (model:Optional[str]=None, cli:Optional[__main__.Client]=None,
+>            sp='', tools:Optional[list]=None, tool_choice:Optional[str]=None)
+
+*OpenAI chat client.*
+
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 25%" />
+<col style="width: 34%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>model</td>
+<td>Optional</td>
+<td>None</td>
+<td>Model to use (leave empty if passing <code>cli</code>)</td>
+</tr>
+<tr>
+<td>cli</td>
+<td>Optional</td>
+<td>None</td>
+<td>Client to use (leave empty if passing <code>model</code>)</td>
+</tr>
+<tr>
+<td>sp</td>
+<td>str</td>
+<td></td>
+<td>Optional system prompt</td>
+</tr>
+<tr>
+<td>tools</td>
+<td>Optional</td>
+<td>None</td>
+<td>List of tools to make available</td>
+</tr>
+<tr>
+<td>tool_choice</td>
+<td>Optional</td>
+<td>None</td>
+<td>Forced tool choice</td>
+</tr>
+</tbody>
+</table>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+class Chat:
+    def __init__(self,
+                 model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
+                 cli:Optional[Client]=None, # Client to use (leave empty if passing `model`)
+                 sp='', # Optional system prompt
+                 tools:Optional[list]=None,  # List of tools to make available
+                 tool_choice:Optional[str]=None): # Forced tool choice
+        "OpenAI chat client."
+        assert model or cli
+        self.c = (cli or Client(model))
+        self.h,self.sp,self.tools,self.tool_choice = [],sp,tools,tool_choice
+    
+    @property
+    def use(self): return self.c.use
+```
+
+</details>
+
+``` python
+sp = "Never mention what tools you use."
+chat = Chat(model, sp=sp)
+chat.c.use, chat.h
+```
+
+    (In: 0; Out: 0; Total: 0, [])
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/cosette/blob/main/cosette/core.py#L226"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### Chat.\_\_call\_\_
+
+>  Chat.__call__ (pr=None, stream:bool=False,
+>                     audio:Optional[ChatCompletionAudioParam]|NotGiven=NOT_GIVE
+>                     N, frequency_penalty:Optional[float]|NotGiven=NOT_GIVEN, f
+>                     unction_call:completion_create_params.FunctionCall|NotGive
+>                     n=NOT_GIVEN, functions:Iterable[completion_create_params.F
+>                     unction]|NotGiven=NOT_GIVEN,
+>                     logit_bias:Optional[Dict[str,int]]|NotGiven=NOT_GIVEN,
+>                     logprobs:Optional[bool]|NotGiven=NOT_GIVEN,
+>                     max_completion_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+>                     max_tokens:Optional[int]|NotGiven=NOT_GIVEN,
+>                     metadata:Optional[Dict[str,str]]|NotGiven=NOT_GIVEN, modal
+>                     ities:Optional[List[ChatCompletionModality]]|NotGiven=NOT_
+>                     GIVEN, n:Optional[int]|NotGiven=NOT_GIVEN,
+>                     parallel_tool_calls:bool|NotGiven=NOT_GIVEN, prediction:Op
+>                     tional[ChatCompletionPredictionContentParam]|NotGiven=NOT_
+>                     GIVEN,
+>                     presence_penalty:Optional[float]|NotGiven=NOT_GIVEN, reaso
+>                     ning_effort:ChatCompletionReasoningEffort|NotGiven=NOT_GIV
+>                     EN, response_format:completion_create_params.ResponseForma
+>                     t|NotGiven=NOT_GIVEN,
+>                     seed:Optional[int]|NotGiven=NOT_GIVEN, service_tier:"Optio
+>                     nal[Literal['auto','default']]|NotGiven"=NOT_GIVEN,
+>                     stop:Union[Optional[str],List[str]]|NotGiven=NOT_GIVEN,
+>                     store:Optional[bool]|NotGiven=NOT_GIVEN, stream_options:Op
+>                     tional[ChatCompletionStreamOptionsParam]|NotGiven=NOT_GIVE
+>                     N, temperature:Optional[float]|NotGiven=NOT_GIVEN, tool_ch
+>                     oice:ChatCompletionToolChoiceOptionParam|NotGiven=NOT_GIVE
+>                     N, tools:Iterable[ChatCompletionToolParam]|NotGiven=NOT_GI
+>                     VEN, top_logprobs:Optional[int]|NotGiven=NOT_GIVEN,
+>                     top_p:Optional[float]|NotGiven=NOT_GIVEN,
+>                     user:str|NotGiven=NOT_GIVEN,
+>                     extra_headers:Headers|None=None,
+>                     extra_query:Query|None=None, extra_body:Body|None=None,
+>                     timeout:float|httpx.Timeout|None|NotGiven=NOT_GIVEN)
+
+*Add prompt `pr` to dialog and get a response*
+
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 25%" />
+<col style="width: 34%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pr</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Prompt / message</td>
+</tr>
+<tr>
+<td>stream</td>
+<td>bool</td>
+<td>False</td>
+<td>Stream response?</td>
+</tr>
+<tr>
+<td>audio</td>
+<td>Optional[ChatCompletionAudioParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>frequency_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>function_call</td>
+<td>completion_create_params.FunctionCall | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>functions</td>
+<td>Iterable[completion_create_params.Function] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>logit_bias</td>
+<td>Optional[Dict[str, int]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>logprobs</td>
+<td>Optional[bool] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>max_completion_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>max_tokens</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>Optional[Dict[str, str]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>modalities</td>
+<td>Optional[List[ChatCompletionModality]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>n</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>parallel_tool_calls</td>
+<td>bool | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>prediction</td>
+<td>Optional[ChatCompletionPredictionContentParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>presence_penalty</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>reasoning_effort</td>
+<td>ChatCompletionReasoningEffort | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>response_format</td>
+<td>completion_create_params.ResponseFormat | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>seed</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>service_tier</td>
+<td>Optional[Literal[‘auto’, ‘default’]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>stop</td>
+<td>Union[Optional[str], List[str]] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>store</td>
+<td>Optional[bool] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>stream_options</td>
+<td>Optional[ChatCompletionStreamOptionsParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>temperature</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>tool_choice</td>
+<td>ChatCompletionToolChoiceOptionParam | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>tools</td>
+<td>Iterable[ChatCompletionToolParam] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>top_logprobs</td>
+<td>Optional[int] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>top_p</td>
+<td>Optional[float] | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>user</td>
+<td>str | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_headers</td>
+<td>Headers | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_query</td>
+<td>Query | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>extra_body</td>
+<td>Body | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>float | httpx.Timeout | None | NotGiven</td>
+<td>NOT_GIVEN</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<details open class="code-fold">
+<summary>Exported source</summary>
+
+``` python
+@patch
+@delegates(Completions.create)
+def __call__(self:Chat,
+             pr=None,  # Prompt / message
+             stream:bool=False, # Stream response?
+             **kwargs):
+    "Add prompt `pr` to dialog and get a response"
+    if isinstance(pr,str): pr = pr.strip()
+    if pr: self.h.append(mk_msg(pr))
+    if self.tools: kwargs['tools'] = [mk_openai_func(o) for o in self.tools]
+    if self.tool_choice: kwargs['tool_choice'] = mk_tool_choice(self.tool_choice)
+    res = self.c(self.h, sp=self.sp, stream=stream, **kwargs)
+    self.h += mk_toolres(res, ns=self.tools)
+    return res
+```
+
+</details>
+
+``` python
+chat("I'm Jeremy")
+chat("What's my name?")
+```
+
+You mentioned that your name is Jeremy. How can I help you further?
+
+<details>
+
+- id: chatcmpl-ALXvI7Tp8wLo1L4kt94VzHSffNy6y
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘You mentioned that your name is
+  Jeremy. How can I help you further?’, refusal=None, role=‘assistant’,
+  function_call=None, tool_calls=None))\]
+- created: 1729698652
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_a7d06e42a7
+- usage: CompletionUsage(completion_tokens=15, prompt_tokens=43,
+  total_tokens=58,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+``` python
+chat = Chat(model, sp=sp)
+for o in chat("I'm Jeremy", stream=True):
+    o = contents(o)
+    if o and isinstance(o, str): print(o, end='')
+```
+
+    Hello, Jeremy! How can I assist you today?
+
+### Chat tool use
+
+``` python
+pr = f"What is {a}+{b}?"
+pr
+```
+
+    'What is 604542+6458932?'
+
+``` python
+chat = Chat(model, sp=sp, tools=[sums])
+r = chat(pr)
+r
+```
+
+    Finding the sum of 604542 and 6458932
+
+- id: chatcmpl-ALXvKAJK3G7PzLoatbfcY3fE2z9Y6
+- choices: \[Choice(finish_reason=‘tool_calls’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=None, refusal=None,
+  role=‘assistant’, function_call=None,
+  tool_calls=\[ChatCompletionMessageToolCall(id=‘call_0Iu9kqTCeGXNzm61r2yew7Dz’,
+  function=Function(arguments=‘{“a”:604542,“b”:6458932}’, name=‘sums’),
+  type=‘function’)\]))\]
+- created: 1729698654
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_45c6de4934
+- usage: CompletionUsage(completion_tokens=21, prompt_tokens=80,
+  total_tokens=101,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+``` python
+chat()
+```
+
+The sum of 604542 and 6458932 is 7063474.
+
+<details>
+
+- id: chatcmpl-ALXvLXwVVockYTulBBNb4ZBrViss6
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The sum of 604542 and 6458932
+  is 7063474.’, refusal=None, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1729698655
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_72bbfa6014
+- usage: CompletionUsage(completion_tokens=18, prompt_tokens=112,
+  total_tokens=130,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+## Images
+
+As everyone knows, when testing image APIs you have to use a cute puppy.
+
+``` python
+# Image is Cute_dog.jpg from Wikimedia
+fn = Path('samples/puppy.jpg')
+display.Image(filename=fn, width=200)
+```
+
+<img src="00_core_files/figure-commonmark/cell-78-output-1.jpeg"
+width="200" />
+
+``` python
+img = fn.read_bytes()
+```
+
+OpenAI expects an image message to have the following structure
+
+``` js
+{
+  "type": "image_url",
+  "image_url": {
+    "url": f"data:{MEDIA_TYPE};base64,{IMG}"
+  }
+}
+```
+
+`msglm` automatically detects if a message is an image, encodes it, and
+generates the data structure above. All we need to do is a create a list
+containing our image and a query and then pass it to `mk_msg`.
+
+Let’s try it out…
+
+``` python
+q = "In brief, what color flowers are in this image?"
+msg = [mk_msg(img), mk_msg(q)]
+```
+
+``` python
+c = Chat(model)
+c([img, q])
+```
+
+The flowers in the image are purple.
+
+<details>
+
+- id: chatcmpl-ALXvd9DSVpvfd9BjVttUQWhi1fyhP
+- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
+  message=ChatCompletionMessage(content=‘The flowers in the image are
+  purple.’, refusal=None, role=‘assistant’, function_call=None,
+  tool_calls=None))\]
+- created: 1729698673
+- model: gpt-4o-2024-08-06
+- object: chat.completion
+- service_tier: None
+- system_fingerprint: fp_72bbfa6014
+- usage: CompletionUsage(completion_tokens=8, prompt_tokens=273,
+  total_tokens=281,
+  completion_tokens_details=CompletionTokensDetails(audio_tokens=None,
+  reasoning_tokens=0),
+  prompt_tokens_details=PromptTokensDetails(audio_tokens=None,
+  cached_tokens=0))
+
+</details>
+
+# Third Party Providers
+
+## Azure OpenAI Service
+
+``` python
+azure_endpoint = AzureOpenAI(
+  azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"), 
+  api_key=os.getenv("AZURE_OPENAI_API_KEY"),  
+  api_version="2024-08-01-preview"
+)
+```
+
+``` python
+client = Client(models_azure[0], azure_endpoint)
+```
+
+``` python
+chat = Chat(cli=client)
+```
+
+``` python
+chat("I'm Faisal")
+```</doc></optional></project>
