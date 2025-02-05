@@ -432,7 +432,50 @@ that number of input tokens increases quickly with this kind of chat.
 chat.use
 ```
 
-    In: 995; Out: 141; Total: 1136</doc></docs><api><doc title="API List" desc="A succint list of all functions and methods in claudette.">404: Not Found</doc></api><optional><doc title="Tool loop handling" desc="How to use the tool loop functionality for complex multi-step interactions"># Tool loop
+    In: 995; Out: 141; Total: 1136</doc></docs><api><doc title="API List" desc="A succint list of all functions and methods in claudette."># cosette Module Documentation
+
+## cosette.core
+
+- `def find_block(r)`
+    Find the message in `r`.
+
+- `def contents(r)`
+    Helper to get the contents from response `r`.
+
+- `def usage(inp, out)`
+    Slightly more concise version of `CompletionUsage`.
+
+- `@patch def __add__(self, b)`
+    Add together each of `input_tokens` and `output_tokens`
+
+- `def wrap_latex(text, md)`
+    Replace OpenAI LaTeX codes with markdown-compatible ones
+
+- `class Client`
+    - `def __init__(self, model, cli)`
+        Basic LLM messages client.
+
+
+- `@patch @delegates(Completions.create) def __call__(self, msgs, sp, maxtok, stream, **kwargs)`
+    Make a call to LLM.
+
+- `def mk_toolres(r, ns, obj)`
+    Create a `tool_result` message from response `r`.
+
+- `@patch @delegates(Client.__call__) def structured(self, msgs, tools, obj, ns, **kwargs)`
+    Return the value of all tool calls (generally used for structured outputs)
+
+- `class Chat`
+    - `def __init__(self, model, cli, sp, tools, tool_choice)`
+        OpenAI chat client.
+
+    - `@property def use`
+
+## cosette.toolloop
+
+- `@patch @delegates(Completions.create) def toolloop(self, pr, max_steps, trace_func, cont_func, **kwargs)`
+    Add prompt `pr` to dialog and get a response from the model, automatically following up with `tool_use` messages
+</doc></api><optional><doc title="Tool loop handling" desc="How to use the tool loop functionality for complex multi-step interactions"># Tool loop
 
 
 
