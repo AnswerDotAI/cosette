@@ -1,6 +1,6 @@
-<project title="Claudette" summary="Cosette is a Python library that wraps OpenAI's API to provide a higher-level interface for creating AI applications. It automates common patterns while maintaining full control, offering features like stateful chat, prefill support, image handling, and streamlined tool use.">Things to remember when using Claudette:
+<project title="Claudette" summary="Cosette is a Python library that wraps OpenAI's API to provide a higher-level interface for creating AI applications. It automates common patterns while maintaining full control, offering features like stateful chat, prefill support, image handling, and streamlined tool use.">Things to remember when using Cosette: 
 
-- Claudette is designed to work with Claude 3 models (e.g. 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct') and supports multiple providers (OpenAI direct, Azure)
+- Cosette is designed to work with Claude 3 models (e.g. 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct') and supports multiple providers (OpenAI direct, Azure)
 - Use `Chat()` for maintaining conversation state and handling tool interactions
 - When using tools, the library automatically handles the request/response loop
 - Image support is built in<docs><doc title="README" desc="Quick start guide and overview"># cosette
