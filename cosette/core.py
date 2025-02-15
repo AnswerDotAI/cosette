@@ -43,7 +43,7 @@ models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4
 text_only_models = 'o1-preview', 'o1-mini', 'o3-mini'
 
 # %% ../00_core.ipynb 12
-has_streaming_models = set(models) - set(('o1', 'o1-mini', 'o3-mini'))
+has_streaming_models = set(models) - set(('o1-mini', 'o3-mini'))
 has_system_prompt_models = set(models) - set(('o1-mini', 'o3-mini'))
 has_temperature_models = set(models) - set(('o1', 'o1-mini', 'o3-mini'))
 
