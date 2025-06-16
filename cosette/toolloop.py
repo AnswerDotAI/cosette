@@ -10,22 +10,30 @@ from fastcore.meta import delegates
 
 from openai.resources.chat import Completions
 
-# %% ../01_toolloop.ipynb 11
+# %% ../01_toolloop.ipynb 16
+_final_prompt = "You have no more tool uses. Please summarize your findings. If you did not complete your goal please tell the user what further work needs to be done so they can choose how best to proceed."
+
+# %% ../01_toolloop.ipynb 17
 @patch
-@delegates(Completions.create)
+@delegates(Chat.__call__)
 def toolloop(self:Chat,
-             pr, # Prompt to pass to model
+             pr, # Prompt to pass to Claude
              max_steps=10, # Maximum number of tool requests to loop through
-             trace_func:Optional[callable]=None, # Function to trace tool use steps (e.g `print`)
-             cont_func:Optional[callable]=noop, # Function that stops loop if returns False
+             cont_func:callable=noop, # Function that stops loop if returns False
+             final_prompt=_final_prompt, # Prompt to add if last message is a tool call
              **kwargs):
-    "Add prompt `pr` to dialog and get a response from the model, automatically following up with `tool_use` messages"
-    r = self(pr, **kwargs)
-    for i in range(max_steps):
-        ch = r.choices[0]
-        if ch.finish_reason!='tool_calls': break
-        if trace_func: trace_func(r)
-        r = self(**kwargs)
-        if not (cont_func or noop)(self.h[-2]): break
-    if trace_func: trace_func(r)
-    return r
+    "Add prompt `pr` to dialog and get a response from Claude, automatically following up with `tool_use` messages"
+    class _Loop:
+        def __iter__(a):
+            init_n = len(self.h)
+            r = self(pr, **kwargs)
+            yield r
+            if len(self.last)>1: yield self.last[1]
+            for i in range(max_steps-1):
+                if r.choices[0].finish_reason != 'tool_calls': break
+                r = self(final_prompt if i==max_steps-2 else None, **kwargs)
+                yield r
+                if len(self.last)>1: yield self.last[1]
+                if not cont_func(*self.h[-3:]): break
+            a.value = self.h[init_n+1:]
+    return _Loop()

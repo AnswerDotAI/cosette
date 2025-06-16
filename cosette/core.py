@@ -37,7 +37,7 @@ _all_ = ['mk_msg', 'mk_msgs']
 empty = inspect.Parameter.empty
 
 # %% ../00_core.ipynb 9
-models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest'
+models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini'
 
 # %% ../00_core.ipynb 11
 text_only_models = 'o1-preview', 'o1-mini', 'o3-mini'
@@ -162,7 +162,7 @@ def mk_tool_choice(f): return dict(type='function', function={'name':f})
 
 # %% ../00_core.ipynb 63
 def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function, ns:Optional[abc.Mapping]=None):
-    return call_func(func.name, ast.literal_eval(func.arguments), ns)
+    return call_func(func.name, ast.literal_eval(func.arguments), ns, raise_on_err=False)
 
 # %% ../00_core.ipynb 65
 def mk_toolres(
@@ -226,7 +226,7 @@ class Chat:
         "OpenAI chat client."
         assert model or cli
         self.c = (cli or Client(model))
-        self.h,self.sp,self.tools,self.tool_choice = [],sp,tools,tool_choice
+        self.h,self.sp,self.tools,self.tool_choice = [],sp,listify(tools),tool_choice
     
     @property
     def use(self): return self.c.use
@@ -244,7 +244,8 @@ def __call__(self:Chat,
     if self.tools: kwargs['tools'] = [mk_openai_func(o) for o in self.tools]
     if self.tool_choice: kwargs['tool_choice'] = mk_tool_choice(self.tool_choice)
     res = self.c(self.h, sp=self.sp, stream=stream, **kwargs)
-    self.h += mk_toolres(res, ns=self.tools)
+    self.last = mk_toolres(res, ns=self.tools)
+    self.h += self.last
     return res
 
 # %% ../00_core.ipynb 101
