@@ -154,7 +154,6 @@ def __call__(self:Client,
 # %% ../00_core.ipynb 55
 def mk_openai_func(f): 
     sc = get_schema(f, 'parameters')
-    print(f"schema is: {sc}")
     sc['parameters'].pop('title', None)
     return dict(type='function', function=sc)
 
