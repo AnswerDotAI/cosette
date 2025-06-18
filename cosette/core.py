@@ -157,14 +157,14 @@ def mk_openai_func(f):
     sc['parameters'].pop('title', None)
     return dict(type='function', function=sc)
 
-# %% ../00_core.ipynb 56
+# %% ../00_core.ipynb 57
 def mk_tool_choice(f): return dict(type='function', function={'name':f})
 
-# %% ../00_core.ipynb 63
+# %% ../00_core.ipynb 64
 def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function, ns:Optional[abc.Mapping]=None):
     return call_func(func.name, ast.literal_eval(func.arguments), ns, raise_on_err=False)
 
-# %% ../00_core.ipynb 65
+# %% ../00_core.ipynb 66
 def mk_toolres(
     r:abc.Mapping, # Tool use request response
     ns:Optional[abc.Mapping]=None, # Namespace to search for tools
@@ -182,7 +182,7 @@ def mk_toolres(
         res.append(mk_msg(str(cts), 'tool', tool_call_id=tc.id, name=func.name))
     return res
 
-# %% ../00_core.ipynb 73
+# %% ../00_core.ipynb 74
 def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
 
 def mock_tooluse(name:str, # The name of the called function
@@ -196,7 +196,7 @@ def mock_tooluse(name:str, # The name of the called function
     resp = mk_msg('' if res is None else str(res), 'tool', tool_call_id=id, name=name)
     return [req,resp]
 
-# %% ../00_core.ipynb 77
+# %% ../00_core.ipynb 78
 @patch
 @delegates(Client.__call__)
 def structured(self:Client,
@@ -215,23 +215,27 @@ def structured(self:Client,
     tcs = [call_func_openai(t.function, ns=ns) for o in cts for t in (o.message.tool_calls or [])]
     return tcs
 
-# %% ../00_core.ipynb 81
+# %% ../00_core.ipynb 82
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
                  cli:Optional[Client]=None, # Client to use (leave empty if passing `model`)
                  sp='', # Optional system prompt
-                 tools:Optional[list]=None,  # List of tools to make available
-                 tool_choice:Optional[str]=None): # Forced tool choice
+                 tools:Optional[list]=None, # List of tools to make available
+                 hist: list = None,  # Initialize history
+                 tool_choice:Optional[str]=None, # Forced tool choice
+                 ns:Optional[abc.Mapping]=None): # Namespace to search for tools
         "OpenAI chat client."
         assert model or cli
         self.c = (cli or Client(model))
-        self.h,self.sp,self.tools,self.tool_choice = [],sp,listify(tools),tool_choice
+        self.h = hist if hist else []
+        if ns is None: ns=tools
+        self.sp,self.tools,self.tool_choice,self.ns = sp,listify(tools),tool_choice,ns
     
     @property
     def use(self): return self.c.use
 
-# %% ../00_core.ipynb 83
+# %% ../00_core.ipynb 84
 @patch
 @delegates(Completions.create)
 def __call__(self:Chat,
@@ -244,9 +248,9 @@ def __call__(self:Chat,
     if self.tools: kwargs['tools'] = [mk_openai_func(o) for o in self.tools]
     if self.tool_choice: kwargs['tool_choice'] = mk_tool_choice(self.tool_choice)
     res = self.c(self.h, sp=self.sp, stream=stream, **kwargs)
-    self.last = mk_toolres(res, ns=self.tools)
+    self.last = mk_toolres(res, ns=self.ns)
     self.h += self.last
     return res
 
-# %% ../00_core.ipynb 101
+# %% ../00_core.ipynb 102
 models_azure = ('gpt-4o', 'gpt-4-32k', 'gpt4-1106-preview', 'gpt-35-turbo', 'gpt-35-turbo-16k')
