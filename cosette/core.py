@@ -221,11 +221,10 @@ class Chat:
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
                  cli:Optional[Client]=None, # Client to use (leave empty if passing `model`)
                  sp='', # Optional system prompt
-                 tools:Optional[list]=None,  # List of tools to make available
+                 tools:Optional[list]=None, # List of tools to make available
                  hist: list = None,  # Initialize history
-                 tool_choice:Optional[str]=None,
-                 ns:Optional[abc.Mapping]=None # Namespace to search for tools
-                ): # Forced tool choice
+                 tool_choice:Optional[str]=None, # Forced tool choice
+                 ns:Optional[abc.Mapping]=None): # Namespace to search for tools
         "OpenAI chat client."
         assert model or cli
         self.c = (cli or Client(model))
