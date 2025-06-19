@@ -3,17 +3,17 @@
 # %% auto 0
 __all__ = []
 
-# %% ../01_toolloop.ipynb 2
+# %% ../01_toolloop.ipynb
 from .core import *
 from fastcore.utils import *
 from fastcore.meta import delegates
 
 from openai.resources.chat import Completions
 
-# %% ../01_toolloop.ipynb 16
+# %% ../01_toolloop.ipynb
 _final_prompt = "You have no more tool uses. Please summarize your findings. If you did not complete your goal please tell the user what further work needs to be done so they can choose how best to proceed."
 
-# %% ../01_toolloop.ipynb 17
+# %% ../01_toolloop.ipynb
 @patch
 @delegates(Chat.__call__)
 def toolloop(self:Chat,

@@ -6,7 +6,7 @@ __all__ = ['empty', 'models', 'text_only_models', 'has_streaming_models', 'has_s
            'usage', 'wrap_latex', 'Client', 'get_stream', 'mk_openai_func', 'mk_tool_choice', 'call_func_openai',
            'mk_toolres', 'mock_tooluse', 'Chat', 'mk_msg', 'mk_msgs']
 
-# %% ../00_core.ipynb 3
+# %% ../00_core.ipynb
 from fastcore import imghdr
 from fastcore.utils import *
 from fastcore.meta import delegates
@@ -30,29 +30,29 @@ from toolslm.funccall import *
 try: from IPython import display
 except: display=None
 
-# %% ../00_core.ipynb 5
+# %% ../00_core.ipynb
 _all_ = ['mk_msg', 'mk_msgs']
 
-# %% ../00_core.ipynb 6
+# %% ../00_core.ipynb
 empty = inspect.Parameter.empty
 
-# %% ../00_core.ipynb 9
-models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini'
+# %% ../00_core.ipynb
+models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano'
 
-# %% ../00_core.ipynb 11
+# %% ../00_core.ipynb
 text_only_models = 'o1-preview', 'o1-mini', 'o3-mini'
 
-# %% ../00_core.ipynb 12
+# %% ../00_core.ipynb
 has_streaming_models = set(models) - set(('o1-mini', 'o3-mini'))
 has_system_prompt_models = set(models) - set(('o1-mini', 'o3-mini'))
 has_temperature_models = set(models) - set(('o1', 'o1-mini', 'o3-mini'))
 
-# %% ../00_core.ipynb 13
+# %% ../00_core.ipynb
 def can_stream(m): return m in has_streaming_models
 def can_set_system_prompt(m): return m in has_system_prompt_models
 def can_set_temperature(m): return m in has_temperature_models
 
-# %% ../00_core.ipynb 21
+# %% ../00_core.ipynb
 def find_block(r:abc.Mapping, # The message to look in
               ):
     "Find the message in `r`."
@@ -61,7 +61,7 @@ def find_block(r:abc.Mapping, # The message to look in
     if hasattr(m, 'message'): return m.message
     return m.delta
 
-# %% ../00_core.ipynb 22
+# %% ../00_core.ipynb
 def contents(r):
     "Helper to get the contents from response `r`."
     blk = find_block(r)
@@ -69,7 +69,7 @@ def contents(r):
     if hasattr(blk, 'content'): return getattr(blk,'content')
     return blk
 
-# %% ../00_core.ipynb 24
+# %% ../00_core.ipynb
 @patch
 def _repr_markdown_(self:ChatCompletion):
     det = '\n- '.join(f'{k}: {v}' for k,v in dict(self).items())
@@ -83,24 +83,24 @@ def _repr_markdown_(self:ChatCompletion):
 
 </details>"""
 
-# %% ../00_core.ipynb 27
+# %% ../00_core.ipynb
 def usage(inp=0, # Number of prompt tokens
           out=0  # Number of completion tokens
          ):
     "Slightly more concise version of `CompletionUsage`."
     return CompletionUsage(prompt_tokens=inp, completion_tokens=out, total_tokens=inp+out)
 
-# %% ../00_core.ipynb 29
+# %% ../00_core.ipynb
 @patch
 def __repr__(self:CompletionUsage): return f'In: {self.prompt_tokens}; Out: {self.completion_tokens}; Total: {self.total_tokens}'
 
-# %% ../00_core.ipynb 31
+# %% ../00_core.ipynb
 @patch
 def __add__(self:CompletionUsage, b):
     "Add together each of `input_tokens` and `output_tokens`"
     return usage(self.prompt_tokens+b.prompt_tokens, self.completion_tokens+b.completion_tokens)
 
-# %% ../00_core.ipynb 33
+# %% ../00_core.ipynb
 def wrap_latex(text, md=True):
     "Replace OpenAI LaTeX codes with markdown-compatible ones"
     text = re.sub(r"\\\((.*?)\\\)", lambda o: f"${o.group(1)}$", text)
@@ -108,7 +108,7 @@ def wrap_latex(text, md=True):
     if md: res = display.Markdown(res)
     return res
 
-# %% ../00_core.ipynb 42
+# %% ../00_core.ipynb
 class Client:
     def __init__(self, model, cli=None):
         "Basic LLM messages client."
@@ -116,7 +116,7 @@ class Client:
         self.text_only = model in text_only_models
         self.c = (cli or OpenAI()).chat.completions
 
-# %% ../00_core.ipynb 44
+# %% ../00_core.ipynb
 @patch
 def _r(self:Client, r:ChatCompletion):
     "Store the result of the message and accrue total usage."
@@ -124,13 +124,13 @@ def _r(self:Client, r:ChatCompletion):
     if getattr(r,'usage',None): self.use += r.usage
     return r
 
-# %% ../00_core.ipynb 46
+# %% ../00_core.ipynb
 def get_stream(r):
     for o in r:
         o = contents(o)
         if o and isinstance(o, str): yield(o)
 
-# %% ../00_core.ipynb 47
+# %% ../00_core.ipynb
 @patch
 @delegates(Completions.create)
 def __call__(self:Client,
@@ -151,20 +151,20 @@ def __call__(self:Client,
     if not stream: return self._r(r)
     else: return get_stream(map(self._r, r))
 
-# %% ../00_core.ipynb 55
+# %% ../00_core.ipynb
 def mk_openai_func(f): 
     sc = get_schema(f, 'parameters')
     sc['parameters'].pop('title', None)
     return dict(type='function', function=sc)
 
-# %% ../00_core.ipynb 57
+# %% ../00_core.ipynb
 def mk_tool_choice(f): return dict(type='function', function={'name':f})
 
-# %% ../00_core.ipynb 64
+# %% ../00_core.ipynb
 def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function, ns:Optional[abc.Mapping]=None):
     return call_func(func.name, ast.literal_eval(func.arguments), ns, raise_on_err=False)
 
-# %% ../00_core.ipynb 66
+# %% ../00_core.ipynb
 def mk_toolres(
     r:abc.Mapping, # Tool use request response
     ns:Optional[abc.Mapping]=None, # Namespace to search for tools
@@ -182,7 +182,7 @@ def mk_toolres(
         res.append(mk_msg(str(cts), 'tool', tool_call_id=tc.id, name=func.name))
     return res
 
-# %% ../00_core.ipynb 74
+# %% ../00_core.ipynb
 def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
 
 def mock_tooluse(name:str, # The name of the called function
@@ -196,7 +196,7 @@ def mock_tooluse(name:str, # The name of the called function
     resp = mk_msg('' if res is None else str(res), 'tool', tool_call_id=id, name=name)
     return [req,resp]
 
-# %% ../00_core.ipynb 78
+# %% ../00_core.ipynb
 @patch
 @delegates(Client.__call__)
 def structured(self:Client,
@@ -215,7 +215,7 @@ def structured(self:Client,
     tcs = [call_func_openai(t.function, ns=ns) for o in cts for t in (o.message.tool_calls or [])]
     return tcs
 
-# %% ../00_core.ipynb 82
+# %% ../00_core.ipynb
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
@@ -235,7 +235,7 @@ class Chat:
     @property
     def use(self): return self.c.use
 
-# %% ../00_core.ipynb 84
+# %% ../00_core.ipynb
 @patch
 @delegates(Completions.create)
 def __call__(self:Chat,
@@ -252,5 +252,5 @@ def __call__(self:Chat,
     self.h += self.last
     return res
 
-# %% ../00_core.ipynb 102
+# %% ../00_core.ipynb
 models_azure = ('gpt-4o', 'gpt-4-32k', 'gpt4-1106-preview', 'gpt-35-turbo', 'gpt-35-turbo-16k')
