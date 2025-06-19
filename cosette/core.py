@@ -154,7 +154,7 @@ def __call__(self:Client,
 # %% ../00_core.ipynb
 def mk_openai_func(f): 
     sc = get_schema(f, 'parameters')
-    sc['parameters'].pop('title', None)
+    if 'parameters' in sc: sc['parameters'].pop('title', None)
     return dict(type='function', function=sc)
 
 # %% ../00_core.ipynb
@@ -253,4 +253,4 @@ def __call__(self:Chat,
     return res
 
 # %% ../00_core.ipynb
-models_azure = ('gpt-4o', 'gpt-4-32k', 'gpt4-1106-preview', 'gpt-35-turbo', 'gpt-35-turbo-16k')
+models_azure = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano'
