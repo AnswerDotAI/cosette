@@ -2,6 +2,16 @@
 
 <!-- do not remove -->
 
+## 0.1.0
+
+### Breaking changes
+
+- Remove `Client.structured()`
+
+### New Features
+
+- Add `Chat.structured` property ([#21](https://github.com/AnswerDotAI/cosette/issues/21))
+
 
 ## 0.0.6
 
