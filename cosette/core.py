@@ -27,9 +27,6 @@ from openai.types.completion_usage import CompletionUsage
 
 from toolslm.funccall import *
 
-try: from IPython import display
-except: display=None
-
 # %% ../00_core.ipynb
 _all_ = ['mk_msg', 'mk_msgs']
 
@@ -101,11 +98,10 @@ def __add__(self:CompletionUsage, b):
     return usage(self.prompt_tokens+b.prompt_tokens, self.completion_tokens+b.completion_tokens)
 
 # %% ../00_core.ipynb
-def wrap_latex(text, md=True):
+def wrap_latex(text):
     "Replace OpenAI LaTeX codes with markdown-compatible ones"
     text = re.sub(r"\\\((.*?)\\\)", lambda o: f"${o.group(1)}$", text)
     res = re.sub(r"\\\[(.*?)\\\]", lambda o: f"$${o.group(1)}$$", text, flags=re.DOTALL)
-    if md: res = display.Markdown(res)
     return res
 
 # %% ../00_core.ipynb
@@ -197,25 +193,6 @@ def mock_tooluse(name:str, # The name of the called function
     return [req,resp]
 
 # %% ../00_core.ipynb
-@patch
-@delegates(Client.__call__)
-def structured(self:Client,
-               msgs: list, # Prompt
-               tools:Optional[list]=None, # List of tools to make available to OpenAI model
-               obj:Optional=None, # Class to search for tools
-               ns:Optional[abc.Mapping]=None, # Namespace to search for tools
-               **kwargs):
-    "Return the value of all tool calls (generally used for structured outputs)"
-    tools = listify(tools)
-    if ns is None: ns=mk_ns(*tools)
-    tools = [mk_openai_func(o) for o in tools]
-    if obj is not None: ns = mk_ns(obj)
-    res = self(msgs, tools=tools, tool_choice='required', **kwargs)
-    cts = getattr(res, 'choices', [])
-    tcs = [call_func_openai(t.function, ns=ns) for o in cts for t in (o.message.tool_calls or [])]
-    return tcs
-
-# %% ../00_core.ipynb
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
@@ -251,6 +228,10 @@ def __call__(self:Chat,
     self.last = mk_toolres(res, ns=self.ns)
     self.h += self.last
     return res
+
+# %% ../00_core.ipynb
+@patch(as_prop=True)
+def structured(self:Chat): return self.h[-1]['content']
 
 # %% ../00_core.ipynb
 models_azure = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano'
