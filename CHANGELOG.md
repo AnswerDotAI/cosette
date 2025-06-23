@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.1.3
+
+### Bugs Squashed
+
+- fastcore dep update needed ([#25](https://github.com/AnswerDotAI/cosette/issues/25))
+
+
 ## 0.1.2
 
 ### Breaking Changes
