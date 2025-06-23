@@ -29,4 +29,5 @@ d = { 'settings': { 'branch': 'main',
                               'cosette.core.mock_tooluse': ('core.html#mock_tooluse', 'cosette/core.py'),
                               'cosette.core.usage': ('core.html#usage', 'cosette/core.py'),
                               'cosette.core.wrap_latex': ('core.html#wrap_latex', 'cosette/core.py')},
-            'cosette.toolloop': {'cosette.toolloop.Chat.toolloop': ('toolloop.html#chat.toolloop', 'cosette/toolloop.py')}}}
+            'cosette.toolloop': { 'cosette.toolloop.Chat.toolloop': ('toolloop.html#chat.toolloop', 'cosette/toolloop.py'),
+                                  'cosette.toolloop.loop_outputs': ('toolloop.html#loop_outputs', 'cosette/toolloop.py')}}}
