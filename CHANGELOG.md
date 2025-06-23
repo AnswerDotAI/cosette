@@ -2,15 +2,17 @@
 
 <!-- do not remove -->
 
-## 0.1.1
+## 0.1.2
 
-### Breaking changes
+### Breaking Changes
 
-- Remove `Client.structured()`
+- Switch to responses api
 
 ### New Features
 
-- Add `Chat.structured` property ([#21](https://github.com/AnswerDotAI/cosette/issues/21))
+- Add `loop_outputs` ([#24](https://github.com/AnswerDotAI/cosette/issues/24))
+- Support `instructions` param ([#23](https://github.com/AnswerDotAI/cosette/issues/23))
+- Switch to responses api ([#22](https://github.com/AnswerDotAI/cosette/issues/22))
 
 
 ## 0.0.6
