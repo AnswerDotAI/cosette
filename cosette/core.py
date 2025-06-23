@@ -4,7 +4,10 @@
 __all__ = ['empty', 'models', 'text_only_models', 'has_streaming_models', 'has_sp_models', 'has_temp_models', 'models_azure',
            'can_stream', 'can_set_sp', 'can_set_temp', 'usage', 'wrap_latex', 'Client', 'mk_openai_func',
            'mk_tool_choice', 'get_stream', 'call_func_openai', 'mk_toolres', 'mock_tooluse', 'Chat', 'mk_msg',
-           'mk_msgs']
+           'mk_msgs', 'Response', 'Responses', 'ResponseUsage', 'ResponseCompletedEvent', 'ResponseTextDeltaEvent',
+           'ResponseCreatedEvent', 'ResponseInProgressEvent', 'ResponseOutputItemAddedEvent',
+           'ResponseContentPartAddedEvent', 'ResponseTextDoneEvent', 'ResponseContentPartDoneEvent',
+           'ResponseOutputItemDoneEvent', 'ResponseFunctionToolCall']
 
 # %% ../00_core.ipynb
 from fastcore import imghdr
@@ -21,9 +24,9 @@ from toolslm.funccall import *
 
 from openai import types
 from openai import OpenAI,NOT_GIVEN,AzureOpenAI
-from openai.resources.chat.completions.completions import Completions
 from openai.resources import chat
 from openai.types.responses.response import Response
+from openai.resources.responses.responses import Responses
 from openai.types.responses.response_usage import ResponseUsage
 
 from openai.types.responses import (
@@ -33,7 +36,7 @@ from openai.types.responses import (
     ResponseFunctionToolCall)
 
 # %% ../00_core.ipynb
-_all_ = ['mk_msg', 'mk_msgs']
+_all_ = ['mk_msg', 'mk_msgs', 'Response', 'Responses', 'ResponseUsage', 'ResponseCompletedEvent', 'ResponseTextDeltaEvent', 'ResponseCreatedEvent', 'ResponseInProgressEvent', 'ResponseOutputItemAddedEvent', 'ResponseContentPartAddedEvent', 'ResponseTextDoneEvent', 'ResponseContentPartDoneEvent', 'ResponseOutputItemDoneEvent', 'ResponseCompletedEvent', 'ResponseFunctionToolCall']
 
 # %% ../00_core.ipynb
 empty = inspect.Parameter.empty
@@ -135,7 +138,7 @@ def get_stream(o, r, cli, cb=None):
 
 # %% ../00_core.ipynb
 @patch
-@delegates(Completions.create)
+@delegates(Responses.create)
 def __call__(self:Client,
              msgs:list, # List of messages in the dialog
              sp:str='', # System prompt
@@ -148,10 +151,9 @@ def __call__(self:Client,
     "Make a call to LLM."
     if tools: assert not self.text_only, "Tool use is not supported by the current model type."
     if any(c['type'] == 'image_url' for msg in msgs if isinstance(msg, dict) and isinstance(msg.get('content'), list) for c in msg['content']): assert not self.text_only, "Images are not supported by the current model type."
-    if sp and self.model in has_sp_models: msgs = [mk_msg(sp, 'system')] + list(msgs)
     tools = [mk_openai_func(o) for o in listify(tools)]
     r = self.c.create(
-        model=self.model, input=msgs, max_output_tokens=maxtok, stream=stream,
+        model=self.model, input=msgs, max_output_tokens=maxtok, stream=stream, instructions=sp,
         tools=tools, tool_choice=mk_tool_choice(tool_choice), **kwargs)
     if stream: return get_stream(r, self, cb=cb)
     else:
@@ -180,7 +182,7 @@ def mk_toolres(
     "Create a `tool_result` message from response `r`."
     tr = _toolres(r, ns, obj)
     r = mk_msg(r)
-    res = [r]
+    res = [r] if isinstance(r, dict) else listify(r)
     for k,v in tr.items(): res.append(dict(type="function_call_output", call_id=k, output=str(v)))
     return res
 
@@ -221,7 +223,7 @@ class Chat:
 
 # %% ../00_core.ipynb
 @patch
-@delegates(Completions.create)
+@delegates(Responses.create)
 def __call__(self:Chat,
              pr=None,  # Prompt / message
              stream:bool=False, # Stream response?

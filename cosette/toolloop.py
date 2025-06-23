@@ -8,8 +8,6 @@ from .core import *
 from fastcore.utils import *
 from fastcore.meta import delegates
 
-from openai.resources.chat import Completions
-
 # %% ../01_toolloop.ipynb
 _final_prompt = "You have no more tool uses. Please summarize your findings. If you did not complete your goal please tell the user what further work needs to be done so they can choose how best to proceed."
 
@@ -30,7 +28,7 @@ def toolloop(self:Chat,
             yield r
             if len(self.last)>1: yield self.last[1]
             for i in range(max_steps-1):
-                if r.choices[0].finish_reason != 'tool_calls': break
+                if not [o for o in r.output if isinstance(o,ResponseFunctionToolCall)]: break
                 r = self(final_prompt if i==max_steps-2 else None, **kwargs)
                 yield r
                 if len(self.last)>1: yield self.last[1]
