@@ -2,12 +2,11 @@
 
 <!-- do not remove -->
 
-## 0.1.4
+## 0.2.0
 
-### New Features
+### Breaking Changes
 
 - Remove `obj` support ([#26](https://github.com/AnswerDotAI/cosette/issues/26))
-
 
 
 ## 0.1.3
