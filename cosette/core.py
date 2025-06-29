@@ -166,25 +166,36 @@ def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function,
     return call_func(func.name, ast.literal_eval(func.arguments), ns, raise_on_err=False)
 
 # %% ../00_core.ipynb
-def _toolres(r, ns, obj):
+def _toolres(r, ns):
     "Create a result dict from `tcs`."
     tcs = [o for o in getattr(r, 'output', []) if isinstance(o, ResponseFunctionToolCall)]
-    if obj is not None: ns = obj
-    elif ns is None: ns = globals()
+    if ns is None: ns = globals()
     return { tc.call_id: call_func_openai(tc, ns=mk_ns(ns)) for tc in tcs }
 
 # %% ../00_core.ipynb
 def mk_toolres(
     r:abc.Mapping, # Response containing tool use request
-    ns:Optional[abc.Mapping]=None, # Namespace to search for tools
-    obj:Optional=None # Class to search for tools
+    ns:Optional[abc.Mapping]=None # Namespace to search for tools
     ):
     "Create a `tool_result` message from response `r`."
-    tr = _toolres(r, ns, obj)
+    tr = _toolres(r, ns)
     r = mk_msg(r)
     res = [r] if isinstance(r, dict) else listify(r)
     for k,v in tr.items(): res.append(dict(type="function_call_output", call_id=k, output=str(v)))
     return res
+
+# %% ../00_core.ipynb
+@patch
+@delegates(Client.__call__)
+def structured(self:Client,
+               msgs: list, # Prompt
+               tools:Optional[list]=None, # List of tools to make available to OpenAI model
+               ns:Optional[abc.Mapping]=None, # Namespace to search for tools
+               **kwargs):
+    "Return the value of all tool calls (generally used for structured outputs)"
+    if ns is None: ns = mk_ns(tools)
+    r = self(msgs, tools=tools, tool_choice='required', **kwargs)
+    return first(_toolres(r, ns).values())
 
 # %% ../00_core.ipynb
 def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
