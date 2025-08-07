@@ -61,7 +61,7 @@ def can_set_temp(m): return m in has_temp_models
 @patch
 def _repr_markdown_(self:Response):
     det = '\n- '.join(f'{k}: {v}' for k,v in dict(self).items())
-    res = self.output_text
+    res = nested_idx(self, 'output', 0, 'content', 0, 'text')
     if not res: return f"- {det}"
     return f"""{res}
 
@@ -162,7 +162,7 @@ def __call__(self:Client,
         return res
 
 # %% ../00_core.ipynb
-def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function, ns:Optional[abc.Mapping]=None):
+def call_func_openai(func, ns:Optional[abc.Mapping]=None):
     return call_func(func.name, ast.literal_eval(func.arguments), ns, raise_on_err=False)
 
 # %% ../00_core.ipynb
