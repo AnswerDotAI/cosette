@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.2.1
+
+### New Features
+
+- Support latest 1.99.2 sdk ([#27](https://github.com/AnswerDotAI/cosette/issues/27))
+
+
 ## 0.2.0
 
 ### Breaking Changes
