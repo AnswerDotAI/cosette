@@ -61,7 +61,7 @@ def can_set_temp(m): return m in has_temp_models
 @patch
 def _repr_markdown_(self:Response):
     det = '\n- '.join(f'{k}: {v}' for k,v in dict(self).items())
-    res = nested_idx(self, 'output', 0, 'content', 0, 'text')
+    res = self.output_text
     if not res: return f"- {det}"
     return f"""{res}
 
