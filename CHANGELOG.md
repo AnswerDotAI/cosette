@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.2.2
+
+### Bugs Squashed
+
+- openai broke their api ([#28](https://github.com/AnswerDotAI/cosette/issues/28))
+
+
 ## 0.2.1
 
 ### New Features
