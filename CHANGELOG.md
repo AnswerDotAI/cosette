@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.2.3
+
+### New Features
+
+- Support GPT 5 ([#29](https://github.com/AnswerDotAI/cosette/issues/29))
+
+
 ## 0.2.2
 
 ### Bugs Squashed
