@@ -3,11 +3,11 @@
 # %% auto 0
 __all__ = ['empty', 'models', 'text_only_models', 'has_streaming_models', 'has_sp_models', 'has_temp_models', 'models_azure',
            'can_stream', 'can_set_sp', 'can_set_temp', 'usage', 'wrap_latex', 'Client', 'mk_openai_func',
-           'mk_tool_choice', 'get_stream', 'call_func_openai', 'mk_toolres', 'mock_tooluse', 'Chat', 'mk_msg',
-           'mk_msgs', 'Response', 'Responses', 'ResponseUsage', 'ResponseCompletedEvent', 'ResponseTextDeltaEvent',
-           'ResponseCreatedEvent', 'ResponseInProgressEvent', 'ResponseOutputItemAddedEvent',
-           'ResponseContentPartAddedEvent', 'ResponseTextDoneEvent', 'ResponseContentPartDoneEvent',
-           'ResponseOutputItemDoneEvent', 'ResponseFunctionToolCall']
+           'mk_tool_choice', 'get_stream', 'call_func_openai', 'mk_toolres', 'Chat', 'mk_msg', 'mk_msgs', 'Response',
+           'Responses', 'ResponseUsage', 'ResponseCompletedEvent', 'ResponseTextDeltaEvent', 'ResponseCreatedEvent',
+           'ResponseInProgressEvent', 'ResponseOutputItemAddedEvent', 'ResponseContentPartAddedEvent',
+           'ResponseTextDoneEvent', 'ResponseContentPartDoneEvent', 'ResponseOutputItemDoneEvent',
+           'ResponseFunctionToolCall']
 
 # %% ../00_core.ipynb
 from fastcore import imghdr
@@ -42,7 +42,7 @@ _all_ = ['mk_msg', 'mk_msgs', 'Response', 'Responses', 'ResponseUsage', 'Respons
 empty = inspect.Parameter.empty
 
 # %% ../00_core.ipynb
-models = 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano'
+models = 'gpt-5', 'gpt-5-mini', 'gpt-5-nano', 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano'
 
 # %% ../00_core.ipynb
 text_only_models = 'o1-preview', 'o1-mini', 'o3-mini'
@@ -198,21 +198,6 @@ def structured(self:Client,
     return first(_toolres(r, ns).values())
 
 # %% ../00_core.ipynb
-def _mock_id(): return 'call_' + ''.join(choices(ascii_letters+digits, k=24))
-
-def mock_tooluse(name:str, # The name of the called function
-                 res,  # The result of calling the function
-                 **kwargs): # The arguments to the function
-    ""
-    raise Exception("This has not been updated for the `responses` API yet")
-    id = _mock_id()
-    func = dict(arguments=json.dumps(kwargs), name=name)
-    tc = dict(id=id, function=func, type='function')
-    req = dict(content=None, role='assistant', tool_calls=[tc])
-    resp = mk_msg('' if res is None else str(res), 'tool', tool_call_id=id, name=name)
-    return [req,resp]
-
-# %% ../00_core.ipynb
 class Chat:
     def __init__(self,
                  model:Optional[str]=None, # Model to use (leave empty if passing `cli`)
@@ -221,13 +206,14 @@ class Chat:
                  tools:Optional[list]=None, # List of tools to make available
                  hist: list = None,  # Initialize history
                  tool_choice:Optional[str]=None, # Forced tool choice
-                 ns:Optional[abc.Mapping]=None): # Namespace to search for tools
+                 ns:Optional[abc.Mapping]=None,  # Namespace to search for tools
+                 **kw):
         "OpenAI chat client."
         assert model or cli
         self.c = (cli or Client(model))
         self.h = hist if hist else []
         if ns is None: ns=tools
-        self.sp,self.tools,self.tool_choice,self.ns = sp,tools,tool_choice,ns
+        self.sp,self.tools,self.tool_choice,self.ns,self.kw = sp,tools,tool_choice,ns,kw
     
     @property
     def use(self): return self.c.use
@@ -246,10 +232,11 @@ def __call__(self:Chat,
     if pr: self.h.append(mk_msg(pr))
     if not tools: tools = self.tools
     if not tool_choice: tool_choice = self.tool_choice
+    kw = self.kw | kwargs
     def _cb(v):
         self.last = mk_toolres(v, ns=self.ns)
         self.h += self.last
-    res = self.c(self.h, sp=self.sp, stream=stream, cb=_cb, tools=tools, **kwargs)
+    res = self.c(self.h, sp=self.sp, stream=stream, cb=_cb, tools=tools, **kw)
     return res
 
 # %% ../00_core.ipynb
