@@ -4,6 +4,6 @@ project:
 website:
   title: "cosette"
   site-url: "https://AnswerDotAI.github.io/cosette"
-  description: "Cosette is Claude's friend"
+  description: "A helper for using the OpenAI API"
   repo-branch: main
   repo-url: "https://github.com/AnswerDotAI/cosette"

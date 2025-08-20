@@ -34,45 +34,80 @@ from the SDK.
 ' '.join(models)
 ```
 
-    'o1-preview o1-mini gpt-4o gpt-4o-mini gpt-4-turbo gpt-4 gpt-4-32k gpt-3.5-turbo gpt-3.5-turbo-instruct o1 o3-mini chatgpt-4o-latest o1-pro o3 o4-mini gpt-4.1 gpt-4.1-mini gpt-4.1-nano'
+    'gpt-5 gpt-5-mini gpt-5-nano o1-preview o1-mini gpt-4o gpt-4o-mini gpt-4-turbo gpt-4 gpt-4-32k gpt-3.5-turbo gpt-3.5-turbo-instruct o1 o3-mini chatgpt-4o-latest o1-pro o3 o4-mini gpt-4.1 gpt-4.1-mini gpt-4.1-nano'
 
-For these examples, we’ll use GPT-4.1.
+For these examples, we’ll use GPT-5-mini.
 
 ``` python
-model = 'gpt-4.1'
+model = models[1]
 ```
 
 ## Chat
 
-The main interface to Cosette is the
-[`Chat`](https://AnswerDotAI.github.io/cosette/core.html#chat) class,
-which provides a stateful interface to the models:
+The main interface to Cosette is the `Chat` class, which provides a
+stateful interface to the models. You can pass message keywords to
+either `Chat` or when you call the model.
 
 ``` python
-chat = Chat(model, sp="""You are a helpful and concise assistant.""")
+chatkw = dict(
+    text={ "verbosity": "low" },
+    reasoning={ "effort": "minimal" }
+)
+```
+
+``` python
+chat = Chat(model, sp="You are a helpful and concise assistant.", **chatkw)
 chat("I'm Jeremy")
 ```
 
-Hi Jeremy! How can I help you today?
+Nice to meet you, Jeremy. How can I help you today?
 
 <details>
 
-- id: chatcmpl-BjwyifaV82goo6WYIeEORBGDMLCSA
-- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘Hi Jeremy! How can I help you
-  today?’, refusal=None, role=‘assistant’, annotations=\[\], audio=None,
-  function_call=None, tool_calls=None))\]
-- created: 1750291172
-- model: gpt-4.1-2025-04-14
-- object: chat.completion
+- id: resp_6897d6bf742081a29d6f5ed0d4fcc6b905935ac4b74d3abc
+- created_at: 1754781375.0
+- error: None
+- incomplete_details: None
+- instructions: You are a helpful and concise assistant.
+- metadata: {}
+- model: gpt-5-mini-2025-08-07
+- object: response
+- output:
+  \[ResponseReasoningItem(id=‘rs_6897d6bfbc3481a294c74c025cf3965605935ac4b74d3abc’,
+  summary=\[\], type=‘reasoning’, content=None, encrypted_content=None,
+  status=None),
+  ResponseOutputMessage(id=‘msg_6897d6bfd4e481a2a3b96e6859d73d0005935ac4b74d3abc’,
+  content=\[ResponseOutputText(annotations=\[\], text=‘Nice to meet you,
+  Jeremy. How can I help you today?’, type=‘output_text’,
+  logprobs=\[\])\], role=‘assistant’, status=‘completed’,
+  type=‘message’)\]
+- parallel_tool_calls: True
+- temperature: 1.0
+- tool_choice: auto
+- tools: \[\]
+- top_p: 1.0
+- background: False
+- max_output_tokens: 4096
+- max_tool_calls: None
+- previous_response_id: None
+- prompt: None
+- prompt_cache_key: None
+- reasoning: Reasoning(effort=‘minimal’, generate_summary=None,
+  summary=None)
+- safety_identifier: None
 - service_tier: default
-- system_fingerprint: fp_51e1070cf2
-- usage: CompletionUsage(completion_tokens=10, prompt_tokens=21,
-  total_tokens=31,
-  completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0,
-  audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0),
-  prompt_tokens_details=PromptTokensDetails(audio_tokens=0,
-  cached_tokens=0))
+- status: completed
+- text: ResponseTextConfig(format=ResponseFormatText(type=‘text’),
+  verbosity=‘low’)
+- top_logprobs: 0
+- truncation: disabled
+- usage: ResponseUsage(input_tokens=20,
+  input_tokens_details=InputTokensDetails(cached_tokens=0),
+  output_tokens=20,
+  output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
+  total_tokens=40)
+- user: None
+- store: True
 
 </details>
 
@@ -81,26 +116,53 @@ r = chat("What's my name?")
 r
 ```
 
-Your name is Jeremy. How can I assist you, Jeremy?
+Your name is Jeremy.
 
 <details>
 
-- id: chatcmpl-BjwyjN4t2wKzVWBRVWhD6buZF8y07
-- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘Your name is Jeremy. How can I
-  assist you, Jeremy?’, refusal=None, role=‘assistant’,
-  annotations=\[\], audio=None, function_call=None, tool_calls=None))\]
-- created: 1750291173
-- model: gpt-4.1-2025-04-14
-- object: chat.completion
+- id: resp_6897d6c249c481a2ab32c89f1f9e5ffe05935ac4b74d3abc
+- created_at: 1754781378.0
+- error: None
+- incomplete_details: None
+- instructions: You are a helpful and concise assistant.
+- metadata: {}
+- model: gpt-5-mini-2025-08-07
+- object: response
+- output:
+  \[ResponseReasoningItem(id=‘rs_6897d6c31b3081a29771f246090620aa05935ac4b74d3abc’,
+  summary=\[\], type=‘reasoning’, content=None, encrypted_content=None,
+  status=None),
+  ResponseOutputMessage(id=‘msg_6897d6c327a081a2bae1eec5cd30917305935ac4b74d3abc’,
+  content=\[ResponseOutputText(annotations=\[\], text=‘Your name is
+  Jeremy.’, type=‘output_text’, logprobs=\[\])\], role=‘assistant’,
+  status=‘completed’, type=‘message’)\]
+- parallel_tool_calls: True
+- temperature: 1.0
+- tool_choice: auto
+- tools: \[\]
+- top_p: 1.0
+- background: False
+- max_output_tokens: 4096
+- max_tool_calls: None
+- previous_response_id: None
+- prompt: None
+- prompt_cache_key: None
+- reasoning: Reasoning(effort=‘minimal’, generate_summary=None,
+  summary=None)
+- safety_identifier: None
 - service_tier: default
-- system_fingerprint: fp_b3f1157249
-- usage: CompletionUsage(completion_tokens=13, prompt_tokens=43,
-  total_tokens=56,
-  completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0,
-  audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0),
-  prompt_tokens_details=PromptTokensDetails(audio_tokens=0,
-  cached_tokens=0))
+- status: completed
+- text: ResponseTextConfig(format=ResponseFormatText(type=‘text’),
+  verbosity=‘low’)
+- top_logprobs: 0
+- truncation: disabled
+- usage: ResponseUsage(input_tokens=48,
+  input_tokens_details=InputTokensDetails(cached_tokens=0),
+  output_tokens=11,
+  output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
+  total_tokens=59)
+- user: None
+- store: True
 
 </details>
 
@@ -112,7 +174,7 @@ collapsible section. Alternatively you can `print` the details:
 print(r)
 ```
 
-    ChatCompletion(id='chatcmpl-BjwyjN4t2wKzVWBRVWhD6buZF8y07', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Your name is Jeremy. How can I assist you, Jeremy?', refusal=None, role='assistant', annotations=[], audio=None, function_call=None, tool_calls=None))], created=1750291173, model='gpt-4.1-2025-04-14', object='chat.completion', service_tier='default', system_fingerprint='fp_b3f1157249', usage=In: 43; Out: 13; Total: 56)
+    Response(id='resp_6897d6c249c481a2ab32c89f1f9e5ffe05935ac4b74d3abc', created_at=1754781378.0, error=None, incomplete_details=None, instructions='You are a helpful and concise assistant.', metadata={}, model='gpt-5-mini-2025-08-07', object='response', output=[ResponseReasoningItem(id='rs_6897d6c31b3081a29771f246090620aa05935ac4b74d3abc', summary=[], type='reasoning', content=None, encrypted_content=None, status=None), ResponseOutputMessage(id='msg_6897d6c327a081a2bae1eec5cd30917305935ac4b74d3abc', content=[ResponseOutputText(annotations=[], text='Your name is Jeremy.', type='output_text', logprobs=[])], role='assistant', status='completed', type='message')], parallel_tool_calls=True, temperature=1.0, tool_choice='auto', tools=[], top_p=1.0, background=False, max_output_tokens=4096, max_tool_calls=None, previous_response_id=None, prompt=None, prompt_cache_key=None, reasoning=Reasoning(effort='minimal', generate_summary=None, summary=None), safety_identifier=None, service_tier='default', status='completed', text=ResponseTextConfig(format=ResponseFormatText(type='text'), verbosity='low'), top_logprobs=0, truncation='disabled', usage=In: 48; Out: 11; Total: 59, user=None, store=True)
 
 You can use `stream=True` to stream the results as soon as they arrive
 (although you will only see the gradual generation if you execute the
@@ -122,7 +184,7 @@ notebook yourself, of course!)
 for o in chat("What's your name?", stream=True): print(o, end='')
 ```
 
-    I’m an AI assistant created by OpenAI, and you can just call me Assistant! If you’d like to give me a nickname, feel free—what would you like to call me?
+    I'm ChatGPT.
 
 ## Model Capabilities
 
@@ -132,14 +194,14 @@ temperature. Query these capbilities using these functions:
 
 ``` python
 # o1 does not support streaming or setting the temperature
-can_stream('o1'), can_set_system_prompt('o1'), can_set_temperature('o1')
+can_stream('o1'), can_set_sp('o1'), can_set_temp('o1')
 ```
 
     (True, True, False)
 
 ``` python
 # gpt-4o has these capabilities
-can_stream('gpt-4o'), can_set_system_prompt('gpt-4o'), can_set_temperature('gpt-4o')
+can_stream('gpt-4o'), can_set_sp('gpt-4o'), can_set_temp('gpt-4o')
 ```
 
     (True, True, True)
@@ -183,11 +245,10 @@ pr
 
     'What is 604542+6458932?'
 
-To use tools, pass a list of them to
-[`Chat`](https://AnswerDotAI.github.io/cosette/core.html#chat):
+To use tools, pass a list of them to `Chat`:
 
 ``` python
-chat = Chat(model, sp=sp, tools=[sums])
+chat = Chat(model, sp=sp, tools=[sums], **chatkw)
 ```
 
 Now when we call that with our prompt, the model doesn’t return the
@@ -196,29 +257,13 @@ call the named tool with the provided parameters:
 
 ``` python
 r = chat(pr)
-r
+r.output
 ```
 
     Finding the sum of 604542 and 6458932
 
-- id: chatcmpl-Bjwyvg3bSWW0pKTxdwKCfhZKnwpho
-- choices: \[Choice(finish_reason=‘tool_calls’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=None, refusal=None,
-  role=‘assistant’, annotations=\[\], audio=None, function_call=None,
-  tool_calls=\[ChatCompletionMessageToolCall(id=‘call_cry44pvhtr0KDszQFufZjyGN’,
-  function=Function(arguments=‘{“a”:604542,“b”:6458932}’, name=‘sums’),
-  type=‘function’)\]))\]
-- created: 1750291185
-- model: gpt-4.1-2025-04-14
-- object: chat.completion
-- service_tier: default
-- system_fingerprint: fp_51e1070cf2
-- usage: CompletionUsage(completion_tokens=21, prompt_tokens=86,
-  total_tokens=107,
-  completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0,
-  audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0),
-  prompt_tokens_details=PromptTokensDetails(audio_tokens=0,
-  cached_tokens=0))
+    [ResponseReasoningItem(id='rs_6897d70b74b4819f97bd7ccb549bce65056524066556f4c9', summary=[], type='reasoning', content=None, encrypted_content=None, status=None),
+     ResponseFunctionToolCall(arguments='{"a":604542,"b":6458932}', call_id='call_RFHB5vQbpgkpuPGN2cdSMHlJ', name='sums', type='function_call', id='fc_6897d70bab7c819fb48d16260fb4118c056524066556f4c9', status='completed')]
 
 Cosette handles all that for us – we just have to pass along the
 message, and it all happens automatically:
@@ -227,26 +272,55 @@ message, and it all happens automatically:
 chat()
 ```
 
-604,542 + 6,458,932 equals 7,063,474.
+7,063,474
 
 <details>
 
-- id: chatcmpl-Bjx0vtvAnE4W7z0dupqPfqnJngBCy
-- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘604,542 + 6,458,932 equals
-  7,063,474.’, refusal=None, role=‘assistant’, annotations=\[\],
-  audio=None, function_call=None, tool_calls=None))\]
-- created: 1750291309
-- model: gpt-4.1-2025-04-14
-- object: chat.completion
+- id: resp_6897d70dd204819fbb21bfd7608ae6dd056524066556f4c9
+- created_at: 1754781453.0
+- error: None
+- incomplete_details: None
+- instructions: Never mention what tools you use.
+- metadata: {}
+- model: gpt-5-mini-2025-08-07
+- object: response
+- output:
+  \[ResponseOutputMessage(id=‘msg_6897d70e51b0819f8993eba3ec6ca440056524066556f4c9’,
+  content=\[ResponseOutputText(annotations=\[\], text=‘7,063,474’,
+  type=‘output_text’, logprobs=\[\])\], role=‘assistant’,
+  status=‘completed’, type=‘message’)\]
+- parallel_tool_calls: True
+- temperature: 1.0
+- tool_choice: auto
+- tools: \[FunctionTool(name=‘sums’, parameters={‘type’: ‘object’,
+  ‘properties’: {‘a’: {‘type’: ‘integer’, ‘description’: ‘First thing to
+  sum’}, ‘b’: {‘type’: ‘integer’, ‘description’: ‘Second thing to sum’,
+  ‘default’: 1}}, ‘required’: \[‘a’, ‘b’\], ‘additionalProperties’:
+  False}, strict=True, type=‘function’, description=‘Adds a + b.:- type:
+  integer’)\]
+- top_p: 1.0
+- background: False
+- max_output_tokens: 4096
+- max_tool_calls: None
+- previous_response_id: None
+- prompt: None
+- prompt_cache_key: None
+- reasoning: Reasoning(effort=‘minimal’, generate_summary=None,
+  summary=None)
+- safety_identifier: None
 - service_tier: default
-- system_fingerprint: fp_51e1070cf2
-- usage: CompletionUsage(completion_tokens=19, prompt_tokens=118,
-  total_tokens=137,
-  completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0,
-  audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0),
-  prompt_tokens_details=PromptTokensDetails(audio_tokens=0,
-  cached_tokens=0))
+- status: completed
+- text: ResponseTextConfig(format=ResponseFormatText(type=‘text’),
+  verbosity=‘low’)
+- top_logprobs: 0
+- truncation: disabled
+- usage: ResponseUsage(input_tokens=142,
+  input_tokens_details=InputTokensDetails(cached_tokens=0),
+  output_tokens=9,
+  output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
+  total_tokens=151)
+- user: None
+- store: True
 
 </details>
 
@@ -257,14 +331,18 @@ You can see how many tokens have been used at any time by checking the
 chat.use
 ```
 
-    In: 204; Out: 40; Total: 244
+    In: 231; Out: 36; Total: 267
 
 ### Tool loop
 
+``` python
+def show(x):
+    if getattr(x, 'output_text', None): display(x)
+```
+
 We can do everything needed to use tools in a single step, by using
-[`Chat.toolloop`](https://AnswerDotAI.github.io/cosette/toolloop.html#chat.toolloop).
-This can even call multiple tools as needed solve a problem. For
-example, let’s define a tool to handle multiplication:
+`Chat.toolloop`. This can even call multiple tools as needed solve a
+problem. For example, let’s define a tool to handle multiplication:
 
 ``` python
 def mults(
@@ -276,34 +354,83 @@ def mults(
     return a * b
 ```
 
-Now with a single call we can calculate `(a+b)*2` – by passing
-`show_trace` we can see each response from the model in the process:
+Now with a single call we can calculate `(a+b)*2`:
 
 ``` python
-chat = Chat(model, sp=sp, tools=[sums,mults])
-pr = f'Calculate ({a}+{b})*2'
+chat = Chat(model, tools=[sums,mults], **chatkw)
+pr = f'Calculate ({a}+{b})*2 and display the result as US$'
 pr
 ```
 
-    'Calculate (604542+6458932)*2'
-
-``` python
-def pchoice(r): print(r.choices[0])
-```
+    'Calculate (604542+6458932)*2 and display the result as US$'
 
 ``` python
 r = chat.toolloop(pr)
 ```
 
-OpenAI uses special tags for math equations, which we can replace using
-[`wrap_latex`](https://AnswerDotAI.github.io/cosette/core.html#wrap_latex):
-
 ``` python
-for o in r:
-    display(wrap_latex(contents(o)))
+for o in r: show(o)
 ```
 
-(604542 + 6458932) × 2 = 14,126,948.
+    Finding the sum of 604542 and 6458932
+    Finding the product of 7063474 and 2
+
+US\$14,126,948
+
+<details>
+
+- id: resp_6897e3bb932081969ee99109c1b66db20b5a46ab1de6956b
+- created_at: 1754784699.0
+- error: None
+- incomplete_details: None
+- instructions: None
+- metadata: {}
+- model: gpt-5-mini-2025-08-07
+- object: response
+- output:
+  \[ResponseOutputMessage(id=‘msg_6897e3bbe2948196a0e696d834f92b5a0b5a46ab1de6956b’,
+  content=\[ResponseOutputText(annotations=\[\], text=‘US\$14,126,948’,
+  type=‘output_text’, logprobs=\[\])\], role=‘assistant’,
+  status=‘completed’, type=‘message’)\]
+- parallel_tool_calls: True
+- temperature: 1.0
+- tool_choice: auto
+- tools: \[FunctionTool(name=‘sums’, parameters={‘type’: ‘object’,
+  ‘properties’: {‘a’: {‘type’: ‘integer’, ‘description’: ‘First thing to
+  sum’}, ‘b’: {‘type’: ‘integer’, ‘description’: ‘Second thing to sum’,
+  ‘default’: 1}}, ‘required’: \[‘a’, ‘b’\], ‘additionalProperties’:
+  False}, strict=True, type=‘function’, description=‘Adds a + b.:- type:
+  integer’), FunctionTool(name=‘mults’, parameters={‘type’: ‘object’,
+  ‘properties’: {‘a’: {‘type’: ‘integer’, ‘description’: ‘First thing to
+  multiply’}, ‘b’: {‘type’: ‘integer’, ‘description’: ‘Second thing to
+  multiply’, ‘default’: 1}}, ‘required’: \[‘a’, ‘b’\],
+  ‘additionalProperties’: False}, strict=True, type=‘function’,
+  description=‘Multiplies a \* b.:- type: integer’)\]
+- top_p: 1.0
+- background: False
+- max_output_tokens: 4096
+- max_tool_calls: None
+- previous_response_id: None
+- prompt: None
+- prompt_cache_key: None
+- reasoning: Reasoning(effort=‘minimal’, generate_summary=None,
+  summary=None)
+- safety_identifier: None
+- service_tier: default
+- status: completed
+- text: ResponseTextConfig(format=ResponseFormatText(type=‘text’),
+  verbosity=‘low’)
+- top_logprobs: 0
+- truncation: disabled
+- usage: ResponseUsage(input_tokens=225,
+  input_tokens_details=InputTokensDetails(cached_tokens=0),
+  output_tokens=11,
+  output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
+  total_tokens=236)
+- user: None
+- store: True
+
+</details>
 
 ## Images
 
@@ -314,15 +441,13 @@ fn = Path('samples/puppy.jpg')
 Image(filename=fn, width=200)
 ```
 
-<img src="index_files/figure-commonmark/cell-23-output-1.jpeg"
+<img src="index_files/figure-commonmark/cell-24-output-1.jpeg"
 width="200" />
 
-We create a
-[`Chat`](https://AnswerDotAI.github.io/cosette/core.html#chat) object as
-before:
+We create a `Chat` object as before:
 
 ``` python
-chat = Chat(model)
+chat = Chat(model, **chatkw)
 ```
 
 Claudia expects images as a list of bytes, so we read in the file:
@@ -337,26 +462,53 @@ Prompts to Claudia can be lists, containing text, images, or both, eg:
 chat([img, "In brief, what color flowers are in this image?"])
 ```
 
-The flowers in the image are purple.
+Purple.
 
 <details>
 
-- id: chatcmpl-Bjx2lnRK05FvJWFh2smshhAWw0TXx
-- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘The flowers in the image are
-  purple.’, refusal=None, role=‘assistant’, annotations=\[\],
-  audio=None, function_call=None, tool_calls=None))\]
-- created: 1750291423
-- model: gpt-4.1-2025-04-14
-- object: chat.completion
+- id: resp_6897d7493f148197a7555683dead90e504a418ea2e45fb88
+- created_at: 1754781513.0
+- error: None
+- incomplete_details: None
+- instructions: None
+- metadata: {}
+- model: gpt-5-mini-2025-08-07
+- object: response
+- output:
+  \[ResponseReasoningItem(id=‘rs_6897d74a033081979b865a7ceeb4084e04a418ea2e45fb88’,
+  summary=\[\], type=‘reasoning’, content=None, encrypted_content=None,
+  status=None),
+  ResponseOutputMessage(id=‘msg_6897d74a1d70819790b7a077a0dfcd0804a418ea2e45fb88’,
+  content=\[ResponseOutputText(annotations=\[\], text=‘Purple.’,
+  type=‘output_text’, logprobs=\[\])\], role=‘assistant’,
+  status=‘completed’, type=‘message’)\]
+- parallel_tool_calls: True
+- temperature: 1.0
+- tool_choice: auto
+- tools: \[\]
+- top_p: 1.0
+- background: False
+- max_output_tokens: 4096
+- max_tool_calls: None
+- previous_response_id: None
+- prompt: None
+- prompt_cache_key: None
+- reasoning: Reasoning(effort=‘minimal’, generate_summary=None,
+  summary=None)
+- safety_identifier: None
 - service_tier: default
-- system_fingerprint: fp_51e1070cf2
-- usage: CompletionUsage(completion_tokens=8, prompt_tokens=273,
-  total_tokens=281,
-  completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0,
-  audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0),
-  prompt_tokens_details=PromptTokensDetails(audio_tokens=0,
-  cached_tokens=0))
+- status: completed
+- text: ResponseTextConfig(format=ResponseFormatText(type=‘text’),
+  verbosity=‘low’)
+- top_logprobs: 0
+- truncation: disabled
+- usage: ResponseUsage(input_tokens=102,
+  input_tokens_details=InputTokensDetails(cached_tokens=0),
+  output_tokens=8,
+  output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
+  total_tokens=110)
+- user: None
+- store: True
 
 </details>
 
@@ -366,7 +518,7 @@ The image is included as input tokens.
 chat.use
 ```
 
-    In: 273; Out: 8; Total: 281
+    In: 102; Out: 8; Total: 110
 
 Alternatively, Cosette supports creating a multi-stage chat with
 separate image and text prompts. For instance, you can pass just the
@@ -375,38 +527,60 @@ general comments about what it sees), and then follow up with questions
 in additional prompts:
 
 ``` python
-chat = Chat(model)
+chat = Chat(model, **chatkw)
 chat(img)
 ```
 
-This is an image of an adorable puppy lying on the grass next to some
-purple flowers. The puppy appears to be a Cavalier King Charles Spaniel,
-known for their sweet expressions, long ears, and beautiful markings.
-The scene looks peaceful and charming, with the flowers adding a touch
-of color and nature to the setting.
+What would you like to know or do with this photo of the puppy? (e.g.,
+identify breed, give care tips, help with caption, edit suggestions)
 
 <details>
 
-- id: chatcmpl-Bjx2nluEtIzGnD5IMxE8c2RsG3CNW
-- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘This is an image of an adorable
-  puppy lying on the grass next to some purple flowers. The puppy
-  appears to be a Cavalier King Charles Spaniel, known for their sweet
-  expressions, long ears, and beautiful markings. The scene looks
-  peaceful and charming, with the flowers adding a touch of color and
-  nature to the setting.’, refusal=None, role=‘assistant’,
-  annotations=\[\], audio=None, function_call=None, tool_calls=None))\]
-- created: 1750291425
-- model: gpt-4.1-2025-04-14
-- object: chat.completion
+- id: resp_6897d74cc47881a3957fdb4946c7e02603dfba9cf4322ea6
+- created_at: 1754781516.0
+- error: None
+- incomplete_details: None
+- instructions: None
+- metadata: {}
+- model: gpt-5-mini-2025-08-07
+- object: response
+- output:
+  \[ResponseReasoningItem(id=‘rs_6897d74d2bfc81a39f3ffde4ccf99c9503dfba9cf4322ea6’,
+  summary=\[\], type=‘reasoning’, content=None, encrypted_content=None,
+  status=None),
+  ResponseOutputMessage(id=‘msg_6897d74d44e481a3971238c119e8f71d03dfba9cf4322ea6’,
+  content=\[ResponseOutputText(annotations=\[\], text=‘What would you
+  like to know or do with this photo of the puppy? (e.g., identify
+  breed, give care tips, help with caption, edit suggestions)’,
+  type=‘output_text’, logprobs=\[\])\], role=‘assistant’,
+  status=‘completed’, type=‘message’)\]
+- parallel_tool_calls: True
+- temperature: 1.0
+- tool_choice: auto
+- tools: \[\]
+- top_p: 1.0
+- background: False
+- max_output_tokens: 4096
+- max_tool_calls: None
+- previous_response_id: None
+- prompt: None
+- prompt_cache_key: None
+- reasoning: Reasoning(effort=‘minimal’, generate_summary=None,
+  summary=None)
+- safety_identifier: None
 - service_tier: default
-- system_fingerprint: fp_51e1070cf2
-- usage: CompletionUsage(completion_tokens=65, prompt_tokens=262,
-  total_tokens=327,
-  completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0,
-  audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0),
-  prompt_tokens_details=PromptTokensDetails(audio_tokens=0,
-  cached_tokens=0))
+- status: completed
+- text: ResponseTextConfig(format=ResponseFormatText(type=‘text’),
+  verbosity=‘low’)
+- top_logprobs: 0
+- truncation: disabled
+- usage: ResponseUsage(input_tokens=92,
+  input_tokens_details=InputTokensDetails(cached_tokens=0),
+  output_tokens=39,
+  output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
+  total_tokens=131)
+- user: None
+- store: True
 
 </details>
 
@@ -414,30 +588,54 @@ of color and nature to the setting.
 chat('What direction is the puppy facing?')
 ```
 
-The puppy is facing towards the camera, looking directly at the viewer.
-Its body is positioned sideways, but its head is turned forward, making
-eye contact with the camera.
+The puppy is facing toward the camera (slightly to the viewer’s right).
 
 <details>
 
-- id: chatcmpl-Bjx2pgeYeYLF5UHSd9iY68IeAjIxy
-- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘The puppy is facing towards the
-  camera, looking directly at the viewer. Its body is positioned
-  sideways, but its head is turned forward, making eye contact with the
-  camera.’, refusal=None, role=‘assistant’, annotations=\[\],
-  audio=None, function_call=None, tool_calls=None))\]
-- created: 1750291427
-- model: gpt-4.1-2025-04-14
-- object: chat.completion
+- id: resp_6897d74eab1c81a390df5c03ad22415403dfba9cf4322ea6
+- created_at: 1754781518.0
+- error: None
+- incomplete_details: None
+- instructions: None
+- metadata: {}
+- model: gpt-5-mini-2025-08-07
+- object: response
+- output:
+  \[ResponseReasoningItem(id=‘rs_6897d74f1be481a3ad6c67714d67106403dfba9cf4322ea6’,
+  summary=\[\], type=‘reasoning’, content=None, encrypted_content=None,
+  status=None),
+  ResponseOutputMessage(id=‘msg_6897d74f336081a3820708998493d90f03dfba9cf4322ea6’,
+  content=\[ResponseOutputText(annotations=\[\], text=‘The puppy is
+  facing toward the camera (slightly to the viewer’s right).’,
+  type=‘output_text’, logprobs=\[\])\], role=‘assistant’,
+  status=‘completed’, type=‘message’)\]
+- parallel_tool_calls: True
+- temperature: 1.0
+- tool_choice: auto
+- tools: \[\]
+- top_p: 1.0
+- background: False
+- max_output_tokens: 4096
+- max_tool_calls: None
+- previous_response_id: None
+- prompt: None
+- prompt_cache_key: None
+- reasoning: Reasoning(effort=‘minimal’, generate_summary=None,
+  summary=None)
+- safety_identifier: None
 - service_tier: default
-- system_fingerprint: fp_51e1070cf2
-- usage: CompletionUsage(completion_tokens=34, prompt_tokens=342,
-  total_tokens=376,
-  completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0,
-  audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0),
-  prompt_tokens_details=PromptTokensDetails(audio_tokens=0,
-  cached_tokens=0))
+- status: completed
+- text: ResponseTextConfig(format=ResponseFormatText(type=‘text’),
+  verbosity=‘low’)
+- top_logprobs: 0
+- truncation: disabled
+- usage: ResponseUsage(input_tokens=142,
+  input_tokens_details=InputTokensDetails(cached_tokens=0),
+  output_tokens=22,
+  output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
+  total_tokens=164)
+- user: None
+- store: True
 
 </details>
 
@@ -445,31 +643,55 @@ eye contact with the camera.
 chat('What color is it?')
 ```
 
-The puppy is predominantly white with brown markings, particularly on
-its ears and around its eyes. Its nose is black. This color pattern is
-common in certain breeds, such as the Cavalier King Charles Spaniel.
+The puppy is mostly white with brown patches (brown ears and brown
+markings on the face).
 
 <details>
 
-- id: chatcmpl-Bjx2rl2tCdnEcvWF78UN0UaSwnvUS
-- choices: \[Choice(finish_reason=‘stop’, index=0, logprobs=None,
-  message=ChatCompletionMessage(content=‘The puppy is predominantly
-  white with brown markings, particularly on its ears and around its
-  eyes. Its nose is black. This color pattern is common in certain
-  breeds, such as the Cavalier King Charles Spaniel.’, refusal=None,
-  role=‘assistant’, annotations=\[\], audio=None, function_call=None,
-  tool_calls=None))\]
-- created: 1750291429
-- model: gpt-4.1-2025-04-14
-- object: chat.completion
+- id: resp_6897d74fede481a389bac0f29103f0a903dfba9cf4322ea6
+- created_at: 1754781520.0
+- error: None
+- incomplete_details: None
+- instructions: None
+- metadata: {}
+- model: gpt-5-mini-2025-08-07
+- object: response
+- output:
+  \[ResponseReasoningItem(id=‘rs_6897d750c6e881a3bc2c39941787c97303dfba9cf4322ea6’,
+  summary=\[\], type=‘reasoning’, content=None, encrypted_content=None,
+  status=None),
+  ResponseOutputMessage(id=‘msg_6897d750e8ec81a38c30a0f7c6dce6d203dfba9cf4322ea6’,
+  content=\[ResponseOutputText(annotations=\[\], text=‘The puppy is
+  mostly white with brown patches (brown ears and brown markings on the
+  face).’, type=‘output_text’, logprobs=\[\])\], role=‘assistant’,
+  status=‘completed’, type=‘message’)\]
+- parallel_tool_calls: True
+- temperature: 1.0
+- tool_choice: auto
+- tools: \[\]
+- top_p: 1.0
+- background: False
+- max_output_tokens: 4096
+- max_tool_calls: None
+- previous_response_id: None
+- prompt: None
+- prompt_cache_key: None
+- reasoning: Reasoning(effort=‘minimal’, generate_summary=None,
+  summary=None)
+- safety_identifier: None
 - service_tier: default
-- system_fingerprint: fp_51e1070cf2
-- usage: CompletionUsage(completion_tokens=42, prompt_tokens=389,
-  total_tokens=431,
-  completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0,
-  audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0),
-  prompt_tokens_details=PromptTokensDetails(audio_tokens=0,
-  cached_tokens=0))
+- status: completed
+- text: ResponseTextConfig(format=ResponseFormatText(type=‘text’),
+  verbosity=‘low’)
+- top_logprobs: 0
+- truncation: disabled
+- usage: ResponseUsage(input_tokens=173,
+  input_tokens_details=InputTokensDetails(cached_tokens=0),
+  output_tokens=24,
+  output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
+  total_tokens=197)
+- user: None
+- store: True
 
 </details>
 
@@ -480,4 +702,4 @@ that number of input tokens increases quickly with this kind of chat.
 chat.use
 ```
 
-    In: 993; Out: 141; Total: 1134
+    In: 407; Out: 85; Total: 492
