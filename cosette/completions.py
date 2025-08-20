@@ -2,8 +2,8 @@
 
 # %% auto 0
 __all__ = ['empty', 'models', 'text_only_models', 'has_streaming_models', 'has_sp_models', 'has_temp_models', 'can_stream',
-           'can_set_sp', 'can_set_temp', 'usage', 'wrap_latex', 'Client', 'call_func_openai', 'mk_toolres', 'Chat',
-           'mk_msg', 'mk_msgs', 'ChatCompletion']
+           'can_set_sp', 'can_set_temp', 'usage', 'wrap_latex', 'mk_msg', 'mk_msgs', 'Client', 'mk_tool_choice',
+           'mk_openai_func', 'call_func_openai', 'mk_toolres', 'Chat', 'ChatCompletion']
 
 # %% ../01_completions.ipynb
 from fastcore import imghdr
@@ -86,6 +86,24 @@ def wrap_latex(text):
     return res
 
 # %% ../01_completions.ipynb
+def mk_msg(msg: Union[str, ChatCompletion, dict], role: str = "user") -> dict:
+    """Convert various message types to OpenAI API message format."""
+    if isinstance(msg, str):
+        return {"role": role, "content": msg}
+    elif isinstance(msg, ChatCompletion):
+        return msg.choices[0].message.model_dump(exclude_none=True)
+    elif isinstance(msg, dict):
+        return msg
+    else:
+        raise ValueError(f"Unknown msg type: {type(msg).__name__}")
+    
+def mk_msgs(msgs: Union[str, list]) -> list:
+    """Convert string or list to formatted messages with alternating roles."""
+    if isinstance(msgs, str): 
+        msgs = [msgs]
+    return [mk_msg(o, ('user', 'assistant')[i % 2]) for i, o in enumerate(msgs)]
+
+# %% ../01_completions.ipynb
 class Client:
     def __init__(self, model, cli=None):
         "Basic LLM messages client."
@@ -99,6 +117,35 @@ def _r(self:Client, r):
     self.result = r
     if getattr(r,'usage',None): self.use += r.usage
     return r
+
+# %% ../01_completions.ipynb
+def mk_tool_choice(choice: Union[str, Callable, dict]) -> Union[str, dict[str, Any]]:
+    """Returns either a string or dict suitable for tool_choice parameter."""
+    if not choice or choice in ("auto", "none", "required"):
+        return choice
+    
+    if isinstance(choice, dict):
+        return choice
+    
+    name = choice.__name__ if callable(choice) else str(choice)
+    return {
+        "type": "function",
+        "function": {"name": name}
+    }
+
+def mk_openai_func(f):
+    """Convert a function to OpenAI tool definition for chat.completions."""
+    if isinstance(f, dict): 
+        return f
+    
+    sc = get_schema(f, 'parameters')
+    if 'parameters' in sc: 
+        sc['parameters'].pop('title', None)
+    
+    return {
+        "type": "function",
+        "function": sc  # Wrap schema in "function" key
+    }
 
 # %% ../01_completions.ipynb
 @patch
