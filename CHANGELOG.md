@@ -2,6 +2,17 @@
 
 <!-- do not remove -->
 
+## 0.2.4
+
+### New Features
+
+- Add gpt-oss models ([#31](https://github.com/AnswerDotAI/cosette/issues/31))
+
+### Bugs Squashed
+
+- Use json.loads for func args instead of ast.literal_eval ([#32](https://github.com/AnswerDotAI/cosette/pull/32)), thanks to [@artste](https://github.com/artste)
+
+
 ## 0.2.3
 
 ### New Features
