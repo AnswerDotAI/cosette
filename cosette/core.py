@@ -14,7 +14,7 @@ from fastcore import imghdr
 from fastcore.utils import *
 from fastcore.meta import delegates
 
-import inspect, typing, mimetypes, base64, json, ast, msglm
+import inspect, typing, mimetypes, base64, json, msglm
 from collections import abc
 from random import choices
 from string import ascii_letters,digits
@@ -163,7 +163,7 @@ def __call__(self:Client,
 
 # %% ../00_core.ipynb
 def call_func_openai(func, ns:Optional[abc.Mapping]=None):
-    return call_func(func.name, ast.literal_eval(func.arguments), ns, raise_on_err=False)
+    return call_func(func.name, json.loads(func.arguments), ns, raise_on_err=False)
 
 # %% ../00_core.ipynb
 def _toolres(r, ns):

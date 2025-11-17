@@ -1874,7 +1874,7 @@ target="_blank" style="float:right; font-size:smaller">source</a>
 
 ``` python
 def call_func_openai(func:types.chat.chat_completion_message_tool_call.Function, ns:Optional[abc.Mapping]=None):
-    return call_func(func.name, ast.literal_eval(func.arguments), ns)
+    return call_func(func.name, json.loads(func.arguments), ns)
 ```
 
 </details>
