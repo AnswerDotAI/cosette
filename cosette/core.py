@@ -97,11 +97,13 @@ def wrap_latex(text):
 
 # %% ../00_core.ipynb
 class Client:
-    def __init__(self, model, cli=None):
+    def __init__(self, model, cli=None, api_key_env=None, base_url=None):
         "Basic LLM messages client."
         self.model,self.use = model,usage(0,0)
         self.text_only = model in text_only_models
-        self.c = (cli or OpenAI()).responses
+        if not cli:
+            cli = OpenAI(api_key=os.getenv(api_key_env or "OPENAI_API_KEY"), base_url=base_url )
+        self.c = cli.responses
 
 # %% ../00_core.ipynb
 @patch
