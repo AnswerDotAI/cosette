@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.2.5
+
+### New Features
+
+- Add 5.1 and 5.2 models ([#33](https://github.com/AnswerDotAI/cosette/issues/33))
+
+
 ## 0.2.4
 
 ### New Features
