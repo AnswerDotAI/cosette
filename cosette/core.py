@@ -42,7 +42,7 @@ _all_ = ['mk_msg', 'mk_msgs', 'Response', 'Responses', 'ResponseUsage', 'Respons
 empty = inspect.Parameter.empty
 
 # %% ../00_core.ipynb
-models = 'gpt-5', 'gpt-5-mini', 'gpt-5-nano', 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano'
+models = 'gpt-5.2', 'gpt-5.2-pro', 'gpt-5.2-chat-latest', 'gpt-5.1-codex', 'gpt-5-mini', 'gpt-5-nano', 'o1-preview', 'o1-mini', 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-4-32k', 'gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'o1', 'o3-mini', 'chatgpt-4o-latest', 'o1-pro', 'o3', 'o4-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano'
 
 # %% ../00_core.ipynb
 text_only_models = 'o1-preview', 'o1-mini', 'o3-mini'
