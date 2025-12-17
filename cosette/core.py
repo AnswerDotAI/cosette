@@ -3,11 +3,11 @@
 # %% auto 0
 __all__ = ['empty', 'models', 'text_only_models', 'has_streaming_models', 'has_sp_models', 'has_temp_models', 'models_azure',
            'can_stream', 'can_set_sp', 'can_set_temp', 'usage', 'wrap_latex', 'Client', 'mk_openai_func',
-           'mk_tool_choice', 'get_stream', 'call_func_openai', 'mk_toolres', 'Chat', 'mk_msg', 'mk_msgs', 'Response',
-           'Responses', 'ResponseUsage', 'ResponseCompletedEvent', 'ResponseTextDeltaEvent', 'ResponseCreatedEvent',
-           'ResponseInProgressEvent', 'ResponseOutputItemAddedEvent', 'ResponseContentPartAddedEvent',
-           'ResponseTextDoneEvent', 'ResponseContentPartDoneEvent', 'ResponseOutputItemDoneEvent',
-           'ResponseFunctionToolCall']
+           'mk_tool_choice', 'get_stream', 'call_func_openai', 'mk_toolres', 'allowed_tools', 'Chat', 'mk_msg',
+           'mk_msgs', 'Response', 'Responses', 'ResponseUsage', 'ResponseCompletedEvent', 'ResponseTextDeltaEvent',
+           'ResponseCreatedEvent', 'ResponseInProgressEvent', 'ResponseOutputItemAddedEvent',
+           'ResponseContentPartAddedEvent', 'ResponseTextDoneEvent', 'ResponseContentPartDoneEvent',
+           'ResponseOutputItemDoneEvent', 'ResponseFunctionToolCall']
 
 # %% ../00_core.ipynb
 from fastcore import imghdr
@@ -165,26 +165,43 @@ def __call__(self:Client,
 
 # %% ../00_core.ipynb
 def call_func_openai(func, ns:Optional[abc.Mapping]=None):
-    return call_func(func.name, json.loads(func.arguments), ns, raise_on_err=False)
+    try: return call_func(func.name, json.loads(func.arguments), ns, raise_on_err=False)
+    except KeyError as e: return f"Error - tool not defined in the tool_schemas: {func.name}"
 
 # %% ../00_core.ipynb
-def _toolres(r, ns):
+def _toolres(r, ns, limit_to=None):
     "Create a result dict from `tcs`."
     tcs = [o for o in getattr(r, 'output', []) if isinstance(o, ResponseFunctionToolCall)]
     if ns is None: ns = globals()
+    if not isinstance(ns, abc.Mapping): ns = mk_ns(ns)
+    if limit_to: ns = {k:v for k,v in ns.items() if k in limit_to}
     return { tc.call_id: call_func_openai(tc, ns=mk_ns(ns)) for tc in tcs }
 
 # %% ../00_core.ipynb
 def mk_toolres(
     r:abc.Mapping, # Response containing tool use request
-    ns:Optional[abc.Mapping]=None # Namespace to search for tools
+    ns:Optional[abc.Mapping]=None, # Namespace to search for tools
+    limit_to:Optional[set[str]]=None # Limits the tool calls to specific names only
     ):
     "Create a `tool_result` message from response `r`."
-    tr = _toolres(r, ns)
+    tr = _toolres(r, ns, limit_to)
     r = mk_msg(r)
     res = [r] if isinstance(r, dict) else listify(r)
     for k,v in tr.items(): res.append(dict(type="function_call_output", call_id=k, output=str(v)))
     return res
+
+# %% ../00_core.ipynb
+def _get_name(f):
+    if isinstance(f,str): return f
+    if isinstance(f, dict): return f['name']
+    if callable(f) and hasattr(f, '__name__'): return f.__name__
+
+def allowed_tools(specs:dict, choice:dict|str|None=None):
+    if choice:
+        choice = mk_tool_choice(choice)
+        if isinstance(choice, dict) and choice['type'] == 'function': 
+            return {choice['function']['name']}
+    return {_get_name(v) for v in specs}
 
 # %% ../00_core.ipynb
 @patch
@@ -236,7 +253,7 @@ def __call__(self:Chat,
     if not tool_choice: tool_choice = self.tool_choice
     kw = self.kw | kwargs
     def _cb(v):
-        self.last = mk_toolres(v, ns=self.ns)
+        self.last = mk_toolres(v, ns=self.ns, limit_to=allowed_tools(self.tools, tool_choice))
         self.h += self.last
     res = self.c(self.h, sp=self.sp, stream=stream, cb=_cb, tools=tools, **kw)
     return res
