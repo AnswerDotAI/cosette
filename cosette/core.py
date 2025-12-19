@@ -3,11 +3,11 @@
 # %% auto 0
 __all__ = ['empty', 'models', 'text_only_models', 'has_streaming_models', 'has_sp_models', 'has_temp_models', 'models_azure',
            'can_stream', 'can_set_sp', 'can_set_temp', 'usage', 'wrap_latex', 'Client', 'mk_openai_func',
-           'mk_tool_choice', 'get_stream', 'call_func_openai', 'mk_toolres', 'Chat', 'mk_msg', 'mk_msgs', 'Response',
-           'Responses', 'ResponseUsage', 'ResponseCompletedEvent', 'ResponseTextDeltaEvent', 'ResponseCreatedEvent',
-           'ResponseInProgressEvent', 'ResponseOutputItemAddedEvent', 'ResponseContentPartAddedEvent',
-           'ResponseTextDoneEvent', 'ResponseContentPartDoneEvent', 'ResponseOutputItemDoneEvent',
-           'ResponseFunctionToolCall']
+           'mk_tool_choice', 'get_stream', 'call_func_openai', 'allowed_tools', 'limit_ns', 'mk_toolres', 'Chat',
+           'mk_msg', 'mk_msgs', 'Response', 'Responses', 'ResponseUsage', 'ResponseCompletedEvent',
+           'ResponseTextDeltaEvent', 'ResponseCreatedEvent', 'ResponseInProgressEvent', 'ResponseOutputItemAddedEvent',
+           'ResponseContentPartAddedEvent', 'ResponseTextDoneEvent', 'ResponseContentPartDoneEvent',
+           'ResponseOutputItemDoneEvent', 'ResponseFunctionToolCall']
 
 # %% ../00_core.ipynb
 from fastcore import imghdr
@@ -122,8 +122,8 @@ def mk_openai_func(f):
 
 # %% ../00_core.ipynb
 def mk_tool_choice(f):
-    if not f: return f
-    if isinstance(f,dict) or f=='required': return f
+    if not f: return NOT_GIVEN
+    if isinstance(f,dict) or f in ['required', 'none']: return f
     return dict(type='function', function={'name':f})
 
 # %% ../00_core.ipynb
@@ -165,19 +165,45 @@ def __call__(self:Client,
 
 # %% ../00_core.ipynb
 def call_func_openai(func, ns:Optional[abc.Mapping]=None):
-    return call_func(func.name, json.loads(func.arguments), ns, raise_on_err=False)
+    try: return call_func(func.name, json.loads(func.arguments), ns, raise_on_err=False)
+    except KeyError as e: return f"Error - tool not defined in the tool_schemas: {func.name}"
+
+# %% ../00_core.ipynb
+def _get_name(f):
+    if isinstance(f,str): return f
+    if isinstance(f, dict): return f['name']
+    if callable(f) and hasattr(f, '__name__'): return f.__name__
+
+def allowed_tools(specs:Optional[list]=None, choice:Optional[Union[dict,str]]=None):
+    if choice:
+        choice = mk_tool_choice(choice)
+        if isinstance(choice, dict) and choice['type'] == 'function': 
+            return {choice['function']['name']}
+    return {_get_name(v) for v in specs or []}
+
+# %% ../00_core.ipynb
+def limit_ns(
+    ns:Optional[abc.Mapping]=None, # Namespace to search for tools
+    specs:Optional[Union[str,abc.Callable]]=None, # List of the tools that are allowed for llm to call, if None no tools are allowed
+    choice:Optional[Union[dict,str]]=None # Tool choice as defined by Anthropic API
+    ):
+    "Filter namespace `ns` to only include tools allowed by `specs` and `choice`"
+    if ns is None: ns = globals()
+    if not isinstance(ns, abc.Mapping): ns = mk_ns(ns)
+    ns = {k:v for k,v in ns.items() if k in allowed_tools(specs, choice)}
+    return ns
 
 # %% ../00_core.ipynb
 def _toolres(r, ns):
     "Create a result dict from `tcs`."
-    tcs = [o for o in getattr(r, 'output', []) if isinstance(o, ResponseFunctionToolCall)]
     if ns is None: ns = globals()
+    tcs = [o for o in getattr(r, 'output', []) if isinstance(o, ResponseFunctionToolCall)]
     return { tc.call_id: call_func_openai(tc, ns=mk_ns(ns)) for tc in tcs }
 
 # %% ../00_core.ipynb
 def mk_toolres(
     r:abc.Mapping, # Response containing tool use request
-    ns:Optional[abc.Mapping]=None # Namespace to search for tools
+    ns:Optional[abc.Mapping]=None, # Namespace to search for tools
     ):
     "Create a `tool_result` message from response `r`."
     tr = _toolres(r, ns)
@@ -236,7 +262,7 @@ def __call__(self:Chat,
     if not tool_choice: tool_choice = self.tool_choice
     kw = self.kw | kwargs
     def _cb(v):
-        self.last = mk_toolres(v, ns=self.ns)
+        self.last = mk_toolres(v, ns=limit_ns(self.ns, self.tools, tool_choice))
         self.h += self.last
     res = self.c(self.h, sp=self.sp, stream=stream, cb=_cb, tools=tools, **kw)
     return res
