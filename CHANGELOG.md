@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.2.6
+
+### New Features
+
+- Validate tool names returned by model against allowed tools ([#34](https://github.com/AnswerDotAI/cosette/pull/34)), thanks to [@PiotrCzapla](https://github.com/PiotrCzapla)
+
+
 ## 0.2.5
 
 ### New Features
