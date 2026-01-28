@@ -3,19 +3,16 @@ requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name="cosette"
+name = "cosette"
 dynamic = ["version"]
 description = "A helper for using the OpenAI API"
 readme = "README.md"
-requires-python=">=3.9"
+requires-python = ">=3.9"
 license = {text = "Apache-2.0"}
 authors = [{name = "Jeremy Howard", email = "j@fast.ai"}]
 keywords = ['nbdev', 'jupyter', 'notebook', 'python']
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3 :: Only",
-]
-dependencies = ["fastcore>=1.8.4","openai>=1.99.3","msglm>=0.0.8","toolslm>=0.3.0"]
+classifiers = ["Natural Language :: English", "Intended Audience :: Developers", "Development Status :: 3 - Alpha", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3 :: Only"]
+dependencies = ['fastcore>=1.8.4', 'openai>=1.99.3', 'msglm>=0.0.8', 'toolslm>=0.3.0']
 
 [project.urls]
 Repository = "https://github.com/AnswerDotAI/cosette"
@@ -24,14 +21,14 @@ Documentation = "https://AnswerDotAI.github.io/cosette"
 [project.entry-points.nbdev]
 cosette = "cosette._modidx:d"
 
+[project.optional-dependencies]
+dev = ['ipython']
+
 [tool.setuptools.dynamic]
 version = {attr = "cosette.__version__"}
 
 [tool.setuptools.packages.find]
 include = ["cosette"]
-
-[project.optional-dependencies]
-dev = ["ipython"]
 
 [tool.nbdev]
 nbs_path = '.'
